@@ -292,20 +292,14 @@
   function initTeam() {
     const root = document.getElementById('team-root'); if (!root) return;
     const $ = (id) => document.getElementById(id);
-    const CAND = [
-      { name: 'Ana Lúcia Ferreira', email: 'ana.ferreira@suaong.org.br', st: 'ativo', who: 'Coordenação de Projetos' },
-      { name: 'João Lima', email: 'joao.lima@suaong.org.br', st: 'ativo', who: 'Equipe de Projetos' },
-      { name: 'Luciana Prado', email: 'luciana.prado@suaong.org.br', st: 'ativo', who: 'Equipe de Projetos' },
-      { name: 'Marcos Teixeira', email: 'marcos.teixeira@suaong.org.br', st: 'ativo', who: 'Financeiro' },
-      { name: 'Carlos Eduardo Mendes', email: 'carlos.mendes@suaong.org.br', st: 'bloqueado', who: 'Equipe de Projetos', off: 'Conta bloqueada' },
-      { name: 'Felipe Albuquerque', email: 'felipe.albuquerque@suaong.org.br', st: 'perfil', who: '', off: 'Ainda sem perfil de acesso' }
-    ];
-    let team = [{ name: 'Ana Lúcia Ferreira', email: 'ana.ferreira@suaong.org.br', role: 'Responsável' }, { name: 'João Lima', email: 'joao.lima@suaong.org.br', role: 'Equipe' }];
+    const E = window.PRJ_EQUIPE; /* dados compartilhados com o cadastro do projeto (projeto-equipe-dados.js) */
     let chosen = null;
-    const items = () => CAND.map((c) => Object.assign({}, c, { off: c.off || (team.some((t) => t.email === c.email) ? 'Já está na equipe' : '') }));
+    const items = () => E.usuarios.map((c) => Object.assign({}, c, { off: c.off || (E.equipe().some((t) => t.email === c.email) ? 'Já está na equipe' : '') }));
     function renderTeam() {
-      $('t-list').innerHTML = team.length ? team.map((t, i) => '<li><span class="avatar" aria-hidden="true">' + initials(t.name) + '</span><span class="nm"><b>' + esc(t.name) + '</b><small>' + esc(t.email) + '</small></span>' +
-        '<span class="pill ' + (t.role === 'Responsável' ? 'violet' : 'info') + '">' + t.role + '</span><button type="button" class="icon-btn" data-rm="' + i + '" aria-label="Retirar ' + esc(t.name) + ' da equipe"><svg width="20" height="20" aria-hidden="true"><use href="#i-trash"/></svg></button></li>').join('')
+      const team = E.equipe();
+      $('t-proj').textContent = E.nome() || 'novo projeto, ainda sem nome';
+      $('t-list').innerHTML = team.length ? team.map((t) => '<li><span class="avatar" aria-hidden="true">' + initials(t.name) + '</span><span class="nm"><b>' + esc(t.name) + '</b><small>' + esc(t.email) + '</small></span>' +
+        '<span class="pill ' + (t.role === 'Responsável' ? 'violet' : 'info') + '">' + t.role + '</span><button type="button" class="icon-btn" data-rm="' + esc(t.email) + '" aria-label="Retirar ' + esc(t.name) + ' da equipe"><svg width="20" height="20" aria-hidden="true"><use href="#i-trash"/></svg></button></li>').join('')
         : '<li class="empty">Nenhuma pessoa atribuída. Só quem tem acesso a todos os projetos vê este projeto.</li>';
       $('t-count').textContent = team.length + (team.length === 1 ? ' pessoa' : ' pessoas');
     }
@@ -315,13 +309,18 @@
     $('t-q').addEventListener('input', () => { chosen = null; updateAdd(); });
     $('t-add').addEventListener('click', () => {
       if (!chosen) return;
-      team.push({ name: chosen.name, email: chosen.email, role: $('t-role').value });
-      say(chosen.name + ' agora vê este projeto. Registrado na auditoria.'); chosen = null; $('t-q').value = ''; updateAdd(); renderTeam();
+      const role = $('t-role').value, r = E.atribuir(chosen.email, role);
+      if (r.erro) { say(r.erro); return; }
+      say(chosen.name + (role === 'Responsável' ? ' agora é o Responsável' + (r.anterior ? ' e ' + r.anterior.name + ' passou a Equipe' : '') : ' agora vê este projeto') + '. Registrado na auditoria.');
+      chosen = null; $('t-q').value = ''; updateAdd(); renderTeam();
     });
     $('t-list').addEventListener('click', (e) => {
       const b = e.target.closest('[data-rm]'); if (!b) return;
-      const t = team.splice(+b.getAttribute('data-rm'), 1)[0]; say(t.name + ' deixou de ver este projeto. Registrado na auditoria.'); renderTeam();
+      const u = E.usuario(b.getAttribute('data-rm')), r = E.retirar(b.getAttribute('data-rm'));
+      if (r.erro) { say(r.erro); return; }
+      say(u.name + ' deixou de ver este projeto. Registrado na auditoria.'); renderTeam();
     });
+    E.onChange(renderTeam);
     renderTeam(); updateAdd();
   }
 

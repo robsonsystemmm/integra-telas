@@ -114,6 +114,7 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <script src="../projeto-acesso.js"></script>
+<script src="../projeto-equipe-dados.js"></script>
 <template id="tpl-dados"><style>:host{display:block;font:15px/22px var(--font);color:var(--color-text-body)}
 *,*::before,*::after{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -204,9 +205,13 @@ dialog form{padding:20px;display:flex;flex-direction:column;gap:14px}dialog h2{m
       <div class="f cond" id="gEm"><label for="emenda">Número da emenda<span class="req">*</span></label><input id="emenda"><small class="err"></small></div>
       <div class="f cond" id="gPr"><label for="proto">Protocolo no Transferegov</label><input id="proto"></div>
       <div class="f"><label for="unid">Unidade responsável</label><div class="selrow"><select id="unid"></select><button class="btn plus" type="button" data-new="unid" aria-label="Cadastrar nova unidade responsável" title="Cadastrar nova unidade responsável">+</button></div><small class="err"></small></div>
-      <div class="f"><label for="resp">Responsável pelo projeto<span class="req">*</span></label><div class="selrow"><select id="resp"></select><button class="btn plus" type="button" data-new="resp" aria-label="Cadastrar novo responsável" title="Cadastrar novo responsável">+</button></div><small class="err"></small></div>
+      <div class="f"><label for="resp">Responsável pelo projeto<span class="req">*</span></label><select id="resp"></select><small class="hint" id="respHint">Só aparece quem tem conta ativa e perfil de Projetos.</small><small class="err"></small></div>
       <div class="f"><label for="stat">Situação</label><select id="stat"><option>Ativo</option><option>Suspenso</option><option>Cancelado</option></select><small class="hint">Mudar a situação exige justificativa.</small></div>
     </div></section>
+
+  <section class="panel panel-pad" id="seq"><h2>Equipe do projeto</h2><p class="desc">Quem for atribuído passa a ver este projeto. O Responsável é escolhido em Identificação; as demais pessoas são atribuídas na tela Equipe do projeto.</p>
+    <ul class="rows" id="eqList"></ul>
+    <div class="pills" style="align-items:center"><button class="btn sm" type="button" id="eqBtn">Gerenciar equipe</button><span class="hint" id="eqHint"></span></div></section>
 
   <section class="panel panel-pad" id="s2"><h2>Valores</h2><p class="desc">O valor global é calculado: repasse mais as duas contrapartidas. Rendimentos de aplicação ficam à parte.</p>
     <div class="grid3">
@@ -260,7 +265,7 @@ dialog form{padding:20px;display:flex;flex-direction:column;gap:14px}dialog h2{m
   <div class="dacts"><button class="btn" type="button" id="dNo">Voltar</button><button class="btn primary" type="submit">Confirmar</button></div></form></dialog>
 <dialog id="dlgM"><form method="dialog"><h2>Gerenciar listas de cadastro</h2>
   <p class="hint">Itens inativos saem das listas de novos cadastros, mas continuam valendo nos projetos já cadastrados. Municípios que não estão em uso em nenhum projeto também podem ser apagados.</p>
-  <div class="f"><label for="mK">Lista</label><select id="mK"><option value="tipo">Tipos de instrumento</option><option value="conc">Concedentes</option><option value="unid">Unidades responsáveis</option><option value="resp">Responsáveis pelo projeto</option><option value="mun">Municípios (localização)</option></select></div>
+  <div class="f"><label for="mK">Lista</label><select id="mK"><option value="tipo">Tipos de instrumento</option><option value="conc">Concedentes</option><option value="unid">Unidades responsáveis</option><option value="mun">Municípios (localização)</option></select></div>
   <ul class="rows" id="mList"></ul>
   <div class="dacts"><button class="btn" type="button" id="mAdd">Cadastrar novo</button><button class="btn primary" type="submit">Fechar</button></div></form></dialog>
 <dialog id="dlgN"><form method="dialog" id="nForm"><h2 id="nT">Cadastrar</h2>
@@ -268,8 +273,7 @@ dialog form{padding:20px;display:flex;flex-direction:column;gap:14px}dialog h2{m
   <div id="nExtra" class="grid2"><div class="f"><label for="nE">Esfera</label><select id="nE"><option value="">Selecione</option><option>Federal</option><option>Estadual</option><option>Municipal</option><option>Privada</option></select></div><div class="f"><label for="nC">CNPJ</label><input id="nC" inputmode="numeric" placeholder="00.000.000/0000-00"></div></div>
   <div class="f" id="nEmW"><label class="lbl"><input type="checkbox" id="nEm" style="width:auto;height:auto;margin-right:8px">Exige número da emenda</label></div>
   <div class="f" id="nUfW" style="display:none"><label for="nUf">UF</label><select id="nUf"></select></div>
-  <div class="f" id="nMailW" style="display:none"><label for="nMail">E-mail</label><input id="nMail" type="email" autocomplete="off"><small class="hint">Recebe as notificações dos projetos atribuídos.</small></div>
-  <small class="err" id="nEr"></small>
+    <small class="err" id="nEr"></small>
   <div class="dacts"><button class="btn" type="button" id="nNo">Voltar</button><button class="btn primary" type="submit" id="nOk">Cadastrar</button></div></form></dialog>
 <div class="toast" id="toast" role="status" hidden></div>
 
@@ -369,7 +373,7 @@ dialog form{padding:20px;display:flex;flex-direction:column;gap:14px;max-height:
     <div class="f span2"><label for="fInd">Indicador<span class="req">*</span></label><input id="fInd" autocomplete="off"></div>
     <div class="f span2"><span class="lbl">Meios de comprovação<span class="req">*</span></span><div class="chips"><span class="chips" id="fCp" role="group" aria-label="Meios de comprovação"></span><button class="btn sm plus" type="button" data-new="cp" aria-label="Cadastrar novo meio de comprovação">+</button></div></div>
     <div class="f"><label for="fPrazo">Prazo<span class="req">*</span></label><input type="date" id="fPrazo"></div>
-    <div class="f"><label for="fResp">Responsável<span class="req">*</span></label><select id="fResp"><option value="">Selecione</option><option>Ana Ribeiro</option><option>Carlos Mendes</option><option>Juliana Prado</option></select></div>
+    <div class="f"><label for="fResp">Responsável<span class="req">*</span></label><select id="fResp"></select><small class="hint" id="fRespHint">Só pessoas da equipe do projeto.</small></div>
     <div class="f span2" id="fWhyW"><label for="fWhy">Justificativa da alteração<span class="req">*</span></label><input id="fWhy" autocomplete="off"><small class="hint">Obrigatória porque as metas já foram concluídas.</small></div>
   </div>
   <small class="err" id="fEr"></small>
@@ -485,7 +489,7 @@ dialog form{padding:20px;display:flex;flex-direction:column;gap:14px;max-height:
     <div class="f" id="gVal"><label for="dVal">Validade<span class="req">*</span></label><input type="date" id="dVal"></div>
     <div class="f" id="gOrg"><label for="dOrg">Órgão emissor<span class="req">*</span></label><input id="dOrg" autocomplete="off"></div>
     <div class="f" id="gNum"><label for="dNum">Número<span class="req">*</span></label><input id="dNum" autocomplete="off"></div>
-    <div class="f span2" id="gResp"><label for="dResp">Responsável pela assinatura<span class="req">*</span></label><select id="dResp"><option value="">Selecione</option><option>Ana Ribeiro</option><option>Carlos Mendes</option><option>Juliana Prado</option></select></div>
+    <div class="f span2" id="gResp"><label for="dResp">Responsável pela assinatura<span class="req">*</span></label><select id="dResp"></select></div>
     <div class="f span2"><label for="dDesc">Descrição</label><input id="dDesc" autocomplete="off"></div>
     <div class="f span2"><label for="dFile">Arquivo<span class="req">*</span></label><input type="file" id="dFile" accept=".pdf,.png,.jpg,.jpeg" style="height:auto;padding:9px 12px"><small class="hint">PDF, PNG ou JPG, até 10 MB.</small></div>
     <div class="f span2" id="gWhy"><label for="dWhy">Motivo da substituição<span class="req">*</span></label><input id="dWhy" autocomplete="off"><small class="hint">A versão anterior fica guardada no histórico.</small></div>
@@ -538,12 +542,14 @@ const TIPOS=[{n:"Convênio",a:1},{n:"Termo de fomento",a:1},{n:"Termo de colabor
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
 const isEm=()=>{const t=TIPOS.find(x=>x.n===$("#tipo").value);return !!(t&&t.em)};
 const UNIDS=[{n:"Coordenação de Esportes",a:1},{n:"Coordenação Social",a:1},{n:"Administrativo",a:1}];
-const RESPS=[{n:"Ana Ribeiro",a:1,e:"ana.ribeiro@instituicao.org"},{n:"Carlos Mendes",a:1,e:"carlos.mendes@instituicao.org"},{n:"Juliana Prado",a:1,e:"juliana.prado@instituicao.org"}];
-const LISTS={tipo:TIPOS,unid:UNIDS,resp:RESPS,mun:MUNS},RT={tipo:"tipo de instrumento",conc:"concedente",unid:"unidade responsável",resp:"responsável",mun:"município"};
+const LISTS={tipo:TIPOS,unid:UNIDS,mun:MUNS},RT={tipo:"tipo de instrumento",conc:"concedente",unid:"unidade responsável",mun:"município"};
+const E=window.PRJ_EQUIPE;E.zerar("");
+function fillResp(){const s=$("#resp"),v=s.value;s.innerHTML='<option value="">Selecione</option>'+E.elegiveisResponsavel().map(u=>'<option value="'+esc(u.name)+'">'+esc(u.name)+"</option>").join("");s.value=v}
+function renderEq(){const L=E.equipe();$("#eqList").innerHTML=L.map(m=>'<li><div class="nm"><b>'+esc(m.name)+"</b><small>"+esc(m.email)+'</small></div><span class="pill '+(m.role==="Responsável"?"info":"")+'">'+m.role+"</span></li>").join("");$("#eqHint").textContent=L.length?"":"Ninguém atribuído ainda. Escolha o Responsável e salve o rascunho."}
 function fillP(k){const s=$("#"+k),v=s.value;s.innerHTML='<option value="">Selecione</option>'+LISTS[k].filter(x=>x.a||x.n===v).map(x=>'<option value="'+esc(x.n)+'">'+esc(x.n)+(x.a?"":" (inativo)")+"</option>").join("");s.value=v}
 function fillSel(){const t=$("#tipo"),c=$("#conc"),tv=t.value,cv=c.value,o=(n,a)=>'<option value="'+esc(n)+'">'+esc(n)+(a?"":" (inativo)")+"</option>";
   t.innerHTML='<option value="">Selecione</option>'+TIPOS.filter(x=>x.a||x.n===tv).map(x=>o(x.n,x.a)).join("");
-  c.innerHTML='<option value="">Selecione</option>'+Object.keys(CONC).filter(n=>CONC[n][2]!==0||n===cv).map(n=>o(n,CONC[n][2]!==0)).join("");t.value=tv;c.value=cv;fillP("unid");fillP("resp")}
+  c.innerHTML='<option value="">Selecione</option>'+Object.keys(CONC).filter(n=>CONC[n][2]!==0||n===cv).map(n=>o(n,CONC[n][2]!==0)).join("");t.value=tv;c.value=cv;fillP("unid");fillResp()}
 const ETAPAS=["Celebração","Estruturação","Execução","Prestação de contas","Encerramento"];
 const EXISTE=["ministério do esporte|912345|2025"];
 const REQ=[["nome","Nome do projeto",1],["tipo","Tipo de instrumento",1],["conc","Concedente",1],["num","Número",1],["ano","Ano",1],["resp","Responsável",1],["rep","Repasse",2],["ini","Início",3],["fim","Término",3],["obj","Objeto",5],["pub","Público-alvo",5],["muns","Municípios",6]];
@@ -595,13 +601,16 @@ function validate(full){let first=null;const bad=(id,m)=>{setErr(id,m);first=fir
 function ask(t,p,cb){$("#dT").textContent=t;$("#dP").textContent=p;$("#dW").value="";$("#dE").textContent="";$("#dlg").showModal();$("#dW").focus();ask.cb=cb}
 $("#dNo").onclick=()=>{$("#dlg").close();ask.cb=null;$("#stat").value=statAnt};
 $("#dForm").addEventListener("submit",e=>{e.preventDefault();const w=$("#dW").value.trim();if(!w){$("#dE").textContent="Informe a justificativa para continuar.";return}$("#dlg").close();const c=ask.cb;ask.cb=null;c&&c(w)});
+function syncEq(){E.setNome($("#nome").value.trim());const n=$("#resp").value;if(n){const u=E.porNome(n);if(u)E.atribuir(u.email,"Responsável")}renderEq()}
 function shot(){const o={};REL.forEach(([id])=>o[id]=$("#"+id).value);return o}
 function save(done){if(!validate(false)){say("Corrija o campo destacado para salvar.");return}
   const df=saved?REL.filter(([id])=>snap[id]!==$("#"+id).value):[];
-  const go=w=>{if(!saved)log("Projeto criado");df.forEach(([id,l])=>log(l+" alterado: "+(snap[id]||"vazio")+" para "+($("#"+id).value||"vazio"),w));snap=shot();saved=true;
+  const go=w=>{if(!saved)log("Projeto criado");df.forEach(([id,l])=>log(l+" alterado: "+(snap[id]||"vazio")+" para "+($("#"+id).value||"vazio"),w));snap=shot();saved=true;syncEq();
     $("#pCad").textContent=final?"Cadastro finalizado":"Rascunho salvo";$("#pCad").className="pill "+(final?"ok":"info");say("Salvo. O histórico foi atualizado.");done&&done()};
   df.length?ask("Justifique as alterações",df.map(d=>d[1]).join(", ")+".",go):go()}
 function perfil(){const A=window.PRJ_A(),ro=!A.editar,mx=A.gerencia;$("#form").disabled=ro;$$("[data-new]").forEach(b=>{b.disabled=!mx;b.title=mx?"Cadastrar novo":"Só quem pode editar todos os projetos cadastra novos itens"});$("#bMan").style.display=mx?"":"none";$("#catHint").textContent=mx?"":"Novos cadastros nessas listas só podem ser feitos por quem edita todos os projetos.";$("#bar2").style.display=ro?"none":"";$("#bAd").disabled=ro;
+  $("#resp").disabled=!A.equipeEditar;$("#respHint").textContent=A.equipeEditar?"Só aparece quem tem conta ativa e perfil de Projetos.":"O Responsável só muda por quem gerencia a equipe do projeto.";
+  $("#seq").hidden=!A.equipeVer;$("#eqBtn").style.display=A.equipeEditar?"":"none";
   $("#banner").classList.toggle("show",ro);$("#banTxt").textContent=A.aviso;$("#bReq").style.display=A.reprog?"":"none"}
 function renderAds(){$("#adList").innerHTML=ads.map((a,i)=>'<li><div class="nm"><b>Aditivo '+(i+1)+": "+a.t+"</b><small>"+dt(a.dt)+(a.d?", novo término "+dt(a.d):"")+(a.v?", acréscimo de "+brl(a.v):"")+" — "+a.w.replace(/</g,"&lt;")+'</small></div><span class="pill '+(a.ok?"ok":"warn")+'">'+(a.ok?"Aprovado":"Pendente de aprovação")+"</span>"+(a.ok?"":'<button class="btn sm" type="button" data-ap="'+i+'">Aprovar</button>')+"</li>").join("");calc()}
 
@@ -629,8 +638,8 @@ $("#perfil").onchange=perfil;
 // cadastro rápido de tipo de instrumento e concedente
 let nk=null,ed=null;const nd=$("#dlgN");
 function cnpjMask(v){const d=v.replace(/\D/g,"").slice(0,14);let o=d.slice(0,2);if(d.length>2)o+="."+d.slice(2,5);if(d.length>5)o+="."+d.slice(5,8);if(d.length>8)o+="/"+d.slice(8,12);if(d.length>12)o+="-"+d.slice(12);return o}
-function openNew(k,item){nk=k;ed=item||null;const c=k==="conc";$("#nT").textContent=(ed?"Editar ":"Cadastrar ")+RT[k];$("#nOk").textContent=ed?"Salvar":"Cadastrar";$("#nL").textContent="Nome";$("#nExtra").style.display=c?"":"none";$("#nEmW").style.display=k==="tipo"?"":"none";$("#nMailW").style.display=k==="resp"?"":"none";$("#nUfW").style.display=k==="mun"?"":"none";["nN","nC","nE","nUf"].forEach(i=>$("#"+i).value="");$("#nEm").checked=false;$("#nMail").value="";
-  if(ed){$("#nN").value=ed;if(c){$("#nE").value=CONC[ed][0];$("#nC").value=CONC[ed][1]}else{const x=LISTS[k].find(y=>y.n===ed);$("#nEm").checked=!!x.em;$("#nMail").value=x.e||"";if(k==="mun"){$("#nN").value=x.m;$("#nUf").value=x.u}}}
+function openNew(k,item){nk=k;ed=item||null;const c=k==="conc";$("#nT").textContent=(ed?"Editar ":"Cadastrar ")+RT[k];$("#nOk").textContent=ed?"Salvar":"Cadastrar";$("#nL").textContent="Nome";$("#nExtra").style.display=c?"":"none";$("#nEmW").style.display=k==="tipo"?"":"none";$("#nUfW").style.display=k==="mun"?"":"none";["nN","nC","nE","nUf"].forEach(i=>$("#"+i).value="");$("#nEm").checked=false;
+  if(ed){$("#nN").value=ed;if(c){$("#nE").value=CONC[ed][0];$("#nC").value=CONC[ed][1]}else{const x=LISTS[k].find(y=>y.n===ed);$("#nEm").checked=!!x.em;if(k==="mun"){$("#nN").value=x.m;$("#nUf").value=x.u}}}
   $("#nEr").textContent="";nd.showModal();$("#nN").focus()}
 $$("[data-new]").forEach(b=>b.onclick=()=>openNew(b.dataset.new));
 $("#nC").addEventListener("input",e=>{e.target.value=cnpjMask(e.target.value)});
@@ -640,8 +649,7 @@ $("#nForm").addEventListener("submit",e=>{e.preventDefault();if(nk==="mun"){subM
   const ex=(c?Object.keys(CONC):LISTS[nk].map(x=>x.n)).filter(x=>x!==ed);
   if(ex.some(x=>x.toLowerCase()===n.toLowerCase())){er.textContent="Já existe um cadastro com este nome. Se estiver inativo, ative-o em Gerenciar.";return}
   if(c){if(!$("#nE").value){er.textContent="Escolha a esfera do concedente.";return}const cn=$("#nC").value;if(cn&&cn.replace(/\D/g,"").length!==14){er.textContent="O CNPJ deve ter 14 dígitos.";return}const old=ed?CONC[ed]:null;if(ed)delete CONC[ed];CONC[n]=[$("#nE").value,cn,old?old[2]:1]}
-  if(nk==="resp"&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($("#nMail").value.trim())){er.textContent="Informe um e-mail válido. Ele recebe as notificações do projeto.";return}
-  if(!c){const L=LISTS[nk],x=ed?L.find(y=>y.n===ed):{a:1};x.n=n;if(nk==="tipo")x.em=$("#nEm").checked;if(nk==="resp")x.e=$("#nMail").value.trim();if(!ed)L.push(x)}
+  if(!c){const L=LISTS[nk],x=ed?L.find(y=>y.n===ed):{a:1};x.n=n;if(nk==="tipo")x.em=$("#nEm").checked;if(!ed)L.push(x)}
   const cur=$("#"+nk).value;fillSel();$("#"+nk).value=ed?(cur===ed?n:cur):n;setErr(nk,"");nd.close();calc();renderMan();
   say(ed?"Cadastro atualizado.":"Cadastro criado e selecionado.")});
 // gerenciar (editar, inativar e ativar)
@@ -656,7 +664,9 @@ $("#mList").addEventListener("click",e=>{const b=e.target.closest("[data-ed]"),g
   if(b){$("#dlgM").close();openNew(k,b.dataset.ed)}
   if(g){const n=g.dataset.tg;let on;if(k!=="conc"){const t=LISTS[k].find(x=>x.n===n);t.a=t.a?0:1;on=!!t.a}else{CONC[n][2]=CONC[n][2]===0?1:0;on=CONC[n][2]!==0}
     fillSel();renderMuns();renderMan();say(on?"Ativado. Volta a aparecer nas listas de novos cadastros.":"Inativado. Sai das listas novas e continua nos projetos já cadastrados.")}});
-fillSel();renderMuns();renderHist();perfil();calc();
+$("#eqBtn").onclick=()=>{if(!saved){say("Salve o rascunho antes de atribuir a equipe.");return}window.open("admin-projeto-equipe.html","_blank","noopener")};
+E.onChange(()=>{const r=E.responsavel();fillResp();if(r){$("#resp").value=r.name;if(saved)snap.resp=r.name}renderEq();calc()});
+fillSel();renderMuns();renderHist();renderEq();perfil();calc();
 })();
 })(window.boot("dados"));</script><script>(function(R){
 (function(){
@@ -667,7 +677,7 @@ const nf=n=>Number(n).toLocaleString("pt-BR");
 const P=window.__PROJ;
 const L={un:[{n:"Beneficiários",a:1},{n:"Atendimentos",a:1},{n:"Turmas",a:1},{n:"Eventos",a:1},{n:"Horas de atividade",a:1}],cp:[{n:"Ficha de inscrição",a:1},{n:"Lista de presença",a:1},{n:"Fotografias",a:1},{n:"Relatório de atividades",a:1},{n:"Nota fiscal",a:1}]};
 const NOM={un:"unidade de medida",cp:"meio de comprovação"};
-let metas=[{id:1,tipo:"A",desc:"Atender 1.000 beneficiários",un:"Beneficiários",prev:1000,per:"Mensal",ind:"Número de beneficiários inscritos",cp:["Ficha de inscrição","Lista de presença"],prazo:"2027-06-30",resp:"Ana Ribeiro",real:0},{id:2,tipo:"O",desc:"Manter 40 turmas em funcionamento",un:"Turmas",prev:40,per:"Trimestral",ind:"Número de turmas com aula registrada",cp:["Lista de presença","Fotografias"],prazo:"2026-12-31",resp:"Carlos Mendes",real:0}];
+let metas=[{id:1,tipo:"A",desc:"Atender 1.000 beneficiários",un:"Beneficiários",prev:1000,per:"Mensal",ind:"Número de beneficiários inscritos",cp:["Ficha de inscrição","Lista de presença"],prazo:"2027-06-30",resp:"Ana Lúcia Ferreira",real:0},{id:2,tipo:"O",desc:"Manter 40 turmas em funcionamento",un:"Turmas",prev:40,per:"Trimestral",ind:"Número de turmas com aula registrada",cp:["Lista de presença","Fotografias"],prazo:"2026-12-31",resp:"João Lima",real:0}];
 let nid=3,concl=false,sim=false,ed=null,hist=[],ck=null,cEd=null,ro=false,wCb=null;
 function say(m){const t=$("#toast");t.textContent=m;t.hidden=false;clearTimeout(say.t);say.t=setTimeout(()=>t.hidden=true,4200)}
 function log(t,w){const d=new Date();hist.unshift({t:d.toLocaleDateString("pt-BR")+" "+d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),x:t,w,u:$("#perfil").value});rHist()}
@@ -681,8 +691,9 @@ function render(){const A=metas.filter(m=>m.tipo==="A"),dis=ro?" disabled":"",di
 function fills(u,c){u=u!==undefined?u:$("#fUn").value;c=c||$$("#fCp input:checked").map(i=>i.value);
   $("#fUn").innerHTML='<option value="">Selecione</option>'+L.un.filter(x=>x.a||x.n===u).map(x=>'<option value="'+esc(x.n)+'">'+esc(x.n)+(x.a?"":" (inativo)")+"</option>").join("");$("#fUn").value=u;
   $("#fCp").innerHTML=L.cp.filter(x=>x.a||c.includes(x.n)).map(x=>'<label class="chip"><input type="checkbox" value="'+esc(x.n)+'"'+(c.includes(x.n)?" checked":"")+">"+esc(x.n)+(x.a?"":" (inativo)")+"</label>").join("")}
+function fillRespMeta(v){const T=window.PRJ_EQUIPE.equipe().map(x=>x.name);if(v&&!T.includes(v))T.push(v);$("#fResp").innerHTML='<option value="">Selecione</option>'+T.map(n=>"<option>"+esc(n)+"</option>").join("");$("#fResp").value=v||"";$("#fRespHint").textContent=window.PRJ_EQUIPE.equipe().length?"Só pessoas da equipe do projeto.":"A equipe ainda está vazia. Defina o Responsável em Dados do projeto."}
 function openMeta(id){ed=id||null;const m=metas.find(x=>x.id===id)||{tipo:"A",per:"Mensal",cp:[],resp:""};
-  $("#mT").textContent=ed?"Editar meta "+ed:"Nova meta";$("#fTipo").value=m.tipo;$("#fDesc").value=m.desc||"";$("#fPrev").value=m.prev?nf(m.prev):"";$("#fPer").value=m.per;$("#fInd").value=m.ind||"";$("#fPrazo").value=m.prazo||"";$("#fResp").value=m.resp;$("#fWhy").value="";$("#fEr").textContent="";
+  $("#mT").textContent=ed?"Editar meta "+ed:"Nova meta";$("#fTipo").value=m.tipo;$("#fDesc").value=m.desc||"";$("#fPrev").value=m.prev?nf(m.prev):"";$("#fPer").value=m.per;$("#fInd").value=m.ind||"";$("#fPrazo").value=m.prazo||"";fillRespMeta(m.resp);$("#fWhy").value="";$("#fEr").textContent="";
   $("#fWhyW").style.display=ed&&concl?"":"none";fills(m.un||"",m.cp);$("#dlgMeta").showModal();$("#fDesc").focus()}
 $("#fPrev").addEventListener("input",e=>{const d=e.target.value.replace(/\D/g,"");e.target.value=d?nf(parseInt(d,10)):""});
 $("#fNo").onclick=()=>$("#dlgMeta").close();
@@ -747,12 +758,12 @@ const days=s=>Math.ceil((new Date(s+"T00:00")-HJ)/864e5);
 const stamp=()=>{const d=new Date();return d.toLocaleDateString("pt-BR")+" "+d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})};
 const T=(n,c,v,r)=>({n,c,v,r,a:1});
 let TIPOS=[T("Certidão negativa de débitos federais","Certidão",1,1),T("Certidão de regularidade do FGTS","Certidão",1,1),T("Certidão negativa trabalhista","Certidão",1,1),T("Declaração de contrapartida","Declaração",0,1),T("Declaração de capacidade técnica","Declaração",0,1),T("Instrumento assinado","Documento",0,1),T("Plano de trabalho","Documento",0,1),T("Fotografias do núcleo","Documento",0,0)];
-const ver=(arq,tam)=>({v:1,arq,tam,data:stamp(),user:"Ana Ribeiro",motivo:""});
+const ver=(arq,tam)=>({v:1,arq,tam,data:stamp(),user:"Ana Lúcia Ferreira",motivo:""});
 let DOCS=[
- {id:1,tipo:"Certidão negativa de débitos federais",nome:"CND federal",val:iso(20),org:"Receita Federal",num:"A1B2.C3D4",emi:iso(-160),status:"Aprovado",vers:[ver("cnd-federal.pdf","210 KB")],evts:[{t:stamp(),x:"Aprovado",u:"Ana Ribeiro"}]},
+ {id:1,tipo:"Certidão negativa de débitos federais",nome:"CND federal",val:iso(20),org:"Receita Federal",num:"A1B2.C3D4",emi:iso(-160),status:"Aprovado",vers:[ver("cnd-federal.pdf","210 KB")],evts:[{t:stamp(),x:"Aprovado",u:"Ana Lúcia Ferreira"}]},
  {id:2,tipo:"Certidão de regularidade do FGTS",nome:"CRF FGTS",val:iso(120),org:"Caixa Econômica Federal",num:"2026110901",emi:iso(-10),status:"Em análise",vers:[ver("crf-fgts.pdf","180 KB")],evts:[]},
  {id:3,tipo:"Certidão negativa trabalhista",nome:"CNDT",val:iso(-3),org:"Tribunal Superior do Trabalho",num:"778899",emi:iso(-183),status:"Aprovado",vers:[ver("cndt.pdf","95 KB")],evts:[]},
- {id:4,tipo:"Declaração de contrapartida",nome:"Declaração de contrapartida",resp:"Ana Ribeiro",status:"Anexado",vers:[ver("declaracao-contrapartida.pdf","120 KB")],evts:[]},
+ {id:4,tipo:"Declaração de contrapartida",nome:"Declaração de contrapartida",resp:"Ana Lúcia Ferreira",status:"Anexado",vers:[ver("declaracao-contrapartida.pdf","120 KB")],evts:[]},
  {id:5,tipo:"Instrumento assinado",nome:"Termo de fomento assinado",status:"Aprovado",vers:[ver("termo-fomento.pdf","1,2 MB")],evts:[]}];
 let nid=6,AL={a:30,b:15},ro=false,mx=true,fc="Todos",dMode="new",dDoc=null,tEd=null,wCb=null,valido=false;
 const tp=n=>TIPOS.find(x=>x.n===n);
@@ -780,8 +791,9 @@ function render(){const R=rows(),req=TIPOS.filter(t=>t.a&&t.r),bl=bloqueios();
 function fillTipos(sel){const c=$("#dTipo"),v=sel!==undefined?sel:c.value;c.innerHTML='<option value="">Selecione</option>'+TIPOS.filter(x=>x.a||x.n===v).map(x=>'<option value="'+esc(x.n)+'">'+esc(x.n)+(x.a?"":" (inativo)")+"</option>").join("");c.value=v}
 function syncD(){const t=tp($("#dTipo").value),c=t?t.c:"";$("#gVal").style.display=t&&t.v?"":"none";$("#gEmi").style.display=c==="Certidão"?"":"none";$("#gOrg").style.display=c==="Certidão"?"":"none";$("#gNum").style.display=c==="Certidão"?"":"none";$("#gResp").style.display=c==="Declaração"?"":"none";$("#gWhy").style.display=dMode==="rep"?"":"none";
   $("#dHint").textContent=t?t.c+(t.v?", com validade":", sem validade")+(t.r?", exigido para a celebração":""):""}
+function fillSig(v){const N=window.PRJ_EQUIPE.usuarios.filter(u=>u.st==="ativo"&&u.perfil).map(u=>u.name);if(v&&!N.includes(v))N.push(v);$("#dResp").innerHTML='<option value="">Selecione</option>'+N.map(n=>"<option>"+esc(n)+"</option>").join("");$("#dResp").value=v||""}
 function openDoc(mode,d,tn){dMode=mode;dDoc=d||null;const t=d?tp(d.tipo):tn?tp(tn):null;$("#dT").textContent=mode==="rep"?"Substituir documento":"Novo documento";
-  fillTipos(t?t.n:"");$("#dTipo").disabled=mode==="rep";$("#dNome").value=d?d.nome:(t?t.n:"");$("#dEmi").value=d&&d.emi||"";$("#dVal").value=d&&d.val||"";$("#dOrg").value=d&&d.org||"";$("#dNum").value=d&&d.num||"";$("#dResp").value=d&&d.resp||"";$("#dDesc").value=d&&d.desc||"";$("#dFile").value="";$("#dWhy").value="";$("#dEr").textContent="";
+  fillTipos(t?t.n:"");$("#dTipo").disabled=mode==="rep";$("#dNome").value=d?d.nome:(t?t.n:"");$("#dEmi").value=d&&d.emi||"";$("#dVal").value=d&&d.val||"";$("#dOrg").value=d&&d.org||"";$("#dNum").value=d&&d.num||"";fillSig(d&&d.resp);$("#dDesc").value=d&&d.desc||"";$("#dFile").value="";$("#dWhy").value="";$("#dEr").textContent="";
   syncD();$("#dlgD").showModal();$("#dNome").focus()}
 $("#dTipo").onchange=()=>{const t=tp($("#dTipo").value);if(t&&(!$("#dNome").value||TIPOS.some(x=>x.n===$("#dNome").value)))$("#dNome").value=t.n;syncD()};
 $("#dNo").onclick=()=>$("#dlgD").close();

@@ -5,10 +5,10 @@
   'use strict';
   /* ver / editar / excluir: n = sem acesso, m = meus projetos, t = todos. criar: só com acesso a todos. */
   var PERFIS = {
-    'Coordenação de Projetos': { ver: 't', editar: 't', excluir: 't', criar: true },
+    'Coordenação de Projetos': { ver: 't', editar: 't', excluir: 't', criar: true, team: 'editar' },
     'Equipe de Projetos': { ver: 'm', editar: 'm', excluir: 'n', criar: false },
     'Financeiro': { ver: 't', editar: 'n', excluir: 'n', criar: false, reprog: true, nota: 'Perfil Financeiro: o cadastro é só para consulta. Para mudar valores ou itens, peça uma reprogramação ao setor de Projetos.' },
-    'Administrador do Sistema': { ver: 't', editar: 'n', excluir: 'n', criar: false, nota: 'Administrador do Sistema: vê todos os projetos, só para consulta.' },
+    'Administrador do Sistema': { ver: 't', editar: 'n', excluir: 'n', criar: false, team: 'ver', nota: 'Administrador do Sistema: vê todos os projetos, só para consulta.' },
     'Visualização Geral': { ver: 't', editar: 'n', excluir: 'n', criar: false, nota: 'Perfil de visualização: o cadastro é só para consulta.' },
     'Gestor de Acessos': { ver: 'n', editar: 'n', excluir: 'n', criar: false }
   };
@@ -31,6 +31,7 @@
     else if (!novo && !vale(p.ver)) motivo = 'Este projeto não está atribuído a você, então não aparece para o seu perfil.';
     return {
       perfil: perfil, ver: ver, editar: editar, excluir: ver && !novo && vale(p.excluir),
+      equipeVer: ver && (p.team === 'ver' || p.team === 'editar'), equipeEditar: ver && p.team === 'editar', /* linha "Equipe do projeto": só com acesso a todos */
       gerencia: editar && p.editar === 't', /* aprovar, validar e gerenciar listas: exige Editar com acesso a todos */
       reprog: !!p.reprog && ver && !editar, aviso: p.nota || 'Este perfil só consulta o cadastro.', motivo: motivo,
       resumo: 'Ver: ' + ALC[p.ver] + ' · Editar: ' + ALC[p.editar] + ' · Excluir: ' + ALC[p.excluir] + ' · Criar: ' + (p.criar ? 'sim' : 'não')
