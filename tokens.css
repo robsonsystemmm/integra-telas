@@ -1,0 +1,46 @@
+/* INTEGRA - Integração de Projetos, Pessoas e Recursos
+   Tokens de design. Fonte da verdade: tabela de cores aprovada em 2026-11-06.
+   Obrigatórias (aprovadas): primary, secondary, tertiary, neutral.
+   Derivadas (propostas, aguardam aprovação): tons claros, texto, borda de campo e feedback. */
+:root {
+  /* ---- Aprovadas ---- */
+  --color-primary: #1E3A8A;    /* azul-marinho */
+  --color-secondary: #0F766E;  /* azul-petróleo */
+  --color-tertiary: #6D28D9;   /* violeta */
+  --color-neutral: #64748B;    /* cinza azulado */
+
+  /* ---- Derivadas: estados dos botões e fundos suaves ---- */
+  --color-primary-hover: #172E6F;
+  --color-primary-soft: #EEF2FF;     /* fundo de selecionado/info */
+  --color-secondary-hover: #0D5E56;
+  --color-secondary-soft: #E6F4F1;   /* fundo de sucesso */
+  --color-tertiary-soft: #F3EEFF;    /* fundo de destaque/permissão */
+
+  /* ---- Derivadas: texto, superfícies e bordas (a partir do neutral) ---- */
+  --color-text: #0F172A;             /* títulos */
+  --color-text-body: #334155;        /* corpo */
+  --color-text-muted: var(--color-neutral); /* apoio: 4,76:1 sobre branco */
+  --color-bg: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-border: #E2E8F0;           /* divisores e cards */
+  --color-border-field: var(--color-neutral); /* contorno de campo: 4,76:1 (mínimo WCAG 3:1) */
+
+  /* ---- Feedback (erro e alerta não existem na tabela; ver pergunta de aprovação) ---- */
+  --color-error: #BA1A1A;
+  --color-error-soft: #FDECEC;
+  --color-warning-text: #92400E;
+  --color-warning-soft: #FEF3C7;
+
+  /* ---- Forma, espaço, tipografia ---- */
+  --radius-card: 12px;
+  --radius-control: 8px;
+  --radius-pill: 9999px;
+  --control-height: 44px;
+  --shadow-card: 0 1px 3px 0 rgba(100,116,139,.06), 0 4px 12px 0 rgba(100,116,139,.05);
+  --focus-ring: 0 0 0 2px #fff, 0 0 0 4px var(--color-primary);
+  /* Responsivo (mobile primeiro). Breakpoints: 640px (tablet), 1024px (desktop), 1280px (largo) */
+  --touch-target: 44px;               /* alvo mínimo de toque em botões, links isolados e checkboxes (área clicável) */
+  --auth-card-max: 480px;             /* largura máxima do cartão de autenticação */
+  --page-gutter: 16px;                /* 24px a partir de 640px; 32px a partir de 1024px */
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}

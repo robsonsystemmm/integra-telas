@@ -1,0 +1,72 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Telas INTEGRA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: lista única em duas seções (autenticação e administração), com links diretos para cada tela de referência. */
+:root{
+  --bg:#F8FAFC; --surface:#FFFFFF; --fg:#0F172A; --muted:#64748B; --line:#E2E8F0;
+  --accent:#1E3A8A; --accent-soft:#EEF2FF; --link:#6D28D9;
+  --font:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0B1220; --surface:#111B2E; --fg:#E6ECF5; --muted:#94A3B8; --line:#24324A;
+  --accent:#9DB4FF; --accent-soft:#17233D; --link:#C4B5FD; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B1220; --surface:#111B2E; --fg:#E6ECF5; --muted:#94A3B8; --line:#24324A;
+  --accent:#9DB4FF; --accent-soft:#17233D; --link:#C4B5FD; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/22px var(--font);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 56px}
+.wrap{max-width:760px;margin-inline:auto}
+h1{margin:0;font-size:28px;line-height:36px;letter-spacing:-.02em;color:var(--accent);text-wrap:balance}
+.tag{margin:4px 0 0;color:var(--muted);font-size:14px}
+.note{margin:20px 0 0;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:14px;color:var(--muted)}
+h2{margin:32px 0 8px;font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+ul{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+li + li{border-top:1px solid var(--line)}
+a{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;padding:0 16px;color:var(--fg);text-decoration:none;font-weight:500}
+a span{min-width:0}
+a small{color:var(--muted);font-weight:400;font-size:13px;flex:none}
+a:hover{background:var(--accent-soft)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.doc a{color:var(--link)}
+</style>
+<div class="wrap">
+  <h1>INTEGRA</h1>
+  <p class="tag">Integração de Projetos, Pessoas e Recursos</p>
+  <p class="note">Telas de referência para o desenvolvimento do login e do painel do administrador. Nomes, e-mails e datas mostrados são exemplos. Redimensione a janela para ver o layout responsivo.</p>
+
+  <h2>Autenticação</h2>
+  <ul>
+    <li><a href="telas/login.html"><span>Login</span><small>4 estados</small></a></li>
+    <li><a href="telas/cadastro.html"><span>Cadastro</span><small>2 estados</small></a></li>
+    <li><a href="telas/confirmar-email.html"><span>Confirme seu e-mail</span><small>3 estados</small></a></li>
+    <li><a href="telas/esqueci-senha.html"><span>Esqueci minha senha</span><small>2 estados</small></a></li>
+    <li><a href="telas/redefinir-senha.html"><span>Redefinir senha</span><small>4 estados</small></a></li>
+    <li><a href="telas/aguardando-autorizacao.html"><span>Aguardando autorização</span></a></li>
+    <li><a href="telas/aguardando-perfil.html"><span>Aguardando perfil</span></a></li>
+    <li><a href="telas/conta-rejeitada.html"><span>Cadastro não aprovado</span></a></li>
+    <li><a href="telas/conta-bloqueada.html"><span>Conta bloqueada</span></a></li>
+    <li><a href="telas/conta-inativa.html"><span>Conta inativa</span></a></li>
+    <li><a href="telas/paleta-e-captcha.html"><span>Paleta de cores e CAPTCHA</span></a></li>
+  </ul>
+
+  <h2>Administração</h2>
+  <ul>
+    <li><a href="telas/admin-cadastros-pendentes.html"><span>Cadastros pendentes</span></a></li>
+    <li><a href="telas/admin-usuarios.html"><span>Usuários</span></a></li>
+    <li><a href="telas/admin-perfis-permissoes.html"><span>Perfis e permissões (busca de pessoa e matriz)</span><small>novo</small></a></li>
+    <li><a href="telas/admin-projeto-equipe.html"><span>Equipe do projeto</span><small>novo</small></a></li>
+    <li><a href="telas/admin-configuracoes-acesso.html"><span>Configurações de acesso</span></a></li>
+    <li><a href="telas/admin-auditoria.html"><span>Registro de auditoria</span></a></li>
+    <li><a href="telas/minha-conta.html"><span>Minha conta</span></a></li>
+  </ul>
+
+  <h2>Documentação</h2>
+  <ul class="doc">
+    <li><a href="RESPONSIVIDADE.md"><span>Regras de responsividade</span></a></li>
+  </ul>
+</div>
+
+</body></html>
