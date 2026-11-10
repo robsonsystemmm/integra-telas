@@ -26,6 +26,9 @@
 .bdg{font-size:12px;font-weight:600;border-radius:999px;padding:1px 8px;background:var(--color-warning-soft);color:var(--color-warning-text)}
 .bdg.ok{background:var(--color-secondary-soft);color:var(--color-secondary)}
 .bdg:empty{display:none}
+.blocked{margin:0 0 16px;padding:16px 20px;border:1px solid var(--color-error);border-radius:var(--radius-card);background:var(--color-error-soft);color:var(--color-error)}
+.blocked p{margin:4px 0 0;color:var(--color-text-body)}
+#resumoAcesso{flex:1 1 100%;color:var(--color-text-body)}
 [role=tabpanel][hidden]{display:none!important}
 </style>
 </head>
@@ -91,7 +94,11 @@
     </header>
     <main id="main" tabindex="-1">
   <div class="proj page-head"><div><h1>Cadastrar projeto</h1><div class="pills"><span class="pill info" id="hNome">Novo projeto</span><span class="pill" id="hInst">Instrumento não informado</span><span class="pill" id="hVig">Vigência não informada</span></div></div></div>
-  <div class="demo"><label for="perfil">Ver como (demonstração)</label><select id="perfil"><option>Projetos (máxima)</option><option>Projetos (padrão)</option><option>Financeiro</option><option>Coordenação</option></select><span>No sistema real o perfil vem do login e é validado no servidor.</span></div>
+  <div class="demo"><label for="perfil">Ver como (demonstração)</label><select id="perfil"><option>Coordenação de Projetos</option><option>Equipe de Projetos</option><option>Financeiro</option><option>Administrador do Sistema</option><option>Visualização Geral</option><option>Gestor de Acessos</option></select>
+    <label for="contexto">Projeto</label><select id="contexto"><option value="novo">Novo projeto</option><option value="meu">Existente, atribuído a mim</option><option value="alheio">Existente, não atribuído a mim</option></select>
+    <span id="resumoAcesso"></span><span>No sistema real o perfil vem do login e é validado no servidor.</span></div>
+  <div class="blocked" id="semAcesso" role="alert" hidden><b>Acesso não permitido</b><p id="semMotivo"></p></div>
+  <div id="areaProj">
   <div class="tabbar" id="tabs" role="tablist" aria-label="Seções do cadastro do projeto">
     <button type="button" role="tab" id="t-dados" aria-controls="tab-dados" aria-selected="true">Dados do projeto <span class="bdg" id="b-dados"></span></button>
     <button type="button" role="tab" id="t-metas" aria-controls="tab-metas" aria-selected="false" tabindex="-1">Objeto, metas e metodologia <span class="bdg" id="b-metas"></span></button>
@@ -100,11 +107,13 @@
   <div id="tab-dados" role="tabpanel" aria-labelledby="t-dados"></div>
   <div id="tab-metas" role="tabpanel" aria-labelledby="t-metas" hidden></div>
   <div id="tab-docs" role="tabpanel" aria-labelledby="t-docs" hidden></div>
+  </div>
 </main>
   </div>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<script src="../projeto-acesso.js"></script>
 <template id="tpl-dados"><style>:host{display:block;font:15px/22px var(--font);color:var(--color-text-body)}
 *,*::before,*::after{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -163,7 +172,7 @@ dialog form{padding:20px;display:flex;flex-direction:column;gap:14px}dialog h2{m
 .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);max-width:min(92vw,440px);background:var(--color-text);color:var(--color-bg);padding:12px 16px;border-radius:8px;font-size:14px;z-index:90}.toast[hidden]{display:none}
 .hist{list-style:none;margin:0;padding:0}.hist li{padding:10px 0;border-bottom:1px solid var(--color-border);display:flex;flex-wrap:wrap;gap:4px 16px}.hist li:last-child{border:0}.hist time{color:var(--color-text-muted);font-size:13px;font-variant-numeric:tabular-nums;flex:none;min-width:110px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
-</style><select id="perfil" hidden><option>Projetos (máxima)</option><option>Projetos (padrão)</option><option>Financeiro</option><option>Coordenação</option></select><div id="main">
+</style><select id="perfil" hidden><option>Coordenação de Projetos</option><option>Equipe de Projetos</option><option>Financeiro</option><option>Administrador do Sistema</option><option>Visualização Geral</option><option>Gestor de Acessos</option></select><div id="main">
   <div class="page-head">
     <div><h2>Dados do projeto</h2><div class="pills"><span class="pill info" id="pEtapa">Etapa: Celebração</span><span class="pill warn" id="pCad">Rascunho</span><span class="pill danger" id="pAtr" hidden>Atrasado</span></div></div>
     <div class="pills"><button class="btn sm" type="button" id="bAdv">Avançar etapa</button><button class="btn sm link" type="button" id="bHist">Visualizar histórico</button></div>
@@ -317,7 +326,7 @@ dialog form{padding:20px;display:flex;flex-direction:column;gap:14px;max-height:
 .dacts{display:flex;flex-direction:column-reverse;gap:8px}@media (min-width:480px){.dacts{flex-direction:row;justify-content:flex-end}}
 .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);max-width:min(92vw,440px);background:var(--color-text);color:var(--color-bg);padding:12px 16px;border-radius:8px;font-size:14px;z-index:90}.toast[hidden]{display:none}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
-</style><select id="perfil" hidden><option>Projetos (máxima)</option><option>Projetos (padrão)</option><option>Financeiro</option><option>Coordenação</option></select><div id="main">
+</style><select id="perfil" hidden><option>Coordenação de Projetos</option><option>Equipe de Projetos</option><option>Financeiro</option><option>Administrador do Sistema</option><option>Visualização Geral</option><option>Gestor de Acessos</option></select><div id="main">
   <div class="page-head"><div><h2>Objeto, metas e metodologia</h2>
     <div class="pills"><span class="pill warn" id="pSt">Em preenchimento</span></div></div>
     <button class="btn sm" type="button" id="bSim">Simular execução (demonstração)</button></div>
@@ -438,7 +447,7 @@ dialog form{padding:20px;display:flex;flex-direction:column;gap:14px;max-height:
 .alcfg{display:grid;gap:12px;grid-template-columns:1fr;margin-top:14px;align-items:end}@media (min-width:720px){.alcfg{grid-template-columns:1fr 1fr auto}}
 .chk{display:flex;align-items:center;gap:10px;min-height:44px;font-weight:500;color:var(--color-text)}.chk input{width:22px;height:22px;accent-color:var(--color-primary)}
 .tbl td small{overflow-wrap:anywhere}
-</style><select id="perfil" hidden><option>Projetos (máxima)</option><option>Projetos (padrão)</option><option>Financeiro</option><option>Coordenação</option></select><div id="main">
+</style><select id="perfil" hidden><option>Coordenação de Projetos</option><option>Equipe de Projetos</option><option>Financeiro</option><option>Administrador do Sistema</option><option>Visualização Geral</option><option>Gestor de Acessos</option></select><div id="main">
   <div class="page-head"><div><h2>Documentos, declarações e certidões</h2>
     <div class="pills"><span class="pill warn" id="pApto">Ainda não apto para celebração</span></div></div>
     <div class="pills"><button class="btn sm" type="button" id="bTipos">Gerenciar tipos</button><button class="btn sm primary" type="button" id="bNovo">Novo documento</button></div></div>
@@ -592,8 +601,8 @@ function save(done){if(!validate(false)){say("Corrija o campo destacado para sal
   const go=w=>{if(!saved)log("Projeto criado");df.forEach(([id,l])=>log(l+" alterado: "+(snap[id]||"vazio")+" para "+($("#"+id).value||"vazio"),w));snap=shot();saved=true;
     $("#pCad").textContent=final?"Cadastro finalizado":"Rascunho salvo";$("#pCad").className="pill "+(final?"ok":"info");say("Salvo. O histórico foi atualizado.");done&&done()};
   df.length?ask("Justifique as alterações",df.map(d=>d[1]).join(", ")+".",go):go()}
-function perfil(){const p=$("#perfil").value,ro=p==="Financeiro"||p==="Coordenação",mx=p==="Projetos (máxima)";$("#form").disabled=ro;$$("[data-new]").forEach(b=>{b.disabled=!mx;b.title=mx?"Cadastrar novo":"Somente quem tem permissão máxima de projeto pode cadastrar"});$("#bMan").style.display=mx?"":"none";$("#catHint").textContent=mx?"":"Novos cadastros nessas listas só podem ser feitos por quem tem permissão máxima de projeto.";$("#bar2").style.display=ro?"none":"";$("#bAd").disabled=ro;
-  $("#banner").classList.toggle("show",ro);$("#banTxt").textContent=p==="Financeiro"?"Perfil Financeiro: o cadastro é só para consulta. Para mudar valores ou itens, peça uma reprogramação ao setor de Projetos.":"Perfil Coordenação: o cadastro é só para consulta.";$("#bReq").style.display=p==="Financeiro"?"":"none"}
+function perfil(){const A=window.PRJ_A(),ro=!A.editar,mx=A.gerencia;$("#form").disabled=ro;$$("[data-new]").forEach(b=>{b.disabled=!mx;b.title=mx?"Cadastrar novo":"Só quem pode editar todos os projetos cadastra novos itens"});$("#bMan").style.display=mx?"":"none";$("#catHint").textContent=mx?"":"Novos cadastros nessas listas só podem ser feitos por quem edita todos os projetos.";$("#bar2").style.display=ro?"none":"";$("#bAd").disabled=ro;
+  $("#banner").classList.toggle("show",ro);$("#banTxt").textContent=A.aviso;$("#bReq").style.display=A.reprog?"":"none"}
 function renderAds(){$("#adList").innerHTML=ads.map((a,i)=>'<li><div class="nm"><b>Aditivo '+(i+1)+": "+a.t+"</b><small>"+dt(a.dt)+(a.d?", novo término "+dt(a.d):"")+(a.v?", acréscimo de "+brl(a.v):"")+" — "+a.w.replace(/</g,"&lt;")+'</small></div><span class="pill '+(a.ok?"ok":"warn")+'">'+(a.ok?"Aprovado":"Pendente de aprovação")+"</span>"+(a.ok?"":'<button class="btn sm" type="button" data-ap="'+i+'">Aprovar</button>')+"</li>").join("");calc()}
 
 R.addEventListener("input",e=>{if(e.target.closest(".money"))mask(e.target);if(e.target.id==="ano")e.target.value=e.target.value.replace(/\D/g,"");const f=e.target.closest(".f");f&&f.classList.remove("invalid");calc()});
@@ -664,10 +673,10 @@ function say(m){const t=$("#toast");t.textContent=m;t.hidden=false;clearTimeout(
 function log(t,w){const d=new Date();hist.unshift({t:d.toLocaleDateString("pt-BR")+" "+d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),x:t,w,u:$("#perfil").value});rHist()}
 function rHist(){$("#hist").innerHTML=hist.length?hist.map(h=>"<li><time>"+h.t+"</time><span><b>"+esc(h.x)+"</b>"+(h.w?'<br><span class="hint">Justificativa: '+esc(h.w)+"</span>":"")+'<br><span class="hint">Por '+esc(h.u)+"</span></span></li>").join(""):'<li><span class="hint">Nenhuma alteração registrada ainda.</span></li>'}
 function stat(m){const h=new Date();h.setHours(0,0,0,0);if(m.real>=m.prev)return["Atingida","ok"];if(new Date(m.prazo+"T00:00")<h)return["Não atingida","danger"];return m.real>0?["Em andamento","info"]:["Não iniciada",""]}
-function render(){const A=metas.filter(m=>m.tipo==="A"),dis=ro?" disabled":"";
+function render(){const A=metas.filter(m=>m.tipo==="A"),dis=ro?" disabled":"",disD=(ro||!window.PRJ_A().excluir)?" disabled":"";
   $("#mN").textContent=metas.length;$("#mP").textContent=nf(A.reduce((s,m)=>s+m.prev,0));$("#mR").textContent=nf(A.reduce((s,m)=>s+m.real,0));$("#mA").textContent=metas.filter(m=>stat(m)[0]==="Atingida").length;
   $("#tb").innerHTML=metas.map(m=>{const s=stat(m),p=Math.round(m.real/m.prev*100);
-    return '<tr><td class="who-cell"><div class="person"><span class="num-b">'+m.id+'</span><div class="t"><b>'+esc(m.desc)+"</b><small>"+(m.tipo==="A"?"Atendimento":"Outra")+", apuração "+esc(m.per.toLowerCase())+'</small></div></div></td><td data-label="Unidade">'+esc(m.un)+'</td><td data-label="Prevista">'+nf(m.prev)+'</td><td data-label="Realizado">'+nf(m.real)+" ("+p+'%)</td><td data-label="Prazo">'+dt(m.prazo)+'</td><td data-label="Responsável">'+esc(m.resp)+'</td><td data-label="Situação"><span class="pill '+s[1]+'">'+s[0]+'</span></td><td class="btn-cell"><div class="row-acts"><button class="btn sm" type="button" data-e="'+m.id+'"'+dis+'>Editar</button><button class="btn sm" type="button" data-d="'+m.id+'"'+dis+">Apagar</button></div></td></tr>"}).join("");
+    return '<tr><td class="who-cell"><div class="person"><span class="num-b">'+m.id+'</span><div class="t"><b>'+esc(m.desc)+"</b><small>"+(m.tipo==="A"?"Atendimento":"Outra")+", apuração "+esc(m.per.toLowerCase())+'</small></div></div></td><td data-label="Unidade">'+esc(m.un)+'</td><td data-label="Prevista">'+nf(m.prev)+'</td><td data-label="Realizado">'+nf(m.real)+" ("+p+'%)</td><td data-label="Prazo">'+dt(m.prazo)+'</td><td data-label="Responsável">'+esc(m.resp)+'</td><td data-label="Situação"><span class="pill '+s[1]+'">'+s[0]+'</span></td><td class="btn-cell"><div class="row-acts"><button class="btn sm" type="button" data-e="'+m.id+'"'+dis+'>Editar</button><button class="btn sm" type="button" data-d="'+m.id+'"'+disD+">Apagar</button></div></td></tr>"}).join("");
   $("#empty").hidden=metas.length>0}
 function fills(u,c){u=u!==undefined?u:$("#fUn").value;c=c||$$("#fCp input:checked").map(i=>i.value);
   $("#fUn").innerHTML='<option value="">Selecione</option>'+L.un.filter(x=>x.a||x.n===u).map(x=>'<option value="'+esc(x.n)+'">'+esc(x.n)+(x.a?"":" (inativo)")+"</option>").join("");$("#fUn").value=u;
@@ -693,7 +702,7 @@ $("#wForm").addEventListener("submit",e=>{e.preventDefault();const w=$("#wW").va
 function del(id){const m=metas.find(x=>x.id===id);if(m.real>0){say("Não dá para apagar a meta "+id+": ela já tem execução registrada. Ajuste a meta com justificativa.");return}
   const go=w=>{metas=metas.filter(x=>x.id!==id);log("Meta "+id+" apagada: "+m.desc,w||"");render();say("Meta apagada.")};
   concl?ask(id,go):(confirm("Apagar a meta "+id+"?")&&go())}
-// listas auxiliares (só permissão máxima)
+// listas auxiliares (só quem edita todos os projetos)
 function openCat(k,item){ck=k;cEd=item||null;$("#cT").textContent=(cEd?"Editar ":"Cadastrar ")+NOM[k];$("#cN").value=cEd||"";$("#cEr").textContent="";$("#dlgC").showModal();$("#cN").focus()}
 $("#cNo").onclick=()=>$("#dlgC").close();
 $("#cForm").addEventListener("submit",e=>{e.preventDefault();const n=$("#cN").value.trim().replace(/\s+/g," ");if(!n){$("#cEr").textContent="Informe o nome.";return}
@@ -719,10 +728,10 @@ $("#bSave").onclick=()=>{log("Metodologia salva"+(concl?" após a conclusão":""
 $("#bDone").onclick=()=>{if(!metas.some(m=>m.tipo==="A")){say("Cadastre ao menos uma meta de atendimento: ela define os beneficiários previstos.");return}
   if(!$("#met").value.trim()){say("Descreva a metodologia antes de concluir.");$("#met").focus();return}
   concl=true;$("#pSt").textContent="Concluída";$("#pSt").className="pill ok";log("Metas e metodologia concluídas");say("Concluído. Seguindo para Documentos e certidões.");R.host.dispatchEvent(new CustomEvent("goto",{detail:{tab:"docs"}}))};
-function perfil(){const p=$("#perfil").value;ro=p==="Financeiro"||p==="Coordenação";const mx=p==="Projetos (máxima)";
+function perfil(){const A=window.PRJ_A();ro=!A.editar;const mx=A.gerencia;
   $("#banner").classList.toggle("show",ro);$("#bNew").disabled=ro;$("#met").disabled=ro;$("#bar2").style.display=ro?"none":"";
-  $("#bMan").style.display=mx?"":"none";$$("[data-new]").forEach(b=>{b.disabled=!mx;b.title=mx?"Cadastrar novo":"Somente quem tem permissão máxima de projeto pode cadastrar"});
-  $("#catHint").textContent=ro||mx?"":"Novas unidades de medida e meios de comprovação só podem ser cadastrados por quem tem permissão máxima de projeto.";render()}
+  $("#bMan").style.display=mx?"":"none";$$("[data-new]").forEach(b=>{b.disabled=!mx;b.title=mx?"Cadastrar novo":"Só quem pode editar todos os projetos cadastra novos itens"});
+  $("#catHint").textContent=ro||mx?"":"Novas unidades de medida e meios de comprovação só podem ser cadastrados por quem edita todos os projetos.";render()}
 $("#perfil").onchange=perfil;
 
 fills("",[]);rHist();perfil();
@@ -802,7 +811,7 @@ $("#seg").addEventListener("click",e=>{const b=e.target.closest("[data-c]");if(b
 $("#bNovo").onclick=()=>openDoc("new");
 $("#bVal").onclick=()=>{valido=true;render();say("Projeto validado para celebração. Segue para a etapa seguinte.")};
 $("#bAl").onclick=()=>{const a=parseInt($("#aA").value,10),b=parseInt($("#aB").value,10),er=$("#aEr");er.textContent="";if(!(b>0&&a>b)){er.textContent="Use números inteiros, com o primeiro aviso maior que o segundo.";return}AL={a,b};render();say("Prazos de alerta atualizados.")};
-// tipos de documento (permissão máxima)
+// tipos de documento (quem edita todos os projetos)
 function openTipo(item){tEd=item||null;const t=item?tp(item):null;$("#tT").textContent=(item?"Editar":"Cadastrar")+" tipo de documento";$("#tN").value=item||"";$("#tC").value=t?t.c:"";$("#tV").checked=!!(t&&t.v);$("#tR").checked=!!(t&&t.r);$("#tEr").textContent="";$("#dlgT").showModal();$("#tN").focus()}
 $("#tNo").onclick=()=>$("#dlgT").close();
 $("#tForm").addEventListener("submit",e=>{e.preventDefault();const n=$("#tN").value.trim().replace(/\s+/g," "),c=$("#tC").value,er=$("#tEr");er.textContent="";
@@ -816,9 +825,9 @@ $("#bTipos").onclick=()=>{rMan();$("#dlgM").showModal()};$("#mAdd").onclick=()=>
 $("[data-newt]").onclick=()=>openTipo();
 $("#mList").addEventListener("click",e=>{const b=e.target.closest("[data-te]"),g=e.target.closest("[data-tg]");if(b){$("#dlgM").close();openTipo(b.dataset.te)}
   if(g){const x=tp(g.dataset.tg);x.a=x.a?0:1;render();rMan();say(x.a?"Ativado. Volta a aparecer nas listas.":"Inativado. Continua nos documentos já cadastrados.")}});
-function perfil(){const p=$("#perfil").value;ro=p==="Financeiro"||p==="Coordenação";mx=p==="Projetos (máxima)";
-  $("#banner").classList.toggle("show",ro);$("#bNovo").disabled=ro;$("#bTipos").style.display=mx?"":"none";$("[data-newt]").disabled=!mx;$("[data-newt]").title=mx?"Cadastrar novo tipo":"Somente quem tem permissão máxima de projeto pode cadastrar";
-  $("#aA").disabled=$("#aB").disabled=$("#bAl").disabled=!mx;$("#catHint").textContent=!mx&&!ro?"Aprovar, rejeitar, validar para a celebração e cadastrar tipos exigem permissão máxima de projeto.":"";render()}
+function perfil(){const A=window.PRJ_A();ro=!A.editar;mx=A.gerencia;
+  $("#banner").classList.toggle("show",ro);$("#bNovo").disabled=ro;$("#bTipos").style.display=mx?"":"none";$("[data-newt]").disabled=!mx;$("[data-newt]").title=mx?"Cadastrar novo tipo":"Só quem pode editar todos os projetos cadastra novos itens";
+  $("#aA").disabled=$("#aB").disabled=$("#bAl").disabled=!mx;$("#catHint").textContent=!mx&&!ro?"Aprovar, rejeitar, validar para a celebração e cadastrar tipos exigem editar todos os projetos.":"";render()}
 $("#perfil").onchange=perfil;
 
 $("#aA").value=AL.a;$("#aB").value=AL.b;perfil();
@@ -838,7 +847,10 @@ $("#tabs").addEventListener("keydown",e=>{const i=T.indexOf(document.activeEleme
 T.forEach(t=>$("#tab-"+t).addEventListener("goto",e=>show(e.detail.tab,e.detail.focus)));
 addEventListener("hashchange",()=>show(location.hash.slice(1),null,true));
 // perfil único para todas as abas
-$("#perfil").addEventListener("change",()=>T.forEach(t=>{const s=R[t].querySelector("#perfil");s.value=$("#perfil").value;s.dispatchEvent(new Event("change"))}));
+function acesso(){const A=window.PRJ_A();
+  $("#resumoAcesso").textContent=A.resumo;$("#semAcesso").hidden=A.ver;$("#semMotivo").textContent=A.motivo;$("#areaProj").hidden=!A.ver;
+  T.forEach(t=>{const h=R[t].querySelector("#perfil");h.value=$("#perfil").value;h.dispatchEvent(new Event("change"))})}
+$("#perfil").addEventListener("change",acesso);$("#contexto").addEventListener("change",acesso);acesso();
 // selos nas abas
 function badge(id,txt,ok){const b=$("#b-"+id);b.textContent=txt||"";b.className="bdg"+(ok?" ok":"")}
 function watch(r,sel,fn){const el=R[r].querySelector(sel);if(!el)return;const f=()=>fn(el.textContent.trim());new MutationObserver(f).observe(el,{childList:true,characterData:true,subtree:true});f()}
