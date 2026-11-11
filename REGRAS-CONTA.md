@@ -25,8 +25,8 @@ Cada inativação ou reativação registra quem fez, quando, estado antigo e nov
 Limite de 20 MB por arquivo (decisão de 11/11/2026). Tipos: PDF, PNG e JPG. O servidor também precisa validar tipo e tamanho (upload_max_filesize e post_max_size do PHP em 20 MB ou mais).
 
 ## Responsáveis e equipe do projeto (11/11/2026)
-- Todo projeto tem pelo menos 1 Responsável e pode ter mais de um, além de vários membros na equipe.
+- Todo projeto tem 1 Responsável principal (campo do cadastro). A equipe pode ter outros Responsáveis (opcional) e vários membros, qualquer pessoa cadastrada no sistema.
 - O primeiro Responsável é o principal, escolhido no cadastro. Os demais são atribuídos na tela Equipe do projeto.
 - Só perfis que editam projetos (Coordenação e Equipe de Projetos) podem ser Responsáveis.
-- Não se retira o último Responsável: antes é preciso atribuir outro.
+- O principal só muda no campo Responsável principal; quem era principal continua na equipe. Outros Responsáveis e membros podem ser retirados livremente.
 - Funções no projeto: a lista é editável (botão + no cadastro ou "Gerenciar listas"). Uma pessoa pode ter várias funções no mesmo projeto. "Responsável" é fixa e é a que dá a função de Responsável; as demais são descritivas e contam como Equipe.

@@ -46,11 +46,11 @@
     /* funcoes: lista de funções da pessoa no projeto (uma pessoa pode ter várias). 'Responsável' dá a função de Responsável; as demais são Equipe. */
     definir: function (email, funcoes, principal) {
       var u = usuario(email), d = ler();
-      if (!u || !ativo(u)) return { erro: 'Só quem tem conta ativa e perfil pode ser atribuído.' };
+      if (!u) return { erro: 'Pessoa não encontrada entre os usuários cadastrados.' };
       if (!funcoes || !funcoes.length) return { erro: 'Escolha pelo menos uma função no projeto.' };
       var resp = funcoes.indexOf('Responsável') >= 0, ja = d.equipe.filter(function (m) { return m.email === email; })[0];
-      if (resp && PERFIS_EDITAM.indexOf(u.perfil) < 0) return { erro: u.name + ' tem o perfil ' + u.perfil + ', que não edita projetos. O Responsável precisa de um perfil de Projetos.' };
-      if (ja && ja.role === 'Responsável' && !resp && E.responsaveis().length < 2) return { erro: 'O projeto precisa de pelo menos um Responsável. Atribua outra pessoa como Responsável antes de tirar esta função.' };
+      if (resp && !(ativo(u) && PERFIS_EDITAM.indexOf(u.perfil) >= 0)) return { erro: u.name + (ativo(u) ? ' tem o perfil ' + u.perfil + ', que não edita projetos.' : ' ainda não tem conta ativa com perfil.') + ' O Responsável precisa de conta ativa e perfil de Projetos.' };
+      if (ja && !resp && E.responsaveis().length && E.responsaveis()[0].email === email) return { erro: 'Este é o Responsável principal. Para trocar, escolha outra pessoa no campo Responsável principal.' };
       var role = resp ? 'Responsável' : 'Equipe';
       if (ja) { ja.role = role; ja.funcoes = funcoes.slice(); } else d.equipe.push({ email: email, role: role, funcoes: funcoes.slice() });
       if (resp && principal) { var i = d.equipe.map(function (m) { return m.email; }).indexOf(email); d.equipe.unshift(d.equipe.splice(i, 1)[0]); }
@@ -58,8 +58,8 @@
     },
     atribuir: function (email, role, principal) {
       var u = usuario(email), d = ler();
-      if (!u || !ativo(u)) return { erro: 'Só quem tem conta ativa e perfil pode ser atribuído.' };
-      if (role === 'Responsável' && PERFIS_EDITAM.indexOf(u.perfil) < 0) return { erro: u.name + ' tem o perfil ' + u.perfil + ', que não edita projetos. O Responsável precisa de um perfil de Projetos.' };
+      if (!u) return { erro: 'Pessoa não encontrada entre os usuários cadastrados.' };
+      if (role === 'Responsável' && !(ativo(u) && PERFIS_EDITAM.indexOf(u.perfil) >= 0)) return { erro: u.name + (ativo(u) ? ' tem o perfil ' + u.perfil + ', que não edita projetos.' : ' ainda não tem conta ativa com perfil.') + ' O Responsável precisa de conta ativa e perfil de Projetos.' };
       var ja = d.equipe.filter(function (m) { return m.email === email; })[0];
       if (ja) { ja.role = role; var fs = (ja.funcoes || []).filter(function (x) { return x !== 'Responsável' && x !== 'Equipe'; }); ja.funcoes = (role === 'Responsável' ? ['Responsável'] : []).concat(fs, role === 'Equipe' && !fs.length ? ['Equipe'] : []); } else d.equipe.push({ email: email, role: role, funcoes: [role] });
       if (role === 'Responsável' && principal) { var i = d.equipe.map(function (m) { return m.email; }).indexOf(email); d.equipe.unshift(d.equipe.splice(i, 1)[0]); }
@@ -67,7 +67,7 @@
     },
     retirar: function (email) {
       var d = ler(), m = d.equipe.filter(function (x) { return x.email === email; })[0];
-      if (m && m.role === 'Responsável' && E.responsaveis().length < 2) return { erro: 'O projeto precisa de pelo menos um Responsável. Atribua outra pessoa como Responsável antes de retirar esta.' };
+      var rs = E.responsaveis(); if (m && rs.length && rs[0].email === email) return { erro: 'Este é o Responsável principal. Para trocar, escolha outra pessoa no campo Responsável principal; ela passa a ser a principal e esta continua na equipe.' };
       d.equipe = d.equipe.filter(function (x) { return x.email !== email; }); gravar(d); return {};
     },
     onChange: function (f) { ouvintes.push(f); }

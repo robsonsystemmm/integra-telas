@@ -294,7 +294,7 @@
     const $ = (id) => document.getElementById(id);
     const E = window.PRJ_EQUIPE; /* dados compartilhados com o cadastro do projeto (projeto-equipe-dados.js) */
     let chosen = null;
-    const items = () => E.usuarios.map((c) => Object.assign({}, c, { off: c.off || (E.equipe().some((t) => t.email === c.email) ? 'Já está na equipe' : '') }));
+    const items = () => E.usuarios.map((c) => Object.assign({}, c, { who: (c.who || 'Sem perfil') + (c.off ? ' · ' + c.off : ''), off: E.equipe().some((t) => t.email === c.email) ? 'Já está na equipe' : '' }));
     function renderTeam() {
       const team = E.equipe();
       $('t-proj').textContent = E.nome() || 'novo projeto, ainda sem nome';
