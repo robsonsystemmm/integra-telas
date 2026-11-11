@@ -21,6 +21,7 @@
 .tbl .prj b a{color:var(--color-text);text-decoration:none}
 .tbl .prj b a:hover{text-decoration:underline}
 @media (min-width:1024px){.metrics{grid-template-columns:repeat(5,1fr)}}
+.resp{min-width:0;overflow-wrap:anywhere}
 </style>
 </head>
 <body>
@@ -155,7 +156,7 @@ function render(){
   $('#tb').innerHTML=V.map(p=>{const s=situ(p),href='projeto-cadastro.html?ctx='+(p.eq.includes(eu)?'meu':'alheio')+'&perfil='+pf;
     return '<tr><td class="who-cell"><div class="person"><div class="t prj"><b><a href="'+href+'">'+esc(p.nome)+'</a></b><small>'+esc(p.inst)+' · '+esc(p.conc)+'</small></div></div></td>'+
     '<td data-label="Etapa"><span class="pill info">'+ETAPAS[p.etapa]+'</span></td><td data-label="Situação"><span class="pill '+s[0]+'">'+s[1]+'</span></td>'+
-    '<td data-label="Responsável">'+(D.semResp(p)?'<span class="pill danger">'+ic('alert')+'Sem responsável ativo</span><br><small>'+esc(nomeDe(p.resp))+' ('+esc(E.motivoSemResp(p.resp))+')</small>':esc(nomeDe(p.resp)))+'</td><td data-label="Término vigente" class="num">'+prazo(p)+'</td><td data-label="Valor global" class="num">'+(p.valor?brl(p.valor):'—')+'</td>'+
+    '<td data-label="Responsável"><div class="resp">'+(D.semResp(p)?'<span class="pill danger">'+ic('alert')+'Sem responsável ativo</span><br><small>'+esc(nomeDe(p.resp))+' ('+esc(E.motivoSemResp(p.resp))+')</small>':esc(nomeDe(p.resp)))+'</div></td><td data-label="Término vigente" class="num">'+prazo(p)+'</td><td data-label="Valor global" class="num">'+(p.valor?brl(p.valor):'—')+'</td>'+
     '<td class="acts-cell"><details class="menu"><summary class="icon-btn" aria-label="Ações para '+esc(p.nome)+'"><svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-dots"/></svg></summary><div class="list"><a href="'+href+'"><svg width="18" height="18" aria-hidden="true" focusable="false"><use href="#i-folder"/></svg>Abrir cadastro</a>'+
     (per.team==='editar'?'<a href="admin-projeto-equipe.html"><svg width="18" height="18" aria-hidden="true" focusable="false"><use href="#i-users"/></svg>Equipe do projeto</a>':'')+'</div></details></td></tr>'}).join('');
   $('#empty').hidden=tot>0;
