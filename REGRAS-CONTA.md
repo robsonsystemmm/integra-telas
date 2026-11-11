@@ -29,3 +29,4 @@ Limite de 20 MB por arquivo (decisão de 11/11/2026). Tipos: PDF, PNG e JPG. O s
 - O primeiro Responsável é o principal, escolhido no cadastro. Os demais são atribuídos na tela Equipe do projeto.
 - Só perfis que editam projetos (Coordenação e Equipe de Projetos) podem ser Responsáveis.
 - Não se retira o último Responsável: antes é preciso atribuir outro.
+- Funções no projeto: a lista é editável (botão + no cadastro ou "Gerenciar listas"). Uma pessoa pode ter várias funções no mesmo projeto. "Responsável" é fixa e é a que dá a função de Responsável; as demais são descritivas e contam como Equipe.

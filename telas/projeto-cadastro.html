@@ -30,7 +30,7 @@
 .blocked p{margin:4px 0 0;color:var(--color-text-body)}
 #resumoAcesso{flex:1 1 100%;color:var(--color-text-body)}
 [role=tabpanel][hidden]{display:none!important}
-.eqadd{display:grid;grid-template-columns:1fr;gap:12px;align-items:end}.eqadd .btn{width:100%}@media (min-width:640px){.eqadd{grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto}.eqadd .btn{width:auto}}.rows .rm{min-height:44px;min-width:44px}
+
 </style>
 </head>
 <body>
@@ -175,7 +175,9 @@ dialog form{padding:20px;display:flex;flex-direction:column;gap:14px}dialog h2{m
 .hist{list-style:none;margin:0;padding:0}.hist li{padding:10px 0;border-bottom:1px solid var(--color-border);display:flex;flex-wrap:wrap;gap:4px 16px}.hist li:last-child{border:0}.hist time{color:var(--color-text-muted);font-size:13px;font-variant-numeric:tabular-nums;flex:none;min-width:110px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
-.eqadd{display:grid;grid-template-columns:1fr;gap:12px;align-items:end}.eqadd .btn{width:100%}@media (min-width:640px){.eqadd{grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto}.eqadd .btn{width:auto}}.rows .rm{min-height:44px;min-width:44px}
+
+
+.eqadd{display:grid;gap:12px}.fchips{display:flex;flex-wrap:wrap;gap:8px}.fchips label{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px 0 10px;border:1px solid var(--color-border-field);border-radius:8px;background:#fff;cursor:pointer;font-weight:500}.fchips label:has(input:checked){border-color:var(--color-primary);background:var(--color-primary-soft,#EFF3FF);font-weight:600}.fchips input{width:20px;height:20px;min-height:0;margin:0;padding:0;flex:none}.fchips .plus{height:44px}.rows .rm{min-height:44px;min-width:44px}.rows .fn{display:flex;flex-wrap:wrap;gap:6px}
 </style><select id="perfil" hidden><option>Coordenação de Projetos</option><option>Equipe de Projetos</option><option>Financeiro</option><option>Administrador do Sistema</option><option>Visualização Geral</option><option>Gestor de Acessos</option></select><div id="main">
   <div class="page-head">
     <div><h2>Dados do projeto</h2><div class="pills"><span class="pill info" id="pEtapa">Etapa: Celebração</span><span class="pill warn" id="pCad">Rascunho</span><span class="pill danger" id="pAtr" hidden>Atrasado</span></div></div>
@@ -215,8 +217,8 @@ dialog form{padding:20px;display:flex;flex-direction:column;gap:14px}dialog h2{m
   <section class="panel panel-pad" id="seq"><h2>Equipe do projeto</h2><p class="desc">Quem for atribuído passa a ver este projeto. O projeto precisa de pelo menos um Responsável e pode ter vários, além de quantos membros de equipe forem necessários.</p>
     <ul class="rows" id="eqList"></ul>
     <div class="eqadd" id="eqAddBox"><div class="f"><label for="eqPessoa">Pessoa</label><select id="eqPessoa"></select></div>
-      <div class="f"><label for="eqRole">Função no projeto</label><select id="eqRole"><option>Equipe</option><option>Responsável</option></select></div>
-      <button class="btn sm" type="button" id="eqAdd">Adicionar ao projeto</button></div>
+      <div class="f"><label id="eqFnL">Funções no projeto<span class="req">*</span></label><div class="fchips" id="eqFuncs" role="group" aria-labelledby="eqFnL"></div><small class="hint">Escolha uma ou mais. Use o + para criar uma função nova.</small></div>
+      <div class="pills"><button class="btn sm" type="button" id="eqAdd">Adicionar ao projeto</button><button class="btn ghost sm" type="button" id="eqCancel" hidden>Cancelar edição</button></div></div>
     <p class="hint" id="eqHint"></p></section>
 
   <section class="panel panel-pad" id="s2"><h2>Valores</h2><p class="desc">O valor global é calculado: repasse mais as duas contrapartidas. Rendimentos de aplicação ficam à parte.</p>
@@ -271,7 +273,7 @@ dialog form{padding:20px;display:flex;flex-direction:column;gap:14px}dialog h2{m
   <div class="dacts"><button class="btn" type="button" id="dNo">Voltar</button><button class="btn primary" type="submit">Confirmar</button></div></form></dialog>
 <dialog id="dlgM"><form method="dialog"><h2>Gerenciar listas de cadastro</h2>
   <p class="hint">Itens inativos saem das listas de novos cadastros, mas continuam valendo nos projetos já cadastrados. Municípios que não estão em uso em nenhum projeto também podem ser apagados.</p>
-  <div class="f"><label for="mK">Lista</label><select id="mK"><option value="tipo">Tipos de instrumento</option><option value="conc">Concedentes</option><option value="unid">Unidades responsáveis</option><option value="mun">Municípios (localização)</option></select></div>
+  <div class="f"><label for="mK">Lista</label><select id="mK"><option value="tipo">Tipos de instrumento</option><option value="conc">Concedentes</option><option value="unid">Unidades responsáveis</option><option value="mun">Municípios (localização)</option><option value="func">Funções no projeto</option></select></div>
   <ul class="rows" id="mList"></ul>
   <div class="dacts"><button class="btn" type="button" id="mAdd">Cadastrar novo</button><button class="btn primary" type="submit">Fechar</button></div></form></dialog>
 <dialog id="dlgN"><form method="dialog" id="nForm"><h2 id="nT">Cadastrar</h2>
@@ -548,12 +550,15 @@ const TIPOS=[{n:"Convênio",a:1},{n:"Termo de fomento",a:1},{n:"Termo de colabor
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
 const isEm=()=>{const t=TIPOS.find(x=>x.n===$("#tipo").value);return !!(t&&t.em)};
 const UNIDS=[{n:"Coordenação de Esportes",a:1},{n:"Coordenação Social",a:1},{n:"Administrativo",a:1}];
-const LISTS={tipo:TIPOS,unid:UNIDS,mun:MUNS},RT={tipo:"tipo de instrumento",conc:"concedente",unid:"unidade responsável",mun:"município"};
+const FUNCS=[{n:"Responsável",a:1,fixa:1},{n:"Equipe",a:1},{n:"Coordenador de núcleo",a:1},{n:"Educador",a:1},{n:"Apoio administrativo",a:1}];
+const LISTS={tipo:TIPOS,unid:UNIDS,mun:MUNS,func:FUNCS},RT={tipo:"tipo de instrumento",conc:"concedente",unid:"unidade responsável",mun:"município",func:"função no projeto"};
 const E=window.PRJ_EQUIPE;E.zerar("");
 function fillResp(){const s=$("#resp"),v=s.value;s.innerHTML='<option value="">Selecione</option>'+E.elegiveisResponsavel().map(u=>'<option value="'+esc(u.name)+'">'+esc(u.name)+"</option>").join("");s.value=v}
-function renderEq(){const L=E.equipe(),ed=A_eq();$("#eqList").innerHTML=L.map(m=>'<li><div class="nm"><b>'+esc(m.name)+"</b><small>"+esc(m.email)+'</small></div><span class="pill '+(m.role==="Responsável"?"info":"")+'">'+m.role+(m.principal&&E.responsaveis().length>1?" principal":"")+"</span>"+(ed?'<button type="button" class="btn ghost sm auto rm" data-rm="'+esc(m.email)+'" aria-label="Retirar '+esc(m.name)+' do projeto">Retirar</button>':"")+"</li>").join("");
-  const livres=E.usuarios.filter(u=>u.st==="ativo"&&u.perfil&&!L.some(m=>m.email===u.email));$("#eqPessoa").innerHTML='<option value="">Selecione</option>'+livres.map(u=>'<option value="'+esc(u.email)+'">'+esc(u.name)+" · "+esc(u.perfil)+"</option>").join("");
-  $("#eqAddBox").hidden=!ed;$("#eqHint").textContent=L.length?"":"Ninguém atribuído ainda. Adicione pelo menos um Responsável."}
+let eqEd=null;
+function renderFuncs(sel){const cur=sel||[...$$("#eqFuncs input:checked")].map(x=>x.value);$("#eqFuncs").innerHTML=FUNCS.filter(x=>x.a||cur.includes(x.n)).map(x=>'<label><input type="checkbox" value="'+esc(x.n)+'"'+(cur.includes(x.n)?" checked":"")+">"+esc(x.n)+"</label>").join("")+'<button class="btn plus" type="button" data-new="func" aria-label="Cadastrar nova função no projeto">+</button>';$("#eqFuncs [data-new]").onclick=()=>openNew("func")}
+function renderEq(){const L=E.equipe(),ed=A_eq();$("#eqList").innerHTML=L.map(m=>'<li><div class="nm"><b>'+esc(m.name)+"</b><small>"+esc(m.email)+'</small></div><span class="fn">'+m.funcoes.map(f=>'<span class="pill '+(f==="Responsável"?"info":"")+'">'+esc(f)+(f==="Responsável"&&m.principal&&E.responsaveis().length>1?" principal":"")+"</span>").join("")+"</span>"+(ed?'<button type="button" class="btn ghost sm auto rm" data-edf="'+esc(m.email)+'" aria-label="Editar funções de '+esc(m.name)+'">Editar funções</button><button type="button" class="btn ghost sm auto rm" data-rm="'+esc(m.email)+'" aria-label="Retirar '+esc(m.name)+' do projeto">Retirar</button>':"")+"</li>").join("");
+  const livres=E.usuarios.filter(u=>u.st==="ativo"&&u.perfil&&(u.email===eqEd||!L.some(m=>m.email===u.email)));$("#eqPessoa").innerHTML='<option value="">Selecione</option>'+livres.map(u=>'<option value="'+esc(u.email)+'">'+esc(u.name)+" · "+esc(u.perfil)+"</option>").join("");if(eqEd)$("#eqPessoa").value=eqEd;$("#eqPessoa").disabled=!!eqEd;renderFuncs();
+  $("#eqAddBox").hidden=!ed;$("#eqAdd").textContent=eqEd?"Salvar funções":"Adicionar ao projeto";$("#eqCancel").hidden=!eqEd;$("#eqHint").textContent=L.length?"":"Ninguém atribuído ainda. Adicione pelo menos um Responsável."}
 function A_eq(){const a=window.PRJ_A();return !!a.equipeEditar}
 function fillP(k){const s=$("#"+k),v=s.value;s.innerHTML='<option value="">Selecione</option>'+LISTS[k].filter(x=>x.a||x.n===v).map(x=>'<option value="'+esc(x.n)+'">'+esc(x.n)+(x.a?"":" (inativo)")+"</option>").join("");s.value=v}
 function fillSel(){const t=$("#tipo"),c=$("#conc"),tv=t.value,cv=c.value,o=(n,a)=>'<option value="'+esc(n)+'">'+esc(n)+(a?"":" (inativo)")+"</option>";
@@ -659,11 +664,12 @@ $("#nForm").addEventListener("submit",e=>{e.preventDefault();if(nk==="mun"){subM
   if(ex.some(x=>x.toLowerCase()===n.toLowerCase())){er.textContent="Já existe um cadastro com este nome. Se estiver inativo, ative-o em Gerenciar.";return}
   if(c){if(!$("#nE").value){er.textContent="Escolha a esfera do concedente.";return}const cn=$("#nC").value;if(cn&&cn.replace(/\D/g,"").length!==14){er.textContent="O CNPJ deve ter 14 dígitos.";return}const old=ed?CONC[ed]:null;if(ed)delete CONC[ed];CONC[n]=[$("#nE").value,cn,old?old[2]:1]}
   if(!c){const L=LISTS[nk],x=ed?L.find(y=>y.n===ed):{a:1};x.n=n;if(nk==="tipo")x.em=$("#nEm").checked;if(!ed)L.push(x)}
+  if(nk==="func"){const sel=[...$$("#eqFuncs input:checked")].map(x=>x.value).filter(x=>x!==ed);if(!ed)sel.push(n);else if(ed&&$$("#eqFuncs input:checked").some(x=>x.value===ed))sel.push(n);renderFuncs(sel);nd.close();renderMan();say(ed?"Função atualizada.":"Função criada e marcada.");return}
   const cur=$("#"+nk).value;fillSel();$("#"+nk).value=ed?(cur===ed?n:cur):n;setErr(nk,"");nd.close();calc();renderMan();
   say(ed?"Cadastro atualizado.":"Cadastro criado e selecionado.")});
 // gerenciar (editar, inativar e ativar)
-function renderMan(){const k=$("#mK").value,it=k!=="conc"?LISTS[k].map(x=>({n:x.n,a:x.a,s:x.em?"Exige número da emenda":(k==="mun"?"Em uso em "+usoDe(x.n)+" projeto(s)":(x.e||""))})):Object.keys(CONC).map(n=>({n,a:CONC[n][2]!==0,s:CONC[n][0]+(CONC[n][1]?", CNPJ "+CONC[n][1]:"")}));
-  $("#mList").innerHTML=it.map(i=>'<li><div class="nm"><b>'+esc(i.n)+"</b><small>"+esc(i.s)+'</small></div><span class="pill '+(i.a?"ok":"")+'">'+(i.a?"Ativo":"Inativo")+'</span><button class="btn sm" type="button" data-ed="'+esc(i.n)+'">Editar</button><button class="btn sm" type="button" data-tg="'+esc(i.n)+'">'+(i.a?"Inativar":"Ativar")+"</button>"+(k==="mun"?'<button class="btn sm" type="button" data-del="'+esc(i.n)+'">Apagar</button>':"")+"</li>").join("")}
+function renderMan(){const k=$("#mK").value,it=k!=="conc"?LISTS[k].map(x=>({n:x.n,a:x.a,fixa:x.fixa,s:x.em?"Exige número da emenda":(k==="mun"?"Em uso em "+usoDe(x.n)+" projeto(s)":(x.e||""))})):Object.keys(CONC).map(n=>({n,a:CONC[n][2]!==0,s:CONC[n][0]+(CONC[n][1]?", CNPJ "+CONC[n][1]:"")}));
+  $("#mList").innerHTML=it.map(i=>'<li><div class="nm"><b>'+esc(i.n)+"</b><small>"+esc(i.s)+'</small></div><span class="pill '+(i.a?"ok":"")+'">'+(i.a?"Ativo":"Inativo")+'</span>'+(i.fixa?'<span class="hint">Fixa: dá a função de Responsável</span>':'<button class="btn sm" type="button" data-ed="'+esc(i.n)+'">Editar</button><button class="btn sm" type="button" data-tg="'+esc(i.n)+'">'+(i.a?"Inativar":"Ativar")+"</button>")+(k==="mun"?'<button class="btn sm" type="button" data-del="'+esc(i.n)+'">Apagar</button>':"")+"</li>").join("")}
 $("#bMan").onclick=()=>{renderMan();$("#dlgM").showModal()};
 $("#mK").onchange=renderMan;
 $("#mAdd").onclick=()=>{$("#dlgM").close();openNew($("#mK").value)};
@@ -673,8 +679,9 @@ $("#mList").addEventListener("click",e=>{const b=e.target.closest("[data-ed]"),g
   if(b){$("#dlgM").close();openNew(k,b.dataset.ed)}
   if(g){const n=g.dataset.tg;let on;if(k!=="conc"){const t=LISTS[k].find(x=>x.n===n);t.a=t.a?0:1;on=!!t.a}else{CONC[n][2]=CONC[n][2]===0?1:0;on=CONC[n][2]!==0}
     fillSel();renderMuns();renderMan();say(on?"Ativado. Volta a aparecer nas listas de novos cadastros.":"Inativado. Sai das listas novas e continua nos projetos já cadastrados.")}});
-$("#eqAdd").onclick=()=>{const em=$("#eqPessoa").value;if(!em){say("Escolha a pessoa.");return}E.setNome($("#nome").value.trim());const r=E.atribuir(em,$("#eqRole").value);if(r.erro){say(r.erro);return}say("Pessoa adicionada ao projeto.")};
-$("#eqList").addEventListener("click",e=>{const b=e.target.closest("[data-rm]");if(!b)return;const r=E.retirar(b.getAttribute("data-rm"));if(r.erro){say(r.erro);return}say("Pessoa retirada do projeto.")});
+$("#eqAdd").onclick=()=>{const em=$("#eqPessoa").value,fs=[...$$("#eqFuncs input:checked")].map(x=>x.value);if(!em){say("Escolha a pessoa.");return}if(!fs.length){say("Escolha pelo menos uma função no projeto.");return}E.setNome($("#nome").value.trim());const ed=eqEd;eqEd=null;const r=E.definir(em,fs);if(r.erro){eqEd=ed;say(r.erro);return}renderEq();renderFuncs([]);say(ed?"Funções atualizadas.":"Pessoa adicionada ao projeto.")};
+$("#eqCancel").onclick=()=>{eqEd=null;renderEq()};
+$("#eqList").addEventListener("click",e=>{const b=e.target.closest("[data-rm]"),f=e.target.closest("[data-edf]");if(f){eqEd=f.getAttribute("data-edf");renderEq();renderFuncs(E.equipe().find(m=>m.email===eqEd).funcoes);$("#eqAddBox").scrollIntoView({block:"nearest"});return}if(!b)return;const r=E.retirar(b.getAttribute("data-rm"));if(r.erro){say(r.erro);return}if(eqEd===b.getAttribute("data-rm"))eqEd=null;say("Pessoa retirada do projeto.");renderEq()});
 $("#resp").addEventListener("change",()=>{const u=E.porNome($("#resp").value);if(u){E.setNome($("#nome").value.trim());const r=E.atribuir(u.email,"Responsável",true);if(r.erro)say(r.erro)}});
 E.onChange(()=>{const r=E.responsavel();fillResp();if(r){$("#resp").value=r.name;if(saved)snap.resp=r.name}renderEq();calc()});
 fillSel();renderMuns();renderHist();renderEq();perfil();calc();
