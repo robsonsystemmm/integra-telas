@@ -16,6 +16,7 @@
   var ALC = { n: 'sem acesso', m: 'meus projetos', t: 'todos os projetos' };
 
   window.PRJ_PERFIS = Object.keys(PERFIS);
+  window.PRJ_PERFIL = function (n) { return PERFIS[n] || PERFIS['Gestor de Acessos']; };
   window.PRJ_CONTEXTOS = CONTEXTOS;
   window.PRJ_A = function () {
     var perfil = document.getElementById('perfil').value;
