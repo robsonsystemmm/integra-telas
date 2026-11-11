@@ -9,8 +9,9 @@
 
   /* ---------- Modelo ---------- */
   const OPT = { n: 'Sem acesso', m: 'Meus projetos', t: 'Todos', y: 'Sim' };
-  const ACTS = [['ver', 'Visualizar'], ['criar', 'Criar'], ['editar', 'Editar'], ['excluir', 'Excluir']]; /* para novas ações (aprovar, arquivar...), basta acrescentar aqui e nas linhas desejadas */
+  const ACTS = [['ver', 'Visualizar'], ['criar', 'Criar'], ['editar', 'Editar'], ['excluir', 'Excluir'], ['aprovar', 'Aprovar']]; /* para novas ações (aprovar, arquivar...), basta acrescentar aqui e nas linhas desejadas */
   const SIX = ['ver', 'criar', 'editar', 'excluir'];
+  const SIXA = SIX.concat(['aprovar']); /* linhas em que existe algo a aprovar */
   const AREAS = [
     { name: 'Acesso', note: 'Vale para o sistema todo, não depende de projeto', rows: [
       { k: 'acc_users', type: 'acc', label: 'Usuários', hint: 'Editar: aceitar ou rejeitar cadastros, bloquear, inativar e reativar.', acts: ['ver', 'editar'] },
@@ -18,14 +19,14 @@
       { k: 'acc_config', type: 'acc', label: 'Configurações de acesso', hint: 'Domínios, exceções de e-mail e segurança do login.', acts: ['ver', 'editar'] },
       { k: 'acc_audit', type: 'acc', label: 'Auditoria', hint: 'O registro não pode ser editado nem apagado.', acts: ['ver'] } ] },
     { name: 'Projetos', note: '“Meus projetos” são os que foram atribuídos à pessoa', rows: [
-      { k: 'prj_cad', type: 'sc', label: 'Cadastro do projeto', hint: 'Criar exige acesso a todos os projetos.', acts: SIX },
+      { k: 'prj_cad', type: 'sc', label: 'Cadastro do projeto', hint: 'Criar exige acesso a todos os projetos. Aprovar: aditivos e documentos.', acts: SIXA },
       { k: 'prj_est', type: 'sc', label: 'Estruturação', hint: 'Equipe, núcleos, materiais e identidade visual.', acts: SIX },
       { k: 'prj_exe', type: 'sc', label: 'Execução', hint: 'Beneficiários, frequência e atividades.', acts: SIX },
-      { k: 'prj_pre', type: 'sc', label: 'Prestação de contas', hint: 'Relatórios, diligências e envio.', acts: SIX },
+      { k: 'prj_pre', type: 'sc', label: 'Prestação de contas', hint: 'Relatórios, diligências e envio. Aprovar: relatórios e prestação.', acts: SIXA },
       { k: 'prj_team', type: 'team', label: 'Equipe do projeto', hint: 'Atribuir e retirar pessoas de um projeto. Só com acesso a todos.', acts: ['ver', 'editar'] } ] },
     { name: 'Financeiro', note: 'Ver o projeto não dá acesso ao financeiro dele', rows: [
-      { k: 'fin_orc', type: 'sc', label: 'Orçamento (rubricas)', hint: 'Rubricas, valores, remanejamentos e saldos.', acts: SIX },
-      { k: 'fin_lan', type: 'sc', label: 'Lançamentos', hint: 'Gastos e pagamentos por rubrica.', acts: SIX },
+      { k: 'fin_orc', type: 'sc', label: 'Orçamento (rubricas)', hint: 'Rubricas, valores, remanejamentos e saldos. Aprovar: remanejamentos.', acts: SIXA },
+      { k: 'fin_lan', type: 'sc', label: 'Lançamentos', hint: 'Gastos e pagamentos por rubrica. Aprovar: pagamentos.', acts: SIXA },
       { k: 'fin_rel', type: 'sc', label: 'Relatórios', hint: 'Painéis e relatórios financeiros.', acts: ['ver'] } ] }
   ];
   const ROWS = AREAS.reduce((a, ar) => a.concat(ar.rows), []);
@@ -41,12 +42,12 @@
       base: mk(Object.assign(S(['acc_users'], ['ver', 'editar'], 'y'), S(['acc_perfis'], ['ver', 'criar', 'editar', 'excluir'], 'y'), S(['acc_config'], ['ver', 'editar'], 'y'), S(['acc_audit'], ['ver'], 'y'), S(PRJ.concat(['prj_team', 'fin_orc', 'fin_lan', 'fin_rel']), ['ver'], 't'))) },
     gestor: { name: 'Gestor de Acessos', prot: true, desc: 'Gerencia usuários e perfis. Não altera a segurança do login.',
       base: mk(Object.assign(S(['acc_users'], ['ver', 'editar'], 'y'), S(['acc_perfis'], ['ver', 'criar', 'editar', 'excluir'], 'y'), S(['acc_audit'], ['ver'], 'y'))) },
-    coord: { name: 'Coordenação de Projetos', desc: 'Tudo em Projetos, de todos os projetos. No Financeiro, só consulta.',
-      base: mk(Object.assign(S(PRJ, ['ver', 'editar', 'excluir'], 't'), S(PRJ, ['criar'], 'y'), S(['prj_team'], ['ver', 'editar'], 't'), S(['fin_orc', 'fin_lan', 'fin_rel'], ['ver'], 't'))) },
+    coord: { name: 'Coordenação de Projetos', desc: 'Tudo em Projetos, de todos os projetos, inclusive aprovar. No Financeiro, só consulta.',
+      base: mk(Object.assign(S(PRJ, ['ver', 'editar', 'excluir'], 't'), S(PRJ, ['criar'], 'y'), S(['prj_team'], ['ver', 'editar'], 't'), S(['prj_cad', 'prj_pre'], ['aprovar'], 't'), S(['fin_orc', 'fin_lan', 'fin_rel'], ['ver'], 't'))) },
     equipe: { name: 'Equipe de Projetos', desc: 'Vê e edita só os projetos atribuídos a ela. Não cria, exclui nem aprova.',
       base: mk(Object.assign(S(PRJ, ['ver', 'editar'], 'm'))) },
-    fin: { name: 'Financeiro', desc: 'Tudo no Financeiro, de todos os projetos. Em Projetos, só consulta.',
-      base: mk(Object.assign(S(['fin_orc', 'fin_lan'], ['ver', 'editar', 'excluir'], 't'), S(['fin_orc', 'fin_lan'], ['criar'], 'y'), S(['fin_rel'], ['ver'], 't'), S(PRJ, ['ver'], 't'))) },
+    fin: { name: 'Financeiro', desc: 'Tudo no Financeiro, de todos os projetos, inclusive aprovar. Em Projetos, só consulta.',
+      base: mk(Object.assign(S(['fin_orc', 'fin_lan'], ['ver', 'editar', 'excluir'], 't'), S(['fin_orc', 'fin_lan'], ['criar'], 'y'), S(['fin_orc', 'fin_lan'], ['aprovar'], 't'), S(['fin_rel'], ['ver'], 't'), S(PRJ, ['ver'], 't'))) },
     visual: { name: 'Visualização Geral', desc: 'Perfil de consulta. Ao atribuir, marque o que a pessoa pode visualizar.',
       base: mk({}) }
   };
@@ -293,35 +294,70 @@
     const root = document.getElementById('team-root'); if (!root) return;
     const $ = (id) => document.getElementById(id);
     const E = window.PRJ_EQUIPE; /* dados compartilhados com o cadastro do projeto (projeto-equipe-dados.js) */
-    let chosen = null;
+    let chosen = null, editing = null;
     const items = () => E.usuarios.map((c) => Object.assign({}, c, { who: (c.who || 'Sem perfil') + (c.off ? ' · ' + c.off : ''), off: E.equipe().some((t) => t.email === c.email) ? 'Já está na equipe' : '' }));
+    const checked = () => Array.from($('t-funcs').querySelectorAll('input:checked')).map((x) => x.value);
+    function renderFuncs(sel) {
+      const cur = sel || checked();
+      $('t-funcs').innerHTML = E.FUNCS.filter((f) => f.a || cur.indexOf(f.n) >= 0).map((f) => '<label><input type="checkbox" value="' + esc(f.n) + '"' + (cur.indexOf(f.n) >= 0 ? ' checked' : '') + '>' + esc(f.n) + '</label>').join('') +
+        '<button type="button" class="btn plus" id="t-newfn" aria-label="Cadastrar nova função no projeto">+</button>';
+      $('t-newfn').addEventListener('click', () => { $('fn-n').value = ''; $('fn-e').textContent = ''; $('fn-dlg').showModal(); $('fn-n').focus(); });
+    }
+    function renderPrinc() {
+      const p = E.responsavel(), cur = p ? p.email : '';
+      $('t-princ').innerHTML = '<option value="">Selecione</option>' + E.elegiveisResponsavel().map((u) => '<option value="' + esc(u.email) + '">' + esc(u.name) + '</option>').join('');
+      $('t-princ').value = cur;
+    }
     function renderTeam() {
       const team = E.equipe();
       $('t-proj').textContent = E.nome() || 'novo projeto, ainda sem nome';
       $('t-list').innerHTML = team.length ? team.map((t) => '<li><span class="avatar" aria-hidden="true">' + initials(t.name) + '</span><span class="nm"><b>' + esc(t.name) + '</b><small>' + esc(t.email) + '</small></span>' +
-        '<span class="pill ' + (t.role === 'Responsável' ? 'violet' : 'info') + '">' + t.role + (t.principal && team.filter((x) => x.role === 'Responsável').length > 1 ? ' principal' : '') + '</span><button type="button" class="icon-btn" data-rm="' + esc(t.email) + '" aria-label="Retirar ' + esc(t.name) + ' da equipe"><svg width="20" height="20" aria-hidden="true"><use href="#i-trash"/></svg></button></li>').join('')
+        '<span class="fn">' + t.funcoes.map((f) => '<span class="pill ' + (f === 'Responsável' ? 'violet' : 'info') + '">' + esc(f) + (f === 'Responsável' && t.principal ? ' principal' : '') + '</span>').join('') + '</span>' +
+        (t.principal ? '<span class="hint">Troque no campo Responsável principal</span>'
+          : '<span class="rowact"><button type="button" class="btn ghost sm auto" data-edf="' + esc(t.email) + '" aria-label="Editar funções de ' + esc(t.name) + '">Editar funções</button><button type="button" class="icon-btn" data-rm="' + esc(t.email) + '" aria-label="Retirar ' + esc(t.name) + ' da equipe"><svg width="20" height="20" aria-hidden="true" focusable="false"><use href="#i-trash"/></svg></button></span>') + '</li>').join('')
         : '<li class="empty">Nenhuma pessoa atribuída. Só quem tem acesso a todos os projetos vê este projeto.</li>';
       $('t-count').textContent = team.length + (team.length === 1 ? ' pessoa' : ' pessoas');
+      renderPrinc();
     }
-    function updateAdd() { $('t-add').disabled = !chosen; }
+    function updateAdd() { $('t-add').disabled = !chosen; $('t-cancel').hidden = !editing; $('t-add-t').textContent = editing ? 'Salvar funções' : 'Adicionar ao projeto'; $('t-add-h').textContent = editing ? 'Editar funções' : 'Adicionar pessoa'; $('t-q').disabled = !!editing; }
+    function reset() { chosen = null; editing = null; $('t-q').value = ''; renderFuncs([]); updateAdd(); }
     combo($('t-combo'), { items, row: (i) => '<span class="avatar" aria-hidden="true">' + initials(i.name) + '</span><span class="o-t"><b>' + esc(i.name) + '</b><small>' + esc(i.email) + (i.who ? ' · ' + esc(i.who) : '') + '</small>' + (i.off ? '<em>' + esc(i.off) + '</em>' : '') + '</span>',
       pick: (i) => { chosen = i; $('t-q').value = i.name; updateAdd(); } });
     $('t-q').addEventListener('input', () => { chosen = null; updateAdd(); });
     $('t-add').addEventListener('click', () => {
       if (!chosen) return;
-      const role = $('t-role').value, r = E.atribuir(chosen.email, role);
+      const fs = checked(); if (!fs.length) { say('Escolha pelo menos uma função no projeto.'); return; }
+      const r = E.definir(chosen.email, fs);
       if (r.erro) { say(r.erro); return; }
-      say(chosen.name + (role === 'Responsável' ? ' agora é Responsável pelo projeto' : ' agora vê este projeto') + '. Registrado na auditoria.');
-      chosen = null; $('t-q').value = ''; updateAdd(); renderTeam();
+      say(chosen.name + (editing ? ': funções atualizadas' : ' agora vê este projeto') + '. Registrado na auditoria.'); reset(); renderTeam();
+    });
+    $('t-cancel').addEventListener('click', () => { reset(); });
+    $('t-princ').addEventListener('change', () => {
+      if (!$('t-princ').value) { renderPrinc(); return; }
+      const r = E.trocarPrincipal($('t-princ').value);
+      if (r.erro) { say(r.erro); renderPrinc(); return; }
+      say(r.anterior ? r.anterior.name + ' deixou de ser o Responsável principal e continua na equipe. Registrado na auditoria.' : 'Responsável principal definido. Registrado na auditoria.'); renderTeam();
     });
     $('t-list').addEventListener('click', (e) => {
+      const ed = e.target.closest('[data-edf]');
+      if (ed) { const m = E.equipe().filter((x) => x.email === ed.getAttribute('data-edf'))[0]; editing = m.email; chosen = { email: m.email, name: m.name }; $('t-q').value = m.name; renderFuncs(m.funcoes); updateAdd(); $('t-funcs').scrollIntoView({ block: 'nearest' }); return; }
       const b = e.target.closest('[data-rm]'); if (!b) return;
       const u = E.usuario(b.getAttribute('data-rm')), r = E.retirar(b.getAttribute('data-rm'));
       if (r.erro) { say(r.erro); return; }
       say(u.name + ' deixou de ver este projeto. Registrado na auditoria.'); renderTeam();
     });
+    const dlg = $('fn-dlg');
+    dlg.querySelector('[data-cancel]').addEventListener('click', () => dlg.close());
+    $('fn-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const n = $('fn-n').value.trim().replace(/\s+/g, ' ');
+      if (!n) { $('fn-e').textContent = 'Informe o nome da função.'; return; }
+      if (E.FUNCS.some((f) => f.n.toLowerCase() === n.toLowerCase())) { $('fn-e').textContent = 'Já existe uma função com este nome.'; return; }
+      E.FUNCS.push({ n: n, a: 1 }); E.salvarFuncoes();
+      renderFuncs(checked().concat([n])); dlg.close(); say('Função criada e marcada.');
+    });
     E.onChange(renderTeam);
-    renderTeam(); updateAdd();
+    renderFuncs([]); renderTeam(); updateAdd();
   }
 
   initPerfis(); initTeam();

@@ -12,6 +12,9 @@
     { name: 'Carlos Eduardo Mendes', email: 'carlos.mendes@suaong.org.br', st: 'bloqueado', perfil: 'Equipe de Projetos', who: 'Equipe de Projetos', off: 'Conta bloqueada' },
     { name: 'Felipe Albuquerque', email: 'felipe.albuquerque@suaong.org.br', st: 'perfil', perfil: '', who: '', off: 'Ainda sem perfil de acesso' }
   ];
+  /* estado das contas alterado na tela Usuários (inativar, reativar): guardado para as outras telas enxergarem */
+  var SKEY = 'integra.usuarios.estado.v1';
+  try { var ov = JSON.parse(localStorage.getItem(SKEY) || '{}'); USUARIOS.forEach(function (u) { if (ov[u.email]) { u.st = ov[u.email].st; u.off = ov[u.email].off; } }); } catch (e) { /* sem armazenamento */ }
   var PERFIS_EDITAM = ['Coordenação de Projetos', 'Equipe de Projetos']; /* quem pode ser Responsável: perfis que editam projetos */
   var EXEMPLO = { nome: 'Esporte na Comunidade', equipe: [{ email: 'ana.ferreira@suaong.org.br', role: 'Responsável' }, { email: 'joao.lima@suaong.org.br', role: 'Equipe' }] };
   var mem = null, ouvintes = [];
@@ -30,8 +33,31 @@
   function porNome(n) { return USUARIOS.filter(function (u) { return u.name === n; })[0]; }
   function ativo(u) { return u.st === 'ativo' && u.perfil; }
 
+  /* catálogo de funções no projeto (editável pelo "+"). "Responsável" é fixa: é a que dá a função de Responsável. */
+  var FKEY = 'integra.projeto.funcoes.v1';
+  var FUNCS = [{ n: 'Responsável', a: 1, fixa: 1 }, { n: 'Equipe', a: 1 }, { n: 'Coordenador de núcleo', a: 1 }, { n: 'Educador', a: 1 }, { n: 'Apoio administrativo', a: 1 }];
+  try { var fs = JSON.parse(localStorage.getItem(FKEY) || 'null'); if (fs && fs.length) { FUNCS.length = 0; fs.forEach(function (x) { FUNCS.push(x); }); } } catch (e) { /* segue com o padrão */ }
+
   var E = {
+    FUNCS: FUNCS,
+    salvarFuncoes: function () { try { localStorage.setItem(FKEY, JSON.stringify(FUNCS)); } catch (e) { /* sem armazenamento */ } },
+    /* troca o Responsável principal; quem era principal continua na equipe. Devolve { erro } ou { anterior } */
+    trocarPrincipal: function (email) {
+      var old = E.responsavel(), r = E.atribuir(email, 'Responsável', true);
+      if (r.erro) return r;
+      if (old && old.email !== email) { var fs2 = old.funcoes.filter(function (x) { return x !== 'Responsável'; }); E.definir(old.email, fs2.length ? fs2 : ['Equipe']); return { anterior: old }; }
+      return {};
+    },
     usuarios: USUARIOS,
+    /* st: 'ativo' | 'inativo' | 'bloqueado' */
+    setEstado: function (email, st) {
+      var off = st === 'inativo' ? 'Conta inativa' : st === 'bloqueado' ? 'Conta bloqueada' : '';
+      var u = usuario(email); if (u) { u.st = st; u.off = off; }
+      try { var ov = JSON.parse(localStorage.getItem(SKEY) || '{}'); if (st === 'ativo') delete ov[email]; else ov[email] = { st: st, off: off }; localStorage.setItem(SKEY, JSON.stringify(ov)); } catch (e) { /* sem armazenamento */ }
+    },
+    /* o Responsável do projeto precisa de conta ativa; senão o projeto fica sem responsável */
+    semResponsavel: function (email) { var u = usuario(email); return !u || u.st !== 'ativo'; },
+    motivoSemResp: function (email) { var u = usuario(email); return !u ? 'pessoa não encontrada' : u.st === 'inativo' ? 'conta inativa' : u.st === 'bloqueado' ? 'conta bloqueada' : 'conta sem acesso'; },
     usuario: usuario, porNome: porNome,
     nome: function () { return ler().nome; },
     equipe: function () { var p = false; return ler().equipe.map(function (m) { var u = usuario(m.email) || { name: m.email }, pr = m.role === 'Responsável' && !p; if (pr) p = true; return { name: u.name, email: m.email, role: m.role, principal: pr, funcoes: (m.funcoes && m.funcoes.length) ? m.funcoes.slice() : [m.role] }; }); },

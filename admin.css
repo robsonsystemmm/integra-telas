@@ -377,3 +377,17 @@ dialog .dacts{display:flex;flex-direction:column-reverse;gap:8px;margin-top:4px}
   .pr-acts{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
   .pr-acts .chk{min-width:0}
 }
+
+/* Equipe do projeto: funções em caixas de marcação */
+.fchips{display:flex;flex-wrap:wrap;gap:8px}
+.fchips label{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px 0 10px;border:1px solid var(--color-border-field);border-radius:8px;background:#fff;cursor:pointer;font-weight:500;color:var(--color-text)}
+.fchips label:has(input:checked){border-color:var(--color-primary);background:var(--color-primary-soft);font-weight:600}
+.fchips label:has(input:focus-visible){box-shadow:var(--focus-ring)}
+.fchips input{width:20px;height:20px;margin:0;flex:none;accent-color:var(--color-primary)}
+.fchips .plus{width:44px;height:44px;padding:0;font-size:22px;line-height:1}
+.team .field+.field{margin-top:12px}.team .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.team .rows li{flex-wrap:wrap}.team .rows .fn{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto}
+.team .rows .rowact{display:flex;gap:8px;align-items:center}
+.team .select{width:100%;max-width:420px}
+[hidden]{display:none!important}
+.fchips .plus{background:#fff;border:1px solid var(--color-border-field);color:var(--color-text);border-radius:8px;cursor:pointer}

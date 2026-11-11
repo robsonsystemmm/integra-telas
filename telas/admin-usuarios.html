@@ -119,6 +119,7 @@
   <div class="dacts"><button type="button" class="btn ghost" data-cancel>Cancelar</button><button type="submit" class="btn danger" id="off-ok"></button></div>
 </form></dialog>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<script src="../projeto-equipe-dados.js?v=20261111a"></script>
 <script src="../projeto-dados.js?v=20261111a"></script>
 <script>
 (function(){
@@ -150,6 +151,7 @@ d.querySelectorAll('[data-cancel]').forEach(function(b){b.addEventListener('clic
 d.querySelector('form').addEventListener('submit',function(e){e.preventDefault();
   if(modo==='off'&&!$('#off-motivo').value){$('#off-motivo').focus();return}
   if($('#off-just').value.trim().length<10){$('#off-just').focus();say('Escreva a justificativa (mínimo de 10 caracteres).');return}
+  if(window.PRJ_EQUIPE)window.PRJ_EQUIPE.setEstado(alvo.p.e,modo==='off'?'inativo':'ativo');
   var tr=alvo.tr,off=modo==='off',pill=tr.querySelector('[data-label="Estado"] .pill'),btn=alvo.b;
   pill.className='pill '+(off?'muted':'ok');pill.innerHTML='<i aria-hidden="true"></i>'+(off?'Inativo':'Ativo');
   var ic=btn.querySelector('svg use');

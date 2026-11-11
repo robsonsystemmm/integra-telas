@@ -17,7 +17,7 @@
     ['Futsal Feminino', 'Emenda parlamentar 118/2025', 'Ministério do Esporte', 0, 'Rascunho', L, 0, 0, [L], 0, 0, 5, null, 0],
     ['Natação Inclusiva', 'Convênio 12/2023', 'Secretaria Estadual de Esporte', 4, 'Ativo', A, -200, 180000, [A, J], 400, 400, 0, null, 0],
     ['Capoeira nos Bairros', 'Termo de fomento 0456/2025', 'Instituto Parceiro (privado)', 2, 'Suspenso', L, 140, 150000, [L], 250, 90, 0, 45, 2],
-    ['Vôlei de Praia Social', 'Contrato de patrocínio 03/2026', 'Instituto Parceiro (privado)', 2, 'Ativo', J, 75, 95000, [J, A], 200, 120, 0, 80, 0],
+    ['Vôlei de Praia Social', 'Contrato de patrocínio 03/2026', 'Instituto Parceiro (privado)', 2, 'Ativo', 'carlos.mendes@suaong.org.br', 75, 95000, [J, 'carlos.mendes@suaong.org.br'], 200, 120, 0, 80, 0],
     ['Atletismo Jovem', 'Termo de colaboração 21/2025', 'Secretaria Municipal de Esporte', 1, 'Ativo', A, 520, 330000, [A, L, J], 600, 0, 2, 200, 0],
     ['Ginástica para Idosos', 'Convênio 88/2025', 'Secretaria Estadual de Esporte', 2, 'Cancelado', L, -40, 120000, [L], 150, 60, 0, null, 0],
     ['Xadrez nas Escolas', 'Termo de fomento 0777/2026', 'Ministério do Esporte', 0, 'Rascunho', J, 0, 0, [J], 0, 0, 4, null, 0],
@@ -30,6 +30,8 @@
     hoje: HJ, dia: dia, ETAPAS: ETAPAS, SITS: SITS, projetos: projetos,
     USER: { 'Coordenação de Projetos': A, 'Equipe de Projetos': J, 'Financeiro': 'marcos.teixeira@suaong.org.br', 'Administrador do Sistema': 'maria.souza@suaong.org.br', 'Visualização Geral': 'visualizacao@suaong.org.br', 'Gestor de Acessos': 'rodrigo.camargo@suaong.org.br' },
     /* projeto em andamento: não é rascunho, nem cancelado, nem encerrado */
+    /* responsável com conta inativa ou bloqueada (precisa de projeto-equipe-dados.js carregado antes) */
+    semResp: function (p) { var E = window.PRJ_EQUIPE; return !!E && p.sit !== 'Cancelado' && p.sit !== 'Rascunho' && p.etapa < 4 && E.semResponsavel(p.resp); },
     emAndamento: function (p) { return p.sit !== 'Rascunho' && p.sit !== 'Cancelado' && p.etapa < 4; }
   };
 })();

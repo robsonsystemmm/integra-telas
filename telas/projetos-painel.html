@@ -153,6 +153,7 @@ const ic=(n,t)=>'<svg width="'+(t||16)+'" height="'+(t||16)+'" aria-hidden="true
 function alertas(p){const a=[];
   if(p.sit==='Rascunho'){a.push({n:1,t:'Cadastro ainda em rascunho',aba:'dados'});return a}
   if(!D.emAndamento(p))return a;
+  if(D.semResp(p))a.push({n:0,t:'Sem responsável ativo: '+((window.PRJ_EQUIPE.usuario(p.resp)||{name:p.resp}).name)+' está com '+window.PRJ_EQUIPE.motivoSemResp(p.resp)+'. Designe outra pessoa.',aba:'dados'});
   if(p.dias<0)a.push({n:0,t:'Vigência encerrada há '+(-p.dias)+' dias, sem encerramento',aba:'dados'});else if(p.dias<=90)a.push({n:1,t:'Termina em '+p.dias+' dias',aba:'dados'});
   if(p.cert!==null){if(p.cert<0)a.push({n:0,t:'Certidão vencida há '+(-p.cert)+' dias',aba:'docs'});else if(p.cert<=30)a.push({n:1,t:'Certidão vence em '+p.cert+' dias',aba:'docs'})}
   if(p.docsPend>0)a.push({n:1,t:p.docsPend+(p.docsPend===1?' documento exigido sem arquivo':' documentos exigidos sem arquivo'),aba:'docs'});

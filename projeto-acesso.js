@@ -3,9 +3,9 @@
    a decisão é sempre tomada e validada no servidor; aqui ela só controla o que a tela mostra. */
 (function () {
   'use strict';
-  /* ver / editar / excluir: n = sem acesso, m = meus projetos, t = todos. criar: só com acesso a todos. */
+  /* ver / editar / excluir / aprovar: n = sem acesso, m = meus projetos, t = todos. criar: só com acesso a todos. */
   var PERFIS = {
-    'Coordenação de Projetos': { ver: 't', editar: 't', excluir: 't', criar: true, team: 'editar' },
+    'Coordenação de Projetos': { ver: 't', editar: 't', excluir: 't', aprovar: 't', criar: true, team: 'editar' },
     'Equipe de Projetos': { ver: 'm', editar: 'm', excluir: 'n', criar: false },
     'Financeiro': { ver: 't', editar: 'n', excluir: 'n', criar: false, reprog: true, nota: 'Perfil Financeiro: o cadastro é só para consulta. Para mudar valores ou itens, peça uma reprogramação ao setor de Projetos.' },
     'Administrador do Sistema': { ver: 't', editar: 'n', excluir: 'n', criar: false, team: 'ver', nota: 'Administrador do Sistema: vê todos os projetos, só para consulta.' },
@@ -33,9 +33,10 @@
     return {
       perfil: perfil, ver: ver, editar: editar, excluir: ver && !novo && vale(p.excluir),
       equipeVer: ver && (p.team === 'ver' || p.team === 'editar'), equipeEditar: ver && p.team === 'editar', /* linha "Equipe do projeto": só com acesso a todos */
-      gerencia: editar && p.editar === 't', /* aprovar, validar e gerenciar listas: exige Editar com acesso a todos */
+      gerencia: editar && p.editar === 't', /* gerenciar listas de cadastro: exige Editar com acesso a todos */
+      aprova: ver && !novo && vale(p.aprovar), /* ação Aprovar: aditivos e documentos do projeto */
       reprog: !!p.reprog && ver && !editar, aviso: p.nota || 'Este perfil só consulta o cadastro.', motivo: motivo,
-      resumo: 'Ver: ' + ALC[p.ver] + ' · Editar: ' + ALC[p.editar] + ' · Excluir: ' + ALC[p.excluir] + ' · Criar: ' + (p.criar ? 'sim' : 'não')
+      resumo: 'Ver: ' + ALC[p.ver] + ' · Editar: ' + ALC[p.editar] + ' · Excluir: ' + ALC[p.excluir] + ' · Aprovar: ' + ALC[p.aprovar || 'n'] + ' · Criar: ' + (p.criar ? 'sim' : 'não')
     };
   };
 })();
