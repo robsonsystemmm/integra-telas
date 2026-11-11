@@ -133,10 +133,10 @@
     const openSet = new Set(AREAS.map((a) => a.name)); let q = '';
     function render() {
       const map = cfg.get(), base = cfg.base ? cfg.base() : null, dis = !!(cfg.dis && cfg.dis());
-      const ae = document.activeElement, aid = ae && root.contains(ae) ? ae.id : '', sel = aid === prefix + '-q' ? [ae.selectionStart, ae.selectionEnd] : null;
+      const ae = document.activeElement, aid = ae && root.contains(ae) ? ae.id : '', sel = aid === prefix + '-mq' ? [ae.selectionStart, ae.selectionEnd] : null;
       const nq = norm(q.trim());
       let h = '<div class="mx2"><div class="mx-bar"><div class="search">' + '<svg width="20" height="20" aria-hidden="true"><use href="#i-search"/></svg>' +
-        '<input id="' + prefix + '-q" type="search" placeholder="Filtrar permissões (ex.: orçamento, usuários)" aria-label="Filtrar permissões" value="' + esc(q) + '"></div>' +
+        '<input id="' + prefix + '-mq" type="search" placeholder="Filtrar permissões (ex.: orçamento, usuários)" aria-label="Filtrar permissões" value="' + esc(q) + '"></div>' +
         '<div class="mx-btns"><button type="button" class="btn ghost sm auto" data-open="1">Expandir tudo</button><button type="button" class="btn ghost sm auto" data-open="0">Recolher tudo</button></div></div>';
       let shownAny = false;
       AREAS.forEach((ar) => {

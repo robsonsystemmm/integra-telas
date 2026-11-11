@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Painel de projetos - INTEGRA</title>
-<link rel="stylesheet" href="../tokens.css?v=20261111a">
-<link rel="stylesheet" href="../components.css?v=20261111a">
-<link rel="stylesheet" href="../admin.css?v=20261111a">
+<link rel="stylesheet" href="../tokens.css?v=20261111b">
+<link rel="stylesheet" href="../components.css?v=20261111b">
+<link rel="stylesheet" href="../admin.css?v=20261111b">
 <style>
 [hidden]{display:none!important}
 .demo{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 16px;padding:10px 14px;border:1px dashed var(--color-border-field);border-radius:var(--radius-control);background:var(--color-surface);font-size:13px;color:var(--color-text-muted)}
 .demo label{font-weight:600;color:var(--color-text)}
-.demo select{font:14px var(--font);color:var(--color-text);background:var(--color-surface);border:1px solid var(--color-border-field);border-radius:8px;padding:0 10px;height:40px;width:auto}
+.demo select{font:14px var(--font);color:var(--color-text);background:var(--color-surface);border:1px solid var(--color-border-field);border-radius:8px;padding:0 10px;height:44px;width:auto}
 .demo select:focus-visible{outline:none;box-shadow:var(--focus-ring)}
 #resumo{flex:1 1 100%;color:var(--color-text-body)}
 .blocked{margin:0 0 16px;padding:16px 20px;border:1px solid var(--color-error);border-radius:var(--radius-card);background:var(--color-error-soft);color:var(--color-error)}
@@ -37,7 +37,7 @@
 .cols .c{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
 .cols .v{font-size:12px;font-weight:600;color:var(--color-text);margin-bottom:4px;min-height:16px}
 .cols .b{width:100%;max-width:28px;background:var(--color-primary);border-radius:4px 4px 0 0}
-.mes{display:flex;gap:6px;margin-top:6px}.mes span{flex:1;min-width:0;text-align:center;font-size:12px;line-height:14px;color:var(--color-text-muted)}.mes small{font-size:11px}
+.mes{display:flex;gap:6px;margin-top:6px}.mes span{flex:1;min-width:0;text-align:center;font-size:12px;line-height:14px;color:var(--color-text-muted)}.mes small{font-size:12px}
 .tv{margin-top:14px}.tv summary{cursor:pointer;min-height:var(--touch-target);display:flex;align-items:center;font-weight:600;color:var(--color-primary)}
 .tv .tbl-wrap{margin-top:8px}.tbl td.num{font-variant-numeric:tabular-nums}
 .tip{position:fixed;z-index:80;max-width:min(320px,90vw);padding:8px 12px;border-radius:8px;background:var(--color-text);color:#fff;font-size:13px;line-height:18px;pointer-events:none}
@@ -136,9 +136,9 @@
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-<script src="../projeto-acesso.js?v=20261111a"></script>
-<script src="../projeto-equipe-dados.js?v=20261111a"></script>
-<script src="../projeto-dados.js?v=20261111a"></script>
+<script src="../projeto-acesso.js?v=20261111b"></script>
+<script src="../projeto-equipe-dados.js?v=20261111b"></script>
+<script src="../projeto-dados.js?v=20261111b"></script>
 <script>
 (function(){
 const $=s=>document.querySelector(s),D=window.PRJ_DADOS;
@@ -211,7 +211,7 @@ $('#perfil').addEventListener('change',render);
 render();
 })();
 </script>
-<script src="../admin.js?v=20261111a" defer></script>
-<script src="../components.js?v=20261111a" defer></script>
+<script src="../admin.js?v=20261111b" defer></script>
+<script src="../components.js?v=20261111b" defer></script>
 </body>
 </html>

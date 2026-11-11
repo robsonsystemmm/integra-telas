@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Usuários - INTEGRA</title>
-<link rel="stylesheet" href="../tokens.css?v=20261111a">
-<link rel="stylesheet" href="../components.css?v=20261111a">
-<link rel="stylesheet" href="../admin.css?v=20261111a">
+<link rel="stylesheet" href="../tokens.css?v=20261111b">
+<link rel="stylesheet" href="../components.css?v=20261111b">
+<link rel="stylesheet" href="../admin.css?v=20261111b">
 <style>
 [hidden]{display:none!important}
 .demo{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 16px;padding:10px 14px;border:1px dashed var(--color-border-field);border-radius:var(--radius-control);background:var(--color-surface);font-size:13px;color:var(--color-text-muted)}
 .demo label{font-weight:600;color:var(--color-text)}
-.demo select{font:14px var(--font);color:var(--color-text);background:var(--color-surface);border:1px solid var(--color-border-field);border-radius:8px;padding:0 10px;height:40px;width:auto}
+.demo select{font:14px var(--font);color:var(--color-text);background:var(--color-surface);border:1px solid var(--color-border-field);border-radius:8px;padding:0 10px;height:44px;width:auto}
 #quemTxt{flex:1 1 100%;color:var(--color-text-body)}
 .list button[aria-disabled=true]{opacity:.55;cursor:not-allowed}
 #off .box{margin:0;padding:12px 14px;border-radius:var(--radius-control);background:var(--color-surface-alt,#F1F5F9);font-size:14px}
@@ -119,8 +119,8 @@
   <div class="dacts"><button type="button" class="btn ghost" data-cancel>Cancelar</button><button type="submit" class="btn danger" id="off-ok"></button></div>
 </form></dialog>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-<script src="../projeto-equipe-dados.js?v=20261111a"></script>
-<script src="../projeto-dados.js?v=20261111a"></script>
+<script src="../projeto-equipe-dados.js?v=20261111b"></script>
+<script src="../projeto-dados.js?v=20261111b"></script>
 <script>
 (function(){
 var $=function(q){return document.querySelector(q)},d=$('#off'),alvo=null,modo='';
@@ -162,7 +162,7 @@ d.querySelector('form').addEventListener('submit',function(e){e.preventDefault()
 $('#quem').addEventListener('change',aplica);aplica();
 })();
 </script>
-<script src="../admin.js?v=20261111a" defer></script>
-<script src="../components.js?v=20261111a" defer></script>
+<script src="../admin.js?v=20261111b" defer></script>
+<script src="../components.js?v=20261111b" defer></script>
 </body>
 </html>

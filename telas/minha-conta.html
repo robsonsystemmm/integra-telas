@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Minha conta - INTEGRA</title>
-<link rel="stylesheet" href="../tokens.css?v=20261111a">
-<link rel="stylesheet" href="../components.css?v=20261111a">
-<link rel="stylesheet" href="../admin.css?v=20261111a">
+<link rel="stylesheet" href="../tokens.css?v=20261111b">
+<link rel="stylesheet" href="../components.css?v=20261111b">
+<link rel="stylesheet" href="../admin.css?v=20261111b">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -71,7 +71,7 @@
     <main id="main"><div class="page-head"><div><h1>Minha conta</h1><p>Seus dados e a sua senha.</p></div></div>
 <section class="panel panel-pad">
   <h2>Dados pessoais</h2><p class="desc">O e-mail é o seu login e só pode ser alterado por um administrador.</p>
-  <form onsubmit="return false" data-say-submit="Dados atualizados." novalidate>
+  <form data-demo data-say-submit="Dados atualizados." novalidate>
     <div class="grid2">
       <div class="field"><label for="m-nome">Nome completo<span class="req" aria-hidden="true">*</span></label><div class="control"><input id="m-nome" name="m-nome" type="text" value="Maria Souza" required autocomplete="name"></div></div>
       <div class="field"><span class="label">E-mail</span><div class="readonly" style="overflow-wrap:anywhere">maria.souza@suaong.org.br</div></div>
@@ -83,7 +83,7 @@
 </section>
 <section class="panel panel-pad">
   <h2>Trocar senha</h2><p class="desc">Ao trocar a senha, os outros aparelhos conectados são desconectados.</p>
-  <form onsubmit="return false" data-say-submit="Senha atualizada. Os outros aparelhos foram desconectados." novalidate>
+  <form data-demo data-say-submit="Senha atualizada. Os outros aparelhos foram desconectados." novalidate>
     <div style="max-width:440px;display:flex;flex-direction:column;gap:16px">
       <div class="field"><label for="m-atual">Senha atual<span class="req" aria-hidden="true">*</span></label><div class="control has-toggle"><input id="m-atual" name="m-atual" type="password" placeholder="Digite a senha atual" required autocomplete="current-password"><button type="button" class="toggle" data-toggle-password="m-atual" aria-pressed="false" aria-label="Mostrar senha"><span class="on"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-eye"/></svg></span><span class="off"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-eyeoff"/></svg></span></button></div></div>
       <div class="field"><label for="m-nova">Nova senha<span class="req" aria-hidden="true">*</span></label><div class="control has-toggle"><input id="m-nova" name="m-nova" type="password" placeholder="Crie uma senha" required autocomplete="new-password"><button type="button" class="toggle" data-toggle-password="m-nova" aria-pressed="false" aria-label="Mostrar senha"><span class="on"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-eye"/></svg></span><span class="off"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-eyeoff"/></svg></span></button></div></div>
@@ -97,7 +97,7 @@
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-<script src="../admin.js?v=20261111a" defer></script>
-<script src="../components.js?v=20261111a" defer></script>
+<script src="../admin.js?v=20261111b" defer></script>
+<script src="../components.js?v=20261111b" defer></script>
 </body>
 </html>
