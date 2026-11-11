@@ -19,4 +19,7 @@ Cada inativação ou reativação registra quem fez, quando, estado antigo e nov
 
 ## Em aberto
 - Excluir dados pessoais de quem saiu: fica para a política de retenção da LGPD.
-- Limite e tipos de anexo (hoje 10 MB, PDF/PNG/JPG) e hospedagem.
+- Hospedagem: não definida, por enquanto só o front-end está sendo construído.
+
+## Anexos
+Limite de 20 MB por arquivo (decisão de 11/11/2026). Tipos: PDF, PNG e JPG. O servidor também precisa validar tipo e tamanho (upload_max_filesize e post_max_size do PHP em 20 MB ou mais).

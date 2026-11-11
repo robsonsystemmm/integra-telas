@@ -491,7 +491,7 @@ dialog form{padding:20px;display:flex;flex-direction:column;gap:14px;max-height:
     <div class="f" id="gNum"><label for="dNum">Número<span class="req">*</span></label><input id="dNum" autocomplete="off"></div>
     <div class="f span2" id="gResp"><label for="dResp">Responsável pela assinatura<span class="req">*</span></label><select id="dResp"></select></div>
     <div class="f span2"><label for="dDesc">Descrição</label><input id="dDesc" autocomplete="off"></div>
-    <div class="f span2"><label for="dFile">Arquivo<span class="req">*</span></label><input type="file" id="dFile" accept=".pdf,.png,.jpg,.jpeg" style="height:auto;padding:9px 12px"><small class="hint">PDF, PNG ou JPG, até 10 MB.</small></div>
+    <div class="f span2"><label for="dFile">Arquivo<span class="req">*</span></label><input type="file" id="dFile" accept=".pdf,.png,.jpg,.jpeg" style="height:auto;padding:9px 12px"><small class="hint">PDF, PNG ou JPG, até 20 MB.</small></div>
     <div class="f span2" id="gWhy"><label for="dWhy">Motivo da substituição<span class="req">*</span></label><input id="dWhy" autocomplete="off"><small class="hint">A versão anterior fica guardada no histórico.</small></div>
   </div>
   <small class="err" id="dEr"></small>
@@ -803,7 +803,7 @@ $("#dForm").addEventListener("submit",e=>{e.preventDefault();const er=$("#dEr"),
   if(t.c==="Certidão"){if(!o.org)return bad("Informe o órgão emissor.");if(!o.num)return bad("Informe o número da certidão.");if(!o.emi)return bad("Informe a data de emissão.")}
   if(t.c==="Declaração"&&!o.resp)return bad("Escolha quem assina a declaração.");
   if(t.v){if(!o.val)return bad("Informe a validade.");if(o.emi&&o.val<=o.emi)return bad("A validade deve ser posterior à emissão.")}
-  const f=$("#dFile").files[0];if(!f)return bad("Anexe o arquivo.");if(!/\.(pdf|png|jpe?g)$/i.test(f.name))return bad("Use PDF, PNG ou JPG.");if(f.size>10485760)return bad("O arquivo passa de 10 MB.");
+  const f=$("#dFile").files[0];if(!f)return bad("Anexe o arquivo.");if(!/\.(pdf|png|jpe?g)$/i.test(f.name))return bad("Use PDF, PNG ou JPG.");if(f.size>20971520)return bad("O arquivo passa de 20 MB.");
   const w=$("#dWhy").value.trim();if(dMode==="rep"&&!w)return bad("Informe o motivo da substituição.");
   if(dMode==="new"&&t.r&&DOCS.some(d=>d.tipo===t.n))return bad("Já existe documento deste tipo. Use Substituir.");
   const tam=f.size>1048576?(f.size/1048576).toFixed(1).replace(".",",")+" MB":Math.max(1,Math.round(f.size/1024))+" KB",u=$("#perfil").value;
