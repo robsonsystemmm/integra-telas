@@ -370,3 +370,10 @@ dialog .dacts{display:flex;flex-direction:column-reverse;gap:8px;margin-top:4px}
 .pr{grid-template-columns:minmax(170px,1fr) 170px minmax(0,1.8fr)}
 .chk{padding:0 10px 0 6px;gap:6px}
 .pr-acts{gap:6px}
+/* Matriz de acesso no celular: uma coluna só (precisa vir depois da regra .pr acima) */
+@media (max-width:899px){
+  .pr{grid-template-columns:minmax(0,1fr)}
+  .pr-scope .select{max-width:none;width:100%}
+  .pr-acts{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+  .pr-acts .chk{min-width:0}
+}
