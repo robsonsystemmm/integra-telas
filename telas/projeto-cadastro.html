@@ -30,6 +30,7 @@
 .blocked p{margin:4px 0 0;color:var(--color-text-body)}
 #resumoAcesso{flex:1 1 100%;color:var(--color-text-body)}
 [role=tabpanel][hidden]{display:none!important}
+.eqadd{display:grid;grid-template-columns:1fr;gap:12px;align-items:end}.eqadd .btn{width:100%}@media (min-width:640px){.eqadd{grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto}.eqadd .btn{width:auto}}.rows .rm{min-height:44px;min-width:44px}
 </style>
 </head>
 <body>
@@ -173,6 +174,8 @@ dialog form{padding:20px;display:flex;flex-direction:column;gap:14px}dialog h2{m
 .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);max-width:min(92vw,440px);background:var(--color-text);color:var(--color-bg);padding:12px 16px;border-radius:8px;font-size:14px;z-index:90}.toast[hidden]{display:none}
 .hist{list-style:none;margin:0;padding:0}.hist li{padding:10px 0;border-bottom:1px solid var(--color-border);display:flex;flex-wrap:wrap;gap:4px 16px}.hist li:last-child{border:0}.hist time{color:var(--color-text-muted);font-size:13px;font-variant-numeric:tabular-nums;flex:none;min-width:110px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.eqadd{display:grid;grid-template-columns:1fr;gap:12px;align-items:end}.eqadd .btn{width:100%}@media (min-width:640px){.eqadd{grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto}.eqadd .btn{width:auto}}.rows .rm{min-height:44px;min-width:44px}
 </style><select id="perfil" hidden><option>Coordenação de Projetos</option><option>Equipe de Projetos</option><option>Financeiro</option><option>Administrador do Sistema</option><option>Visualização Geral</option><option>Gestor de Acessos</option></select><div id="main">
   <div class="page-head">
     <div><h2>Dados do projeto</h2><div class="pills"><span class="pill info" id="pEtapa">Etapa: Celebração</span><span class="pill warn" id="pCad">Rascunho</span><span class="pill danger" id="pAtr" hidden>Atrasado</span></div></div>
@@ -205,13 +208,16 @@ dialog form{padding:20px;display:flex;flex-direction:column;gap:14px}dialog h2{m
       <div class="f cond" id="gEm"><label for="emenda">Número da emenda<span class="req">*</span></label><input id="emenda"><small class="err"></small></div>
       <div class="f cond" id="gPr"><label for="proto">Protocolo no Transferegov</label><input id="proto"></div>
       <div class="f"><label for="unid">Unidade responsável</label><div class="selrow"><select id="unid"></select><button class="btn plus" type="button" data-new="unid" aria-label="Cadastrar nova unidade responsável" title="Cadastrar nova unidade responsável">+</button></div><small class="err"></small></div>
-      <div class="f"><label for="resp">Responsável principal<span class="req">*</span></label><select id="resp"></select><small class="hint" id="respHint">Só aparece quem tem conta ativa e perfil de Projetos.</small><small class="hint" id="respMais">Para incluir outros responsáveis e a equipe, use <a href="#seq">Equipe do projeto</a>, logo abaixo.</small><small class="err"></small></div>
+      <div class="f"><label for="resp">Responsável principal<span class="req">*</span></label><select id="resp"></select><small class="hint" id="respHint">Só aparece quem tem conta ativa e perfil de Projetos.</small><small class="hint" id="respMais">Outros responsáveis e a equipe são adicionados em <a href="#seq">Equipe do projeto</a>, logo abaixo.</small><small class="err"></small></div>
       <div class="f"><label for="stat">Situação</label><select id="stat"><option>Ativo</option><option>Suspenso</option><option>Cancelado</option></select><small class="hint">Mudar a situação exige justificativa.</small></div>
     </div></section>
 
-  <section class="panel panel-pad" id="seq"><h2>Equipe do projeto</h2><p class="desc">Quem for atribuído passa a ver este projeto. O Responsável principal é escolhido em Identificação. Outros Responsáveis e os membros da equipe são atribuídos na tela Equipe do projeto.</p>
+  <section class="panel panel-pad" id="seq"><h2>Equipe do projeto</h2><p class="desc">Quem for atribuído passa a ver este projeto. O projeto precisa de pelo menos um Responsável e pode ter vários, além de quantos membros de equipe forem necessários.</p>
     <ul class="rows" id="eqList"></ul>
-    <div class="pills" style="align-items:center"><button class="btn sm" type="button" id="eqBtn">Adicionar responsáveis e equipe</button><span class="hint" id="eqHint"></span></div></section>
+    <div class="eqadd" id="eqAddBox"><div class="f"><label for="eqPessoa">Pessoa</label><select id="eqPessoa"></select></div>
+      <div class="f"><label for="eqRole">Função no projeto</label><select id="eqRole"><option>Equipe</option><option>Responsável</option></select></div>
+      <button class="btn sm" type="button" id="eqAdd">Adicionar ao projeto</button></div>
+    <p class="hint" id="eqHint"></p></section>
 
   <section class="panel panel-pad" id="s2"><h2>Valores</h2><p class="desc">O valor global é calculado: repasse mais as duas contrapartidas. Rendimentos de aplicação ficam à parte.</p>
     <div class="grid3">
@@ -545,7 +551,10 @@ const UNIDS=[{n:"Coordenação de Esportes",a:1},{n:"Coordenação Social",a:1},
 const LISTS={tipo:TIPOS,unid:UNIDS,mun:MUNS},RT={tipo:"tipo de instrumento",conc:"concedente",unid:"unidade responsável",mun:"município"};
 const E=window.PRJ_EQUIPE;E.zerar("");
 function fillResp(){const s=$("#resp"),v=s.value;s.innerHTML='<option value="">Selecione</option>'+E.elegiveisResponsavel().map(u=>'<option value="'+esc(u.name)+'">'+esc(u.name)+"</option>").join("");s.value=v}
-function renderEq(){const L=E.equipe();$("#eqList").innerHTML=L.map(m=>'<li><div class="nm"><b>'+esc(m.name)+"</b><small>"+esc(m.email)+'</small></div><span class="pill '+(m.role==="Responsável"?"info":"")+'">'+m.role+(m.principal&&E.responsaveis().length>1?" principal":"")+"</span></li>").join("");$("#eqHint").textContent=L.length?"":"Ninguém atribuído ainda. Escolha o Responsável e salve o rascunho."}
+function renderEq(){const L=E.equipe(),ed=A_eq();$("#eqList").innerHTML=L.map(m=>'<li><div class="nm"><b>'+esc(m.name)+"</b><small>"+esc(m.email)+'</small></div><span class="pill '+(m.role==="Responsável"?"info":"")+'">'+m.role+(m.principal&&E.responsaveis().length>1?" principal":"")+"</span>"+(ed?'<button type="button" class="btn ghost sm auto rm" data-rm="'+esc(m.email)+'" aria-label="Retirar '+esc(m.name)+' do projeto">Retirar</button>':"")+"</li>").join("");
+  const livres=E.usuarios.filter(u=>u.st==="ativo"&&u.perfil&&!L.some(m=>m.email===u.email));$("#eqPessoa").innerHTML='<option value="">Selecione</option>'+livres.map(u=>'<option value="'+esc(u.email)+'">'+esc(u.name)+" · "+esc(u.perfil)+"</option>").join("");
+  $("#eqAddBox").hidden=!ed;$("#eqHint").textContent=L.length?"":"Ninguém atribuído ainda. Adicione pelo menos um Responsável."}
+function A_eq(){const a=window.PRJ_A();return !!a.equipeEditar}
 function fillP(k){const s=$("#"+k),v=s.value;s.innerHTML='<option value="">Selecione</option>'+LISTS[k].filter(x=>x.a||x.n===v).map(x=>'<option value="'+esc(x.n)+'">'+esc(x.n)+(x.a?"":" (inativo)")+"</option>").join("");s.value=v}
 function fillSel(){const t=$("#tipo"),c=$("#conc"),tv=t.value,cv=c.value,o=(n,a)=>'<option value="'+esc(n)+'">'+esc(n)+(a?"":" (inativo)")+"</option>";
   t.innerHTML='<option value="">Selecione</option>'+TIPOS.filter(x=>x.a||x.n===tv).map(x=>o(x.n,x.a)).join("");
@@ -610,7 +619,7 @@ function save(done){if(!validate(false)){say("Corrija o campo destacado para sal
   df.length?ask("Justifique as alterações",df.map(d=>d[1]).join(", ")+".",go):go()}
 function perfil(){const A=window.PRJ_A(),ro=!A.editar,mx=A.gerencia;$("#form").disabled=ro;$$("[data-new]").forEach(b=>{b.disabled=!mx;b.title=mx?"Cadastrar novo":"Só quem pode editar todos os projetos cadastra novos itens"});$("#bMan").style.display=mx?"":"none";$("#catHint").textContent=mx?"":"Novos cadastros nessas listas só podem ser feitos por quem edita todos os projetos.";$("#bar2").style.display=ro?"none":"";$("#bAd").disabled=ro;
   $("#resp").disabled=!A.equipeEditar;$("#respMais").hidden=!A.equipeEditar;$("#respHint").textContent=A.equipeEditar?"Só aparece quem tem conta ativa e perfil de Projetos.":"O Responsável principal só muda por quem gerencia a equipe do projeto.";
-  $("#seq").hidden=!A.equipeVer;$("#eqBtn").style.display=A.equipeEditar?"":"none";
+  $("#seq").hidden=!A.equipeVer;renderEq();
   $("#banner").classList.toggle("show",ro);$("#banTxt").textContent=A.aviso;$("#bReq").style.display=A.reprog?"":"none"}
 function renderAds(){$("#adList").innerHTML=ads.map((a,i)=>'<li><div class="nm"><b>Aditivo '+(i+1)+": "+a.t+"</b><small>"+dt(a.dt)+(a.d?", novo término "+dt(a.d):"")+(a.v?", acréscimo de "+brl(a.v):"")+" — "+a.w.replace(/</g,"&lt;")+'</small></div><span class="pill '+(a.ok?"ok":"warn")+'">'+(a.ok?"Aprovado":"Pendente de aprovação")+"</span>"+(a.ok?"":'<button class="btn sm" type="button" data-ap="'+i+'">Aprovar</button>')+"</li>").join("");calc()}
 
@@ -664,7 +673,9 @@ $("#mList").addEventListener("click",e=>{const b=e.target.closest("[data-ed]"),g
   if(b){$("#dlgM").close();openNew(k,b.dataset.ed)}
   if(g){const n=g.dataset.tg;let on;if(k!=="conc"){const t=LISTS[k].find(x=>x.n===n);t.a=t.a?0:1;on=!!t.a}else{CONC[n][2]=CONC[n][2]===0?1:0;on=CONC[n][2]!==0}
     fillSel();renderMuns();renderMan();say(on?"Ativado. Volta a aparecer nas listas de novos cadastros.":"Inativado. Sai das listas novas e continua nos projetos já cadastrados.")}});
-$("#eqBtn").onclick=()=>{if(!saved){say("Salve o rascunho antes de adicionar responsáveis e equipe.");return}window.open("admin-projeto-equipe.html","_blank","noopener")};
+$("#eqAdd").onclick=()=>{const em=$("#eqPessoa").value;if(!em){say("Escolha a pessoa.");return}E.setNome($("#nome").value.trim());const r=E.atribuir(em,$("#eqRole").value);if(r.erro){say(r.erro);return}say("Pessoa adicionada ao projeto.")};
+$("#eqList").addEventListener("click",e=>{const b=e.target.closest("[data-rm]");if(!b)return;const r=E.retirar(b.getAttribute("data-rm"));if(r.erro){say(r.erro);return}say("Pessoa retirada do projeto.")});
+$("#resp").addEventListener("change",()=>{const u=E.porNome($("#resp").value);if(u){E.setNome($("#nome").value.trim());const r=E.atribuir(u.email,"Responsável",true);if(r.erro)say(r.erro)}});
 E.onChange(()=>{const r=E.responsavel();fillResp();if(r){$("#resp").value=r.name;if(saved)snap.resp=r.name}renderEq();calc()});
 fillSel();renderMuns();renderHist();renderEq();perfil();calc();
 })();
