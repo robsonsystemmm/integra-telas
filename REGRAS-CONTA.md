@@ -23,3 +23,9 @@ Cada inativação ou reativação registra quem fez, quando, estado antigo e nov
 
 ## Anexos
 Limite de 20 MB por arquivo (decisão de 11/11/2026). Tipos: PDF, PNG e JPG. O servidor também precisa validar tipo e tamanho (upload_max_filesize e post_max_size do PHP em 20 MB ou mais).
+
+## Responsáveis e equipe do projeto (11/11/2026)
+- Todo projeto tem pelo menos 1 Responsável e pode ter mais de um, além de vários membros na equipe.
+- O primeiro Responsável é o principal, escolhido no cadastro. Os demais são atribuídos na tela Equipe do projeto.
+- Só perfis que editam projetos (Coordenação e Equipe de Projetos) podem ser Responsáveis.
+- Não se retira o último Responsável: antes é preciso atribuir outro.

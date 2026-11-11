@@ -205,11 +205,11 @@ dialog form{padding:20px;display:flex;flex-direction:column;gap:14px}dialog h2{m
       <div class="f cond" id="gEm"><label for="emenda">Número da emenda<span class="req">*</span></label><input id="emenda"><small class="err"></small></div>
       <div class="f cond" id="gPr"><label for="proto">Protocolo no Transferegov</label><input id="proto"></div>
       <div class="f"><label for="unid">Unidade responsável</label><div class="selrow"><select id="unid"></select><button class="btn plus" type="button" data-new="unid" aria-label="Cadastrar nova unidade responsável" title="Cadastrar nova unidade responsável">+</button></div><small class="err"></small></div>
-      <div class="f"><label for="resp">Responsável pelo projeto<span class="req">*</span></label><select id="resp"></select><small class="hint" id="respHint">Só aparece quem tem conta ativa e perfil de Projetos.</small><small class="err"></small></div>
+      <div class="f"><label for="resp">Responsável principal<span class="req">*</span></label><select id="resp"></select><small class="hint" id="respHint">Só aparece quem tem conta ativa e perfil de Projetos.</small><small class="err"></small></div>
       <div class="f"><label for="stat">Situação</label><select id="stat"><option>Ativo</option><option>Suspenso</option><option>Cancelado</option></select><small class="hint">Mudar a situação exige justificativa.</small></div>
     </div></section>
 
-  <section class="panel panel-pad" id="seq"><h2>Equipe do projeto</h2><p class="desc">Quem for atribuído passa a ver este projeto. O Responsável é escolhido em Identificação; as demais pessoas são atribuídas na tela Equipe do projeto.</p>
+  <section class="panel panel-pad" id="seq"><h2>Equipe do projeto</h2><p class="desc">Quem for atribuído passa a ver este projeto. O Responsável principal é escolhido em Identificação. Outros Responsáveis e os membros da equipe são atribuídos na tela Equipe do projeto.</p>
     <ul class="rows" id="eqList"></ul>
     <div class="pills" style="align-items:center"><button class="btn sm" type="button" id="eqBtn">Gerenciar equipe</button><span class="hint" id="eqHint"></span></div></section>
 
@@ -545,7 +545,7 @@ const UNIDS=[{n:"Coordenação de Esportes",a:1},{n:"Coordenação Social",a:1},
 const LISTS={tipo:TIPOS,unid:UNIDS,mun:MUNS},RT={tipo:"tipo de instrumento",conc:"concedente",unid:"unidade responsável",mun:"município"};
 const E=window.PRJ_EQUIPE;E.zerar("");
 function fillResp(){const s=$("#resp"),v=s.value;s.innerHTML='<option value="">Selecione</option>'+E.elegiveisResponsavel().map(u=>'<option value="'+esc(u.name)+'">'+esc(u.name)+"</option>").join("");s.value=v}
-function renderEq(){const L=E.equipe();$("#eqList").innerHTML=L.map(m=>'<li><div class="nm"><b>'+esc(m.name)+"</b><small>"+esc(m.email)+'</small></div><span class="pill '+(m.role==="Responsável"?"info":"")+'">'+m.role+"</span></li>").join("");$("#eqHint").textContent=L.length?"":"Ninguém atribuído ainda. Escolha o Responsável e salve o rascunho."}
+function renderEq(){const L=E.equipe();$("#eqList").innerHTML=L.map(m=>'<li><div class="nm"><b>'+esc(m.name)+"</b><small>"+esc(m.email)+'</small></div><span class="pill '+(m.role==="Responsável"?"info":"")+'">'+m.role+(m.principal&&E.responsaveis().length>1?" principal":"")+"</span></li>").join("");$("#eqHint").textContent=L.length?"":"Ninguém atribuído ainda. Escolha o Responsável e salve o rascunho."}
 function fillP(k){const s=$("#"+k),v=s.value;s.innerHTML='<option value="">Selecione</option>'+LISTS[k].filter(x=>x.a||x.n===v).map(x=>'<option value="'+esc(x.n)+'">'+esc(x.n)+(x.a?"":" (inativo)")+"</option>").join("");s.value=v}
 function fillSel(){const t=$("#tipo"),c=$("#conc"),tv=t.value,cv=c.value,o=(n,a)=>'<option value="'+esc(n)+'">'+esc(n)+(a?"":" (inativo)")+"</option>";
   t.innerHTML='<option value="">Selecione</option>'+TIPOS.filter(x=>x.a||x.n===tv).map(x=>o(x.n,x.a)).join("");
@@ -601,7 +601,7 @@ function validate(full){let first=null;const bad=(id,m)=>{setErr(id,m);first=fir
 function ask(t,p,cb){$("#dT").textContent=t;$("#dP").textContent=p;$("#dW").value="";$("#dE").textContent="";$("#dlg").showModal();$("#dW").focus();ask.cb=cb}
 $("#dNo").onclick=()=>{$("#dlg").close();ask.cb=null;$("#stat").value=statAnt};
 $("#dForm").addEventListener("submit",e=>{e.preventDefault();const w=$("#dW").value.trim();if(!w){$("#dE").textContent="Informe a justificativa para continuar.";return}$("#dlg").close();const c=ask.cb;ask.cb=null;c&&c(w)});
-function syncEq(){E.setNome($("#nome").value.trim());const n=$("#resp").value;if(n){const u=E.porNome(n);if(u)E.atribuir(u.email,"Responsável")}renderEq()}
+function syncEq(){E.setNome($("#nome").value.trim());const n=$("#resp").value;if(n){const u=E.porNome(n);if(u)E.atribuir(u.email,"Responsável",true)}renderEq()}
 function shot(){const o={};REL.forEach(([id])=>o[id]=$("#"+id).value);return o}
 function save(done){if(!validate(false)){say("Corrija o campo destacado para salvar.");return}
   const df=saved?REL.filter(([id])=>snap[id]!==$("#"+id).value):[];
@@ -609,7 +609,7 @@ function save(done){if(!validate(false)){say("Corrija o campo destacado para sal
     $("#pCad").textContent=final?"Cadastro finalizado":"Rascunho salvo";$("#pCad").className="pill "+(final?"ok":"info");say("Salvo. O histórico foi atualizado.");done&&done()};
   df.length?ask("Justifique as alterações",df.map(d=>d[1]).join(", ")+".",go):go()}
 function perfil(){const A=window.PRJ_A(),ro=!A.editar,mx=A.gerencia;$("#form").disabled=ro;$$("[data-new]").forEach(b=>{b.disabled=!mx;b.title=mx?"Cadastrar novo":"Só quem pode editar todos os projetos cadastra novos itens"});$("#bMan").style.display=mx?"":"none";$("#catHint").textContent=mx?"":"Novos cadastros nessas listas só podem ser feitos por quem edita todos os projetos.";$("#bar2").style.display=ro?"none":"";$("#bAd").disabled=ro;
-  $("#resp").disabled=!A.equipeEditar;$("#respHint").textContent=A.equipeEditar?"Só aparece quem tem conta ativa e perfil de Projetos.":"O Responsável só muda por quem gerencia a equipe do projeto.";
+  $("#resp").disabled=!A.equipeEditar;$("#respHint").textContent=A.equipeEditar?"Só aparece quem tem conta ativa e perfil de Projetos.":"O Responsável principal só muda por quem gerencia a equipe do projeto.";
   $("#seq").hidden=!A.equipeVer;$("#eqBtn").style.display=A.equipeEditar?"":"none";
   $("#banner").classList.toggle("show",ro);$("#banTxt").textContent=A.aviso;$("#bReq").style.display=A.reprog?"":"none"}
 function renderAds(){$("#adList").innerHTML=ads.map((a,i)=>'<li><div class="nm"><b>Aditivo '+(i+1)+": "+a.t+"</b><small>"+dt(a.dt)+(a.d?", novo término "+dt(a.d):"")+(a.v?", acréscimo de "+brl(a.v):"")+" — "+a.w.replace(/</g,"&lt;")+'</small></div><span class="pill '+(a.ok?"ok":"warn")+'">'+(a.ok?"Aprovado":"Pendente de aprovação")+"</span>"+(a.ok?"":'<button class="btn sm" type="button" data-ap="'+i+'">Aprovar</button>')+"</li>").join("");calc()}

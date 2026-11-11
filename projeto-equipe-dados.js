@@ -34,25 +34,27 @@
     usuarios: USUARIOS,
     usuario: usuario, porNome: porNome,
     nome: function () { return ler().nome; },
-    equipe: function () { return ler().equipe.map(function (m) { var u = usuario(m.email) || { name: m.email }; return { name: u.name, email: m.email, role: m.role }; }); },
+    equipe: function () { var p = false; return ler().equipe.map(function (m) { var u = usuario(m.email) || { name: m.email }, pr = m.role === 'Responsável' && !p; if (pr) p = true; return { name: u.name, email: m.email, role: m.role, principal: pr }; }); },
+    /* todos os Responsáveis (o projeto pode ter mais de um; o primeiro é o principal) */
+    responsaveis: function () { return E.equipe().filter(function (m) { return m.role === 'Responsável'; }); },
     responsavel: function () { return E.equipe().filter(function (m) { return m.role === 'Responsável'; })[0] || null; },
     /* quem pode ser Responsável no cadastro: conta ativa com perfil que edita projetos */
     elegiveisResponsavel: function () { return USUARIOS.filter(function (u) { return ativo(u) && PERFIS_EDITAM.indexOf(u.perfil) >= 0; }); },
     zerar: function (nome) { gravar({ nome: nome || '', equipe: [] }); },
     setNome: function (n) { var d = ler(); if (d.nome !== n) { d.nome = n; gravar(d); } },
-    /* devolve { erro } ou { anterior } (quem deixou de ser Responsável) */
-    atribuir: function (email, role) {
-      var u = usuario(email), d = ler(), anterior = null;
+    /* devolve { erro } ou {}. O projeto pode ter vários Responsáveis; principal=true coloca esta pessoa como a principal */
+    atribuir: function (email, role, principal) {
+      var u = usuario(email), d = ler();
       if (!u || !ativo(u)) return { erro: 'Só quem tem conta ativa e perfil pode ser atribuído.' };
       if (role === 'Responsável' && PERFIS_EDITAM.indexOf(u.perfil) < 0) return { erro: u.name + ' tem o perfil ' + u.perfil + ', que não edita projetos. O Responsável precisa de um perfil de Projetos.' };
-      if (role === 'Responsável') d.equipe.forEach(function (m) { if (m.role === 'Responsável' && m.email !== email) { m.role = 'Equipe'; anterior = usuario(m.email); } });
       var ja = d.equipe.filter(function (m) { return m.email === email; })[0];
       if (ja) ja.role = role; else d.equipe.push({ email: email, role: role });
-      gravar(d); return { anterior: anterior };
+      if (role === 'Responsável' && principal) { var i = d.equipe.map(function (m) { return m.email; }).indexOf(email); d.equipe.unshift(d.equipe.splice(i, 1)[0]); }
+      gravar(d); return {};
     },
     retirar: function (email) {
       var d = ler(), m = d.equipe.filter(function (x) { return x.email === email; })[0];
-      if (m && m.role === 'Responsável') return { erro: 'O projeto precisa de um Responsável. Atribua outra pessoa como Responsável antes de retirar esta.' };
+      if (m && m.role === 'Responsável' && E.responsaveis().length < 2) return { erro: 'O projeto precisa de pelo menos um Responsável. Atribua outra pessoa como Responsável antes de retirar esta.' };
       d.equipe = d.equipe.filter(function (x) { return x.email !== email; }); gravar(d); return {};
     },
     onChange: function (f) { ouvintes.push(f); }

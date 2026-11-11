@@ -299,7 +299,7 @@
       const team = E.equipe();
       $('t-proj').textContent = E.nome() || 'novo projeto, ainda sem nome';
       $('t-list').innerHTML = team.length ? team.map((t) => '<li><span class="avatar" aria-hidden="true">' + initials(t.name) + '</span><span class="nm"><b>' + esc(t.name) + '</b><small>' + esc(t.email) + '</small></span>' +
-        '<span class="pill ' + (t.role === 'Responsável' ? 'violet' : 'info') + '">' + t.role + '</span><button type="button" class="icon-btn" data-rm="' + esc(t.email) + '" aria-label="Retirar ' + esc(t.name) + ' da equipe"><svg width="20" height="20" aria-hidden="true"><use href="#i-trash"/></svg></button></li>').join('')
+        '<span class="pill ' + (t.role === 'Responsável' ? 'violet' : 'info') + '">' + t.role + (t.principal && team.filter((x) => x.role === 'Responsável').length > 1 ? ' principal' : '') + '</span><button type="button" class="icon-btn" data-rm="' + esc(t.email) + '" aria-label="Retirar ' + esc(t.name) + ' da equipe"><svg width="20" height="20" aria-hidden="true"><use href="#i-trash"/></svg></button></li>').join('')
         : '<li class="empty">Nenhuma pessoa atribuída. Só quem tem acesso a todos os projetos vê este projeto.</li>';
       $('t-count').textContent = team.length + (team.length === 1 ? ' pessoa' : ' pessoas');
     }
@@ -311,7 +311,7 @@
       if (!chosen) return;
       const role = $('t-role').value, r = E.atribuir(chosen.email, role);
       if (r.erro) { say(r.erro); return; }
-      say(chosen.name + (role === 'Responsável' ? ' agora é o Responsável' + (r.anterior ? ' e ' + r.anterior.name + ' passou a Equipe' : '') : ' agora vê este projeto') + '. Registrado na auditoria.');
+      say(chosen.name + (role === 'Responsável' ? ' agora é Responsável pelo projeto' : ' agora vê este projeto') + '. Registrado na auditoria.');
       chosen = null; $('t-q').value = ''; updateAdd(); renderTeam();
     });
     $('t-list').addEventListener('click', (e) => {
