@@ -71,7 +71,7 @@
     <div class="side-brand"><div class="logo"><svg width="24" height="24" aria-hidden="true" focusable="false" ><use href="#i-logo"/></svg></div>
       <div class="nm">INTEGRA<small>Projetos, Pessoas e Recursos</small></div>
       <button type="button" class="icon-btn side-close" data-close-menu aria-label="Fechar menu"><svg width="22" height="22" aria-hidden="true" focusable="false" ><use href="#i-close"/></svg></button></div>
-    <nav class="nav" aria-label="Administração"><a href="admin-cadastros-pendentes.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-pending"/></svg><span>Cadastros pendentes</span><span class="count" aria-label="3 pendentes">3</span></a><a href="admin-usuarios.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-users"/></svg><span>Usuários</span></a><a href="admin-perfis-permissoes.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-key"/></svg><span>Perfis e permissões</span></a><a href="admin-configuracoes-acesso.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-sliders"/></svg><span>Configurações de acesso</span></a><a href="admin-auditoria.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-scroll"/></svg><span>Registro de auditoria</span></a><a href="minha-conta.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-user"/></svg><span>Minha conta</span></a><h2>Módulos</h2><a href="projetos-lista.html" aria-current="page"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-folder"/></svg><span>Projetos</span></a><a href="projeto-cadastro.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-plus"/></svg><span>Cadastrar projeto</span></a><span class="soon" aria-disabled="true"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-wallet"/></svg><span>Financeiro</span><em>Em breve</em></span></nav>
+    <nav class="nav" aria-label="Administração"><a href="admin-cadastros-pendentes.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-pending"/></svg><span>Cadastros pendentes</span><span class="count" aria-label="3 pendentes">3</span></a><a href="admin-usuarios.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-users"/></svg><span>Usuários</span></a><a href="admin-perfis-permissoes.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-key"/></svg><span>Perfis e permissões</span></a><a href="admin-configuracoes-acesso.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-sliders"/></svg><span>Configurações de acesso</span></a><a href="admin-auditoria.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-scroll"/></svg><span>Registro de auditoria</span></a><a href="minha-conta.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-user"/></svg><span>Minha conta</span></a><h2>Módulos</h2><a href="projetos-painel.html"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></g></svg><span>Painel de projetos</span></a><a href="projetos-lista.html" aria-current="page"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-folder"/></svg><span>Projetos</span></a><a href="projeto-cadastro.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-plus"/></svg><span>Cadastrar projeto</span></a><span class="soon" aria-disabled="true"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-wallet"/></svg><span>Financeiro</span><em>Em breve</em></span></nav>
     <div class="side-foot">Ambiente seguro e auditado · LGPD</div>
   </aside>
   <div class="scrim" hidden></div>
@@ -112,6 +112,7 @@
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <script src="../projeto-acesso.js"></script>
 <script src="../projeto-equipe-dados.js"></script>
+<script src="../projeto-dados.js"></script>
 <script>
 (function(){
 const $=s=>document.querySelector(s),E=window.PRJ_EQUIPE;
@@ -121,25 +122,7 @@ const HJ=new Date();HJ.setHours(0,0,0,0);
 const dia=n=>{const d=new Date(HJ);d.setDate(d.getDate()+n);return d};
 const dt=d=>d.toLocaleDateString('pt-BR');
 const norm=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
-const ETAPAS=['Celebração','Estruturação','Execução','Prestação de contas','Encerramento'];
-const SITS=['Rascunho','Ativo','Suspenso','Cancelado'];
-const A='ana.ferreira@suaong.org.br',J='joao.lima@suaong.org.br',L='luciana.prado@suaong.org.br';
-/* nome, instrumento, concedente, etapa, situação, responsável, término vigente (dias a partir de hoje), valor global, equipe */
-const P=[
- ['Esporte na Comunidade','Termo de fomento 0123/2025','Ministério do Esporte',2,'Ativo',A,420,800000,[A,J]],
- ['Esporte para Todos','Termo de fomento 912346/2026','Ministério do Esporte',1,'Ativo',A,610,1000000,[A,L]],
- ['Basquete nas Escolas','Convênio 45/2024','Secretaria Estadual de Esporte',2,'Ativo',L,62,420000,[L,J]],
- ['Judô Cidadão','Termo de colaboração 07/2025','Secretaria Municipal de Esporte',3,'Ativo',A,-12,260000,[A]],
- ['Futsal Feminino','Emenda parlamentar 118/2025','Ministério do Esporte',0,'Rascunho',L,0,0,[L]],
- ['Natação Inclusiva','Convênio 12/2023','Secretaria Estadual de Esporte',4,'Ativo',A,-200,180000,[A,J]],
- ['Capoeira nos Bairros','Termo de fomento 0456/2025','Instituto Parceiro (privado)',2,'Suspenso',L,140,150000,[L]],
- ['Vôlei de Praia Social','Contrato de patrocínio 03/2026','Instituto Parceiro (privado)',2,'Ativo',J,75,95000,[J,A]],
- ['Atletismo Jovem','Termo de colaboração 21/2025','Secretaria Municipal de Esporte',1,'Ativo',A,520,330000,[A,L,J]],
- ['Ginástica para Idosos','Convênio 88/2025','Secretaria Estadual de Esporte',2,'Cancelado',L,-40,120000,[L]],
- ['Xadrez nas Escolas','Termo de fomento 0777/2026','Ministério do Esporte',0,'Rascunho',J,0,0,[J]],
- ['Skate e Cidadania','Emenda parlamentar 204/2025','Ministério do Esporte',2,'Ativo',L,300,540000,[L,J]]
-].map((r,i)=>({id:i+1,nome:r[0],inst:r[1],conc:r[2],etapa:r[3],sit:r[4],resp:r[5],fim:r[6]?dia(r[6]):null,dias:r[6],valor:r[7],eq:r[8]}));
-const USER={'Coordenação de Projetos':A,'Equipe de Projetos':J,'Financeiro':'marcos.teixeira@suaong.org.br','Administrador do Sistema':'maria.souza@suaong.org.br','Visualização Geral':'visualizacao@suaong.org.br','Gestor de Acessos':'rodrigo.camargo@suaong.org.br'};
+const D=window.PRJ_DADOS,ETAPAS=D.ETAPAS,SITS=D.SITS,P=D.projetos,USER=D.USER;
 const nomeDe=e=>(E.usuario(e)||{name:e}).name;
 const ESC={n:'sem acesso',m:'meus projetos',t:'todos os projetos'};
 let pag=1;const TAM=8;
