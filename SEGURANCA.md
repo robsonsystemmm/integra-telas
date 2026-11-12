@@ -76,3 +76,11 @@ Regra do produto: todo relatório oferece **Exportar PDF** e **Exportar XLSX**. 
 - [ ] Células que começam com `=`, `+`, `-` ou `@` recebem apóstrofo no XLSX real (injeção de fórmula). No gerador de referência todo texto sai como texto, não como fórmula.
 - [ ] Limite de linhas por exportação; acima dele, gerar em fila e avisar por e-mail. Arquivo não fica guardado no servidor depois do download.
 - [ ] Rodapé de todo arquivo: quem emitiu, quando e "uso restrito".
+
+## Termos de uso e política de privacidade
+
+- [ ] Telas públicas `termos-de-uso` e `politica-de-privacidade` (hoje **rascunho**, sem revisão jurídica). Publicar só depois de preencher os campos em amarelo (nome e CNPJ da ONG, encarregado/DPO, foro, provedores, prazos, base legal de cada finalidade).
+- [ ] Aceite no cadastro é obrigatório (caixa desmarcada por padrão; o servidor rejeita se não vier marcada). Guardar **versão do documento, data/hora e IP** do aceite.
+- [ ] Mudança relevante nos textos: nova versão e novo aceite no próximo login.
+- [ ] Menores de idade: confirmar com o jurídico como o consentimento do responsável é coletado e guardado.
+- [ ] Links dos documentos no rodapé do login e do cadastro; abrem em nova aba para não perder o formulário preenchido.

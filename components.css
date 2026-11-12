@@ -151,3 +151,6 @@ input[aria-invalid=true]{border:2px solid var(--color-error);padding:0 11px}
 @media (prefers-reduced-motion:reduce){.captcha[data-state=verifying] .cbox{animation:none}}
 @media (max-width:420px){.captcha .mark{display:none}}
 .captcha[data-state=ok] .ctxt small{color:#115E59}
+
+.legal-links{display:flex;flex-wrap:wrap;justify-content:center;gap:0 16px;margin:4px 0 0;font-size:13px}
+.legal-links a{display:inline-flex;align-items:center;min-height:44px;padding:0 4px;color:var(--color-primary);font-weight:600}
