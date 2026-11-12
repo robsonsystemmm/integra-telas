@@ -32,7 +32,7 @@ Limite de 20 MB por arquivo (decisão de 11/11/2026). Tipos: PDF, PNG e JPG. O s
 - Funções no projeto: a lista é editável (botão + no cadastro ou "Gerenciar listas"). Uma pessoa pode ter várias funções no mesmo projeto. "Responsável" é fixa e é a que dá a função de Responsável; as demais são descritivas e contam como Equipe.
 
 ## Projeto sem responsável ativo (11/11/2026)
-- Se o Responsável principal fica com a conta inativa ou bloqueada, o projeto é marcado como "Sem responsável ativo": alerta urgente no Painel e etiqueta na lista de projetos.
+- Se o Responsável principal fica com a conta inativa ou bloqueada, o projeto é marcado como "Sem responsável ativo": alerta urgente no Dashboard e etiqueta na lista de projetos.
 - A coordenação resolve escolhendo outra pessoa no campo Responsável principal (no cadastro ou na tela Equipe do projeto).
 
 ## Ação Aprovar (11/11/2026)
