@@ -42,6 +42,23 @@
 .tv .tbl-wrap{margin-top:8px}.tbl td.num{font-variant-numeric:tabular-nums}
 .tip{position:fixed;z-index:80;max-width:min(320px,90vw);padding:8px 12px;border-radius:8px;background:var(--color-text);color:#fff;font-size:13px;line-height:18px;pointer-events:none}
 .page-head .btn{white-space:nowrap}
+@media (min-width:1024px){.metrics[data-n="6"]{grid-template-columns:repeat(3,1fr)}}
+.cardp+.cardp{margin-top:16px}.charts+.cardp{margin-top:16px}.cardp+.charts{margin-top:16px}
+.leg{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--color-text)}
+.leg li{display:inline-flex;align-items:center;gap:8px}.leg svg{flex:none}
+.sw{width:14px;height:14px;border-radius:3px;display:inline-block;flex:none}.sw.dark{background:var(--color-primary)}.sw.light{background:var(--color-primary-soft);border:1px solid var(--color-primary)}
+.hb .tr{height:12px;background:var(--color-primary-soft);border:1px solid #C7D2FE;border-radius:0 4px 4px 0;overflow:hidden}
+.hb .tr .bar{height:100%;border-radius:0}
+.seg{display:flex;gap:2px;height:36px;border-radius:6px;overflow:hidden}
+.seg .s{display:flex;align-items:center;justify-content:center;min-width:0;color:#fff;font-weight:700;font-size:14px;cursor:default}
+.seg .s:focus-visible{outline:none;box-shadow:inset 0 0 0 3px #fff,inset 0 0 0 5px var(--color-text)}
+.seg .ok{background:var(--color-secondary)}.seg .and{background:var(--color-primary)}.seg .atr{background:var(--color-error)}
+.docs{list-style:none;margin:0;padding:0}.docs li{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--color-border)}.docs li:first-child{border-top:0}
+.docs .n{margin-left:auto;font-size:20px;font-weight:700;color:var(--color-text);font-variant-numeric:tabular-nums}.docs .t{flex:1;min-width:0}.docs small{display:block;color:var(--color-text-muted);font-size:12px}
+#res td.num,#res th.num{font-variant-numeric:tabular-nums}#res tfoot td{font-weight:700;color:var(--color-text);border-top:2px solid var(--color-border)}
+#res .pn b{display:block;color:var(--color-text)}#res .pn small{color:var(--color-text-muted);font-size:12px}
+#res .lk{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;padding:0 8px;font-weight:600;color:var(--color-primary)}
+.mini{display:flex;align-items:center;gap:8px;min-width:120px}.mini .tr{flex:1;height:8px;background:var(--color-primary-soft);border:1px solid #C7D2FE;border-radius:4px;overflow:hidden}.mini .tr i{display:block;height:100%;background:var(--color-primary)}.mini span{font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
@@ -111,7 +128,7 @@
 <div id="area">
 <div class="empty panel" id="vazio" hidden>Nenhum projeto atribuído a você ainda. Peça à coordenação para atribuir você a um projeto.</div>
 <div id="conteudo">
-<div class="metrics" id="metrics"></div>
+<div class="metrics" id="metrics" data-n="6"></div>
 
 <section class="panel cardp" aria-labelledby="h-alertas"><h2 id="h-alertas">Precisa de atenção</h2>
   <p class="sd">Prazos, certidões, documentos e metas que pedem ação. Os mais urgentes vêm primeiro.</p>
@@ -124,11 +141,27 @@
   <section class="panel cardp" aria-labelledby="h-conc"><h2 id="h-conc">Valor global por concedente</h2><p class="sd">Soma do valor global dos projetos em andamento. Só o valor do cadastro; gastos e saldos ficam no Financeiro.</p>
     <div class="hb" id="c-conc"></div>
     <details class="tv"><summary>Ver como tabela</summary><div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Concedente</th><th scope="col">Projetos</th><th scope="col">Valor global</th></tr></thead><tbody id="t-conc"></tbody></table></div></details></section>
+
+  <section class="panel cardp" aria-labelledby="h-vetapa"><h2 id="h-vetapa">Valor global por etapa</h2><p class="sd">Soma do valor global dos projetos de cada etapa, sem os cancelados.</p>
+    <div class="hb" id="c-vetapa"></div>
+    <details class="tv"><summary>Ver como tabela</summary><div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Etapa</th><th scope="col">Projetos</th><th scope="col">Valor global</th></tr></thead><tbody id="t-vetapa"></tbody></table></div></details></section>
+  <section class="panel cardp" aria-labelledby="h-docs"><h2 id="h-docs">Documentos e certidões</h2><p class="sd">Situação das certidões e dos documentos exigidos nos projetos em andamento.</p>
+    <ul class="docs" id="c-docs"></ul></section>
 </div>
 
+<section class="panel cardp" aria-labelledby="h-ben"><h2 id="h-ben">Beneficiários por projeto</h2><p class="sd">O comprimento da barra mostra os atendimentos previstos. A parte escura mostra os já atendidos.</p>
+  <ul class="leg" aria-label="Legenda"><li><i class="sw dark"></i>Atendidos</li><li><i class="sw light"></i>Previstos (ainda não atendidos)</li></ul>
+  <div class="hb" id="c-ben"></div>
+  <details class="tv"><summary>Ver como tabela</summary><div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Projeto</th><th scope="col">Previstos</th><th scope="col">Atendidos</th><th scope="col">%</th></tr></thead><tbody id="t-ben"></tbody></table></div></details></section>
+<section class="panel cardp" aria-labelledby="h-metas"><h2 id="h-metas">Metas de todos os projetos</h2><p class="sd" id="metasSub"></p>
+  <div class="seg" id="c-metas" role="img" aria-label="Metas por situação"></div>
+  <ul class="leg" id="l-metas" aria-label="Legenda"></ul>
+  <details class="tv"><summary>Ver como tabela</summary><div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Projeto</th><th scope="col">Total</th><th scope="col">Atingidas</th><th scope="col">Em andamento</th><th scope="col">Atrasadas</th></tr></thead><tbody id="t-metas"></tbody></table></div></details></section>
 <section class="panel cardp" aria-labelledby="h-fim"><h2 id="h-fim">Términos nos próximos 12 meses</h2><p class="sd" id="fimSub"></p>
   <div class="cols" id="c-fim" role="img" aria-label="Gráfico de colunas: projetos que terminam em cada mês"></div><div class="mes" id="c-mes" aria-hidden="true"></div>
   <details class="tv"><summary>Ver como tabela</summary><div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Mês</th><th scope="col">Projetos que terminam</th></tr></thead><tbody id="t-fim"></tbody></table></div></details></section>
+<section class="panel cardp" aria-labelledby="h-res"><h2 id="h-res">Resumo por projeto</h2><p class="sd">Todos os projetos que este perfil enxerga, com os números principais lado a lado.</p>
+  <div class="tbl-wrap"><table class="tbl" id="res"><caption class="sr-only">Resumo por projeto</caption><thead><tr><th scope="col">Projeto</th><th scope="col">Etapa</th><th scope="col">Beneficiários</th><th scope="col">Metas</th><th scope="col">Valor global</th><th scope="col">Término</th><th scope="col">Alertas</th></tr></thead><tbody id="t-res"></tbody><tfoot id="f-res"></tfoot></table></div></section>
 <p class="footnote">Projetos de exemplo, só para ilustrar o layout. Beneficiários atendidos vêm da execução; aqui são valores de demonstração.</p>
 </div></div>
 <div class="tip" id="tip" role="tooltip" hidden></div></main>
@@ -172,7 +205,8 @@ function render(){
   $('#vazio').hidden=base.length>0;$('#conteudo').hidden=base.length===0;if(!base.length)return;
   const and=base.filter(D.emAndamento),com=base.map(p=>({p:p,a:alertas(p)})).filter(x=>x.a.length);
   const prev=and.reduce((s,p)=>s+p.benPrev,0),real=and.reduce((s,p)=>s+p.benReal,0);
-  $('#metrics').innerHTML=[['Projetos em andamento',and.length,'de '+base.length+' no total'],['Valor global em andamento',brl(and.reduce((s,p)=>s+p.valor,0)),'valor do cadastro, sem gastos'],['Beneficiários atendidos',nf(real),prev?Math.round(real/prev*100)+'% dos '+nf(prev)+' previstos':'sem meta de atendimento'],['Projetos com alerta',com.length,com.filter(x=>x.a.some(y=>y.n===0)).length+' com alerta urgente']].map(m=>'<div class="panel metric"><span>'+m[0]+'</span><b>'+m[1]+'</b><small>'+m[2]+'</small></div>').join('');
+  const mTot=and.reduce((t,p)=>t+p.metasTot,0),mOk=and.reduce((t,p)=>t+p.metasOk,0),docsP=and.reduce((t,p)=>t+p.docsPend,0),docsN=and.filter(p=>p.docsPend>0).length;
+  $('#metrics').innerHTML=[['Projetos em andamento',and.length,'de '+base.length+' no total'],['Valor global em andamento',brl(and.reduce((t,p)=>t+p.valor,0)),'valor do cadastro, sem gastos'],['Beneficiários atendidos',nf(real),prev?Math.round(real/prev*100)+'% dos '+nf(prev)+' previstos':'sem meta de atendimento'],['Metas atingidas',mOk+' de '+mTot,mTot?Math.round(mOk/mTot*100)+'% das metas em andamento':'sem metas cadastradas'],['Documentos pendentes',docsP,docsN+(docsN===1?' projeto com documento exigido sem arquivo':' projetos com documento exigido sem arquivo')],['Projetos com alerta',com.length,com.filter(x=>x.a.some(y=>y.n===0)).length+' com alerta urgente']].map(m=>'<div class="panel metric"><span>'+m[0]+'</span><b>'+m[1]+'</b><small>'+m[2]+'</small></div>').join('');
   /* alertas */
   const itens=[];com.forEach(x=>x.a.forEach(a=>itens.push({p:x.p,a:a})));
   itens.sort((u,v)=>u.a.n-v.a.n||u.p.nome.localeCompare(v.p.nome,'pt-BR'));
@@ -189,6 +223,31 @@ function render(){
   const C=Object.keys(g).map(k=>g[k]).sort((a,b)=>b.v-a.v);C.forEach(r=>r.tip=r.l+': '+brl(r.v)+' em '+r.n+(r.n===1?' projeto':' projetos'));
   barras($('#c-conc'),C,r=>brl(r.v));
   $('#t-conc').innerHTML=C.map(r=>'<tr><td>'+esc(r.l)+'</td><td class="num">'+r.n+'</td><td class="num">'+brl(r.v)+'</td></tr>').join('');
+  /* valor por etapa */
+  const VE=D.ETAPAS.map((n,i)=>{const L=base.filter(p=>p.sit!=='Cancelado'&&p.etapa===i&&p.valor);return {l:n,v:L.reduce((t,p)=>t+p.valor,0),n:L.length}});
+  VE.forEach(r=>r.tip=r.l+': '+brl(r.v)+' em '+r.n+(r.n===1?' projeto':' projetos'));
+  barras($('#c-vetapa'),VE,r=>brl(r.v));
+  $('#t-vetapa').innerHTML=VE.map(r=>'<tr><td>'+r.l+'</td><td class="num">'+r.n+'</td><td class="num">'+brl(r.v)+'</td></tr>').join('');
+  /* documentos e certidões */
+  const cv=and.filter(p=>p.cert!==null&&p.cert<0),c30=and.filter(p=>p.cert!==null&&p.cert>=0&&p.cert<=30),c90=and.filter(p=>p.cert!==null&&p.cert>30&&p.cert<=90),cok=and.filter(p=>p.cert!==null&&p.cert>90);
+  const nm=L=>L.length?L.map(p=>p.nome).join(', '):'nenhum projeto';
+  $('#c-docs').innerHTML=[['danger','alert','Certidões vencidas',cv],['warn','alert','Vencem em até 30 dias',c30],['info','clock','Vencem em 31 a 90 dias',c90],['ok','check','Certidões em dia (mais de 90 dias)',cok]].map(r=>'<li><span class="pill '+r[0]+'">'+ic(r[1],14)+(r[0]==='danger'?'Urgente':r[0]==='warn'?'Atenção':r[0]==='ok'?'Em dia':'Acompanhar')+'</span><span class="t"><b>'+r[2]+'</b><small>'+esc(nm(r[3]))+'</small></span><span class="n">'+r[3].length+'</span></li>').join('')+'<li><span class="pill '+(docsP?'warn':'ok')+'">'+ic(docsP?'alert':'check',14)+(docsP?'Atenção':'Em dia')+'</span><span class="t"><b>Documentos exigidos sem arquivo</b><small>'+esc(docsN?and.filter(p=>p.docsPend>0).map(p=>p.nome+' ('+p.docsPend+')').join(', '):'nenhum projeto')+'</small></span><span class="n">'+docsP+'</span></li>';
+  /* beneficiários por projeto */
+  const BP=and.filter(p=>p.benPrev>0).sort((x,y)=>y.benPrev-x.benPrev),mxB=Math.max.apply(null,BP.map(p=>p.benPrev).concat([1]));
+  $('#c-ben').innerHTML=BP.map(p=>{const pc=Math.round(p.benReal/p.benPrev*100),tip=p.nome+': '+nf(p.benReal)+' atendidos de '+nf(p.benPrev)+' previstos ('+pc+'%)';return '<div class="r"><div class="lbl"><span>'+esc(p.nome)+'</span><b>'+nf(p.benReal)+' de '+nf(p.benPrev)+' ('+pc+'%)</b></div><div class="ax"><div class="tr" style="width:'+(p.benPrev/mxB*100)+'%"><div class="bar" tabindex="0" data-tip="'+esc(tip)+'" role="img" aria-label="'+esc(tip)+'" style="width:'+pc+'%"></div></div></div></div>'}).join('')||'<p class="hint">Nenhum projeto com meta de atendimento.</p>';
+  $('#t-ben').innerHTML=BP.map(p=>'<tr><td>'+esc(p.nome)+'</td><td class="num">'+nf(p.benPrev)+'</td><td class="num">'+nf(p.benReal)+'</td><td class="num">'+Math.round(p.benReal/p.benPrev*100)+'%</td></tr>').join('');
+  /* metas */
+  const mAt=and.reduce((t,p)=>t+p.metasAtraso,0),mAn=Math.max(0,mTot-mOk-mAt);
+  const MS=[{c:'ok',l:'Atingidas',v:mOk,i:'check'},{c:'and',l:'Em andamento',v:mAn,i:'clock'},{c:'atr',l:'Atrasadas',v:mAt,i:'alert'}];
+  $('#metasSub').textContent=mTot?mTot+(mTot===1?' meta':' metas')+' nos projetos em andamento.':'Nenhum projeto em andamento tem metas cadastradas.';
+  $('#c-metas').hidden=!mTot;$('#c-metas').innerHTML=MS.filter(m=>m.v).map(m=>{const tip=m.l+': '+m.v+' de '+mTot+' ('+Math.round(m.v/mTot*100)+'%)';return '<div class="s '+m.c+'" tabindex="0" data-tip="'+esc(tip)+'" role="img" aria-label="'+esc(tip)+'" style="flex:'+m.v+' 1 0">'+m.v+'</div>'}).join('');
+  $('#l-metas').innerHTML=MS.map(m=>'<li>'+ic(m.i,16)+'<span>'+m.l+': <b>'+m.v+'</b>'+(mTot?' ('+Math.round(m.v/mTot*100)+'%)':'')+'</span></li>').join('');
+  $('#t-metas').innerHTML=and.filter(p=>p.metasTot>0).map(p=>'<tr><td>'+esc(p.nome)+'</td><td class="num">'+p.metasTot+'</td><td class="num">'+p.metasOk+'</td><td class="num">'+Math.max(0,p.metasTot-p.metasOk-p.metasAtraso)+'</td><td class="num">'+p.metasAtraso+'</td></tr>').join('');
+  /* resumo por projeto */
+  const pf2=pf,al=new Map(com.map(x=>[x.p.id,x.a]));
+  $('#t-res').innerHTML=base.slice().sort((x,y)=>x.nome.localeCompare(y.nome,'pt-BR')).map(p=>{const a=al.get(p.id)||[],ur=a.filter(x=>x.n===0).length,pc=p.benPrev?Math.round(p.benReal/p.benPrev*100):null;
+    return '<tr><td class="pn"><b>'+esc(p.nome)+'</b><small>'+esc(p.sit)+' · '+esc(p.inst)+'</small></td><td data-label="Etapa">'+D.ETAPAS[p.etapa]+'</td><td data-label="Beneficiários">'+(pc===null?'—':'<div class="mini"><div class="tr"><i style="width:'+pc+'%"></i></div><span>'+nf(p.benReal)+' / '+nf(p.benPrev)+'</span></div>')+'</td><td data-label="Metas" class="num">'+(p.metasTot?p.metasOk+' / '+p.metasTot:'—')+'</td><td data-label="Valor global" class="num">'+(p.valor?brl(p.valor):'—')+'</td><td data-label="Término">'+(p.fim?p.fim.toLocaleDateString('pt-BR'):'—')+'</td><td data-label="Alertas">'+(a.length?'<span class="pill '+(ur?'danger':'warn')+'">'+ic('alert',14)+a.length+(a.length===1?' alerta':' alertas')+'</span>':'<span class="pill ok">'+ic('check',14)+'Sem alertas</span>')+' <a class="lk" href="projeto-cadastro.html?ctx='+(p.eq.includes(eu)?'meu':'alheio')+'&perfil='+pf2+'">Abrir<span class="sr-only"> '+esc(p.nome)+'</span></a></td></tr>'}).join('');
+  $('#f-res').innerHTML='<tr><td class="pn"><b>Total em andamento</b><small>'+and.length+(and.length===1?' projeto':' projetos')+'</small></td><td></td><td data-label="Beneficiários">'+nf(real)+' / '+nf(prev)+'</td><td data-label="Metas" class="num">'+mOk+' / '+mTot+'</td><td data-label="Valor global" class="num">'+brl(and.reduce((t,p)=>t+p.valor,0))+'</td><td></td><td></td></tr>';
   /* términos em 12 meses */
   const h=D.hoje,M=[];for(let i=0;i<12;i++){const d=new Date(h.getFullYear(),h.getMonth()+i,1);M.push({d:d,n:[]})}
   and.forEach(p=>{if(!p.fim||p.dias<0)return;const k=(p.fim.getFullYear()-h.getFullYear())*12+p.fim.getMonth()-h.getMonth();if(k>=0&&k<12)M[k].n.push(p.nome)});
