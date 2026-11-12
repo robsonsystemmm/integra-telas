@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dashboard de projetos - INTEGRA</title>
-<link rel="stylesheet" href="../tokens.css?v=20261112b">
-<link rel="stylesheet" href="../components.css?v=20261112b">
-<link rel="stylesheet" href="../admin.css?v=20261112b">
+<link rel="stylesheet" href="../tokens.css?v=20261112c">
+<link rel="stylesheet" href="../components.css?v=20261112c">
+<link rel="stylesheet" href="../admin.css?v=20261112c">
 <style>
 [hidden]{display:none!important}
 .demo{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 16px;padding:10px 14px;border:1px dashed var(--color-border-field);border-radius:var(--radius-control);background:var(--color-surface);font-size:13px;color:var(--color-text-muted)}
@@ -110,7 +110,7 @@
     <div class="side-brand"><div class="logo"><svg width="24" height="24" aria-hidden="true" focusable="false" ><use href="#i-logo"/></svg></div>
       <div class="nm">INTEGRA<small>Projetos, Pessoas e Recursos</small></div>
       <button type="button" class="icon-btn side-close" data-close-menu aria-label="Fechar menu"><svg width="22" height="22" aria-hidden="true" focusable="false" ><use href="#i-close"/></svg></button></div>
-    <nav class="nav" aria-label="Administração"><a href="admin-cadastros-pendentes.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-pending"/></svg><span>Cadastros pendentes</span><span class="count" aria-label="3 pendentes">3</span></a><a href="admin-usuarios.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-users"/></svg><span>Usuários</span></a><a href="admin-perfis-permissoes.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-key"/></svg><span>Perfis e permissões</span></a><a href="admin-configuracoes-acesso.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-sliders"/></svg><span>Configurações de acesso</span></a><a href="admin-auditoria.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-scroll"/></svg><span>Registro de auditoria</span></a><a href="minha-conta.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-user"/></svg><span>Minha conta</span></a><h2>Módulos</h2><details class="nav-group" open><summary><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></g></svg><span>Projetos</span></summary><div class="sub"><a href="projetos-painel.html" aria-current="page"><span>Dashboard de projetos</span></a><a href="projetos-lista.html"><span>Lista de projetos</span></a><a href="projeto-cadastro.html"><span>Cadastrar projeto</span></a></div></details><span class="soon" aria-disabled="true"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-wallet"/></svg><span>Financeiro</span><em>Em breve</em></span></nav>
+    <nav class="nav" aria-label="Administração"><a href="admin-cadastros-pendentes.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-pending"/></svg><span>Cadastros pendentes</span><span class="count" aria-label="3 pendentes">3</span></a><a href="admin-usuarios.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-users"/></svg><span>Usuários</span></a><a href="admin-perfis-permissoes.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-key"/></svg><span>Perfis e permissões</span></a><a href="admin-configuracoes-acesso.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-sliders"/></svg><span>Configurações de acesso</span></a><a href="admin-auditoria.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-scroll"/></svg><span>Registro de auditoria</span></a><a href="minha-conta.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-user"/></svg><span>Minha conta</span></a><h2>Módulos</h2><details class="nav-group" open><summary><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></g></svg><span>Projetos</span></summary><div class="sub"><a href="projetos-painel.html" aria-current="page"><span>Dashboard de projetos</span></a><a href="projetos-lista.html"><span>Lista de projetos</span></a><a href="projeto-cadastro.html"><span>Cadastrar projeto</span></a><a href="projetos-relatorios.html"><span>Relatórios</span></a></div></details><span class="soon" aria-disabled="true"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-wallet"/></svg><span>Financeiro</span><em>Em breve</em></span></nav>
     <div class="side-foot">Ambiente seguro e auditado · LGPD</div>
   </aside>
   <div class="scrim" hidden></div>
@@ -160,7 +160,8 @@
 <section class="panel cardp" aria-labelledby="h-fim"><h2 id="h-fim">Términos nos próximos 12 meses</h2><p class="sd" id="fimSub"></p>
   <div class="cols" id="c-fim" role="img" aria-label="Gráfico de colunas: projetos que terminam em cada mês"></div><div class="mes" id="c-mes" aria-hidden="true"></div>
   <details class="tv"><summary>Ver como tabela</summary><div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Mês</th><th scope="col">Projetos que terminam</th></tr></thead><tbody id="t-fim"></tbody></table></div></details></section>
-<section class="panel cardp" aria-labelledby="h-res"><h2 id="h-res">Resumo por projeto</h2><p class="sd">Todos os projetos que este perfil enxerga, com os números principais lado a lado.</p>
+<section class="panel cardp" aria-labelledby="h-res"><div style="display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;align-items:flex-start"><div><h2 id="h-res">Resumo por projeto</h2><p class="sd">Todos os projetos que este perfil enxerga, com os números principais lado a lado.</p></div><div id="expo" role="group" aria-label="Exportar resumo" style="display:flex;flex-wrap:wrap;gap:8px"><button type="button" class="btn primary auto" id="b-pdf">Exportar PDF</button><button type="button" class="btn ghost auto" id="b-xlsx">Exportar XLSX</button></div></div>
+  <p class="hint" id="expoNota" hidden>Seu perfil não pode exportar. Peça a permissão Exportar à administração.</p>
   <div class="tbl-wrap"><table class="tbl" id="res"><caption class="sr-only">Resumo por projeto</caption><thead><tr><th scope="col">Projeto</th><th scope="col">Etapa</th><th scope="col">Beneficiários</th><th scope="col">Metas</th><th scope="col">Valor global</th><th scope="col">Término</th><th scope="col">Alertas</th></tr></thead><tbody id="t-res"></tbody><tfoot id="f-res"></tfoot></table></div></section>
 <p class="footnote">Projetos de exemplo, só para ilustrar o layout. Beneficiários atendidos vêm da execução; aqui são valores de demonstração.</p>
 </div></div>
@@ -169,9 +170,11 @@
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-<script src="../projeto-acesso.js?v=20261112b"></script>
-<script src="../projeto-equipe-dados.js?v=20261112b"></script>
-<script src="../projeto-dados.js?v=20261112b"></script>
+<script src="../projeto-acesso.js?v=20261112c"></script>
+<script src="../projeto-equipe-dados.js?v=20261112c"></script>
+<script src="../projeto-dados.js?v=20261112c"></script>
+<script src="../exportar.js?v=20261112c"></script>
+<script src="../relatorios-dados.js?v=20261112c"></script>
 <script>
 (function(){
 const $=s=>document.querySelector(s),D=window.PRJ_DADOS;
@@ -194,6 +197,11 @@ function alertas(p){const a=[];
   return a}
 function barras(el,rows,fmt){const max=Math.max.apply(null,rows.map(r=>r.v).concat([1]));
   el.innerHTML=rows.map(r=>'<div class="r"><div class="lbl"><span>'+esc(r.l)+'</span><b>'+fmt(r)+'</b></div><div class="ax"><div class="bar" tabindex="0" data-tip="'+esc(r.tip)+'" role="img" aria-label="'+esc(r.tip)+'" style="width:'+(r.v?Math.max(2,r.v/max*100):0)+'%"></div></div></div>').join('')}
+let curExp=null;
+function exportarResumo(f){if(!curExp||!curExp.ok||!curExp.base.length)return;const q=D.USER[$('#perfil').value],u=window.PRJ_EQUIPE.usuario(q);
+  const n=window.PRJ_REL.exportar(f,'resumo',curExp.base,[['Alcance',curExp.alc]],u?u.name:$('#perfil').value);
+  if(window.integraSay)window.integraSay('Arquivo '+n+' gerado. A exportação foi registrada na auditoria.')}
+$('#b-pdf').addEventListener('click',()=>exportarResumo('pdf'));$('#b-xlsx').addEventListener('click',()=>exportarResumo('xlsx'));
 function render(){
   const per=window.PRJ_PERFIL($('#perfil').value),ver=per.ver!=='n',eu=D.USER[$('#perfil').value],pf=encodeURIComponent($('#perfil').value);
   $('#semAcesso').hidden=ver;$('#area').hidden=!ver;
@@ -202,6 +210,9 @@ function render(){
   $('#verLista').href='projetos-lista.html?perfil='+pf;
   if(!ver)return;
   const base=D.projetos.filter(p=>per.ver==='t'||(per.ver==='m'&&p.eq.includes(eu)));
+  curExp={base:base,alc:per.ver==='m'?'Meus projetos':'Todos os projetos',ok:!!per.exportar};
+  ['#b-pdf','#b-xlsx'].forEach(b=>$(b).setAttribute('aria-disabled',curExp.ok&&base.length?'false':'true'));
+  $('#expoNota').hidden=curExp.ok;
   $('#vazio').hidden=base.length>0;$('#conteudo').hidden=base.length===0;if(!base.length)return;
   const and=base.filter(D.emAndamento),com=base.map(p=>({p:p,a:alertas(p)})).filter(x=>x.a.length);
   const prev=and.reduce((s,p)=>s+p.benPrev,0),real=and.reduce((s,p)=>s+p.benReal,0);
@@ -270,7 +281,7 @@ $('#perfil').addEventListener('change',render);
 render();
 })();
 </script>
-<script src="../admin.js?v=20261112b" defer></script>
-<script src="../components.js?v=20261112b" defer></script>
+<script src="../admin.js?v=20261112c" defer></script>
+<script src="../components.js?v=20261112c" defer></script>
 </body>
 </html>

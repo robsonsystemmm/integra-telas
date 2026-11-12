@@ -9,7 +9,7 @@
 
   /* ---------- Modelo ---------- */
   const OPT = { n: 'Sem acesso', m: 'Meus projetos', t: 'Todos', y: 'Sim' };
-  const ACTS = [['ver', 'Visualizar'], ['criar', 'Criar'], ['editar', 'Editar'], ['excluir', 'Excluir'], ['aprovar', 'Aprovar']]; /* para novas ações (aprovar, arquivar...), basta acrescentar aqui e nas linhas desejadas */
+  const ACTS = [['ver', 'Visualizar'], ['criar', 'Criar'], ['editar', 'Editar'], ['excluir', 'Excluir'], ['aprovar', 'Aprovar'], ['exportar', 'Exportar']]; /* para novas ações (aprovar, arquivar...), basta acrescentar aqui e nas linhas desejadas */
   const SIX = ['ver', 'criar', 'editar', 'excluir'];
   const SIXA = SIX.concat(['aprovar']); /* linhas em que existe algo a aprovar */
   const AREAS = [
@@ -17,17 +17,18 @@
       { k: 'acc_users', type: 'acc', label: 'Usuários', hint: 'Editar: aceitar ou rejeitar cadastros, bloquear, inativar e reativar.', acts: ['ver', 'editar'] },
       { k: 'acc_perfis', type: 'acc', label: 'Perfis e permissões', hint: 'Atribuir perfis e criar ou editar perfis.', acts: ['ver', 'criar', 'editar', 'excluir'] },
       { k: 'acc_config', type: 'acc', label: 'Configurações de acesso', hint: 'Domínios, exceções de e-mail e segurança do login.', acts: ['ver', 'editar'] },
-      { k: 'acc_audit', type: 'acc', label: 'Auditoria', hint: 'O registro não pode ser editado nem apagado.', acts: ['ver'] } ] },
+      { k: 'acc_audit', type: 'acc', label: 'Auditoria', hint: 'O registro não pode ser editado nem apagado. Exportar: baixar o registro em PDF e XLSX.', acts: ['ver', 'exportar'] } ] },
     { name: 'Projetos', note: '“Meus projetos” são os que foram atribuídos à pessoa', rows: [
       { k: 'prj_cad', type: 'sc', label: 'Cadastro do projeto', hint: 'Criar exige acesso a todos os projetos. Aprovar: aditivos e documentos.', acts: SIXA },
       { k: 'prj_est', type: 'sc', label: 'Estruturação', hint: 'Equipe, núcleos, materiais e identidade visual.', acts: SIX },
       { k: 'prj_exe', type: 'sc', label: 'Execução', hint: 'Beneficiários, frequência e atividades.', acts: SIX },
       { k: 'prj_pre', type: 'sc', label: 'Prestação de contas', hint: 'Relatórios, diligências e envio. Aprovar: relatórios e prestação.', acts: SIXA },
-      { k: 'prj_team', type: 'team', label: 'Equipe do projeto', hint: 'Atribuir e retirar pessoas de um projeto. Só com acesso a todos.', acts: ['ver', 'editar'] } ] },
+      { k: 'prj_team', type: 'team', label: 'Equipe do projeto', hint: 'Atribuir e retirar pessoas de um projeto. Só com acesso a todos.', acts: ['ver', 'editar'] },
+      { k: 'prj_rel', type: 'sc', label: 'Relatórios de projetos', hint: 'Ver os relatórios. Exportar: baixar em PDF e XLSX; cada exportação vai para a auditoria.', acts: ['ver', 'exportar'] } ] },
     { name: 'Financeiro', note: 'Ver o projeto não dá acesso ao financeiro dele', rows: [
       { k: 'fin_orc', type: 'sc', label: 'Orçamento (rubricas)', hint: 'Rubricas, valores, remanejamentos e saldos. Aprovar: remanejamentos.', acts: SIXA },
       { k: 'fin_lan', type: 'sc', label: 'Lançamentos', hint: 'Gastos e pagamentos por rubrica. Aprovar: pagamentos.', acts: SIXA },
-      { k: 'fin_rel', type: 'sc', label: 'Relatórios', hint: 'Painéis e relatórios financeiros.', acts: ['ver'] } ] }
+      { k: 'fin_rel', type: 'sc', label: 'Relatórios', hint: 'Painéis e relatórios financeiros. Exportar: baixar em PDF e XLSX; cada exportação vai para a auditoria.', acts: ['ver', 'exportar'] } ] }
   ];
   const ROWS = AREAS.reduce((a, ar) => a.concat(ar.rows), []);
   const rowOf = (k) => ROWS.find((r) => r.k === k);
@@ -39,15 +40,15 @@
   const PRJ = ['prj_cad', 'prj_est', 'prj_exe', 'prj_pre'];
   const PROFILES = {
     admin: { name: 'Administrador do Sistema', prot: true, desc: 'Acesso total à administração e visualiza todos os projetos e o financeiro (só consulta).',
-      base: mk(Object.assign(S(['acc_users'], ['ver', 'editar'], 'y'), S(['acc_perfis'], ['ver', 'criar', 'editar', 'excluir'], 'y'), S(['acc_config'], ['ver', 'editar'], 'y'), S(['acc_audit'], ['ver'], 'y'), S(PRJ.concat(['prj_team', 'fin_orc', 'fin_lan', 'fin_rel']), ['ver'], 't'))) },
+      base: mk(Object.assign(S(['acc_users'], ['ver', 'editar'], 'y'), S(['acc_perfis'], ['ver', 'criar', 'editar', 'excluir'], 'y'), S(['acc_config'], ['ver', 'editar'], 'y'), S(['acc_audit'], ['ver', 'exportar'], 'y'), S(PRJ.concat(['prj_team', 'prj_rel', 'fin_orc', 'fin_lan', 'fin_rel']), ['ver'], 't'), S(['prj_rel', 'fin_rel'], ['exportar'], 't'))) },
     gestor: { name: 'Gestor de Acessos', prot: true, desc: 'Gerencia usuários e perfis. Não altera a segurança do login.',
-      base: mk(Object.assign(S(['acc_users'], ['ver', 'editar'], 'y'), S(['acc_perfis'], ['ver', 'criar', 'editar', 'excluir'], 'y'), S(['acc_audit'], ['ver'], 'y'))) },
+      base: mk(Object.assign(S(['acc_users'], ['ver', 'editar'], 'y'), S(['acc_perfis'], ['ver', 'criar', 'editar', 'excluir'], 'y'), S(['acc_audit'], ['ver', 'exportar'], 'y'))) },
     coord: { name: 'Coordenação de Projetos', desc: 'Tudo em Projetos, de todos os projetos, inclusive aprovar. No Financeiro, só consulta.',
-      base: mk(Object.assign(S(PRJ, ['ver', 'editar', 'excluir'], 't'), S(PRJ, ['criar'], 'y'), S(['prj_team'], ['ver', 'editar'], 't'), S(['prj_cad', 'prj_pre'], ['aprovar'], 't'), S(['fin_orc', 'fin_lan', 'fin_rel'], ['ver'], 't'))) },
+      base: mk(Object.assign(S(PRJ, ['ver', 'editar', 'excluir'], 't'), S(PRJ, ['criar'], 'y'), S(['prj_team'], ['ver', 'editar'], 't'), S(['prj_cad', 'prj_pre'], ['aprovar'], 't'), S(['fin_orc', 'fin_lan', 'fin_rel', 'prj_rel'], ['ver'], 't'), S(['prj_rel'], ['exportar'], 't'))) },
     equipe: { name: 'Equipe de Projetos', desc: 'Vê e edita só os projetos atribuídos a ela. Não cria, exclui nem aprova.',
-      base: mk(Object.assign(S(PRJ, ['ver', 'editar'], 'm'))) },
+      base: mk(Object.assign(S(PRJ, ['ver', 'editar'], 'm'), S(['prj_rel'], ['ver'], 'm'))) },
     fin: { name: 'Financeiro', desc: 'Tudo no Financeiro, de todos os projetos, inclusive aprovar. Em Projetos, só consulta.',
-      base: mk(Object.assign(S(['fin_orc', 'fin_lan'], ['ver', 'editar', 'excluir'], 't'), S(['fin_orc', 'fin_lan'], ['criar'], 'y'), S(['fin_orc', 'fin_lan'], ['aprovar'], 't'), S(['fin_rel'], ['ver'], 't'), S(PRJ, ['ver'], 't'))) },
+      base: mk(Object.assign(S(['fin_orc', 'fin_lan'], ['ver', 'editar', 'excluir'], 't'), S(['fin_orc', 'fin_lan'], ['criar'], 'y'), S(['fin_orc', 'fin_lan'], ['aprovar'], 't'), S(['fin_rel'], ['ver', 'exportar'], 't'), S(PRJ.concat(['prj_rel']), ['ver'], 't'), S(['prj_rel'], ['exportar'], 't'))) },
     visual: { name: 'Visualização Geral', desc: 'Perfil de consulta. Ao atribuir, marque o que a pessoa pode visualizar.',
       base: mk({}) }
   };

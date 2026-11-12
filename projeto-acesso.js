@@ -5,12 +5,12 @@
   'use strict';
   /* ver / editar / excluir / aprovar: n = sem acesso, m = meus projetos, t = todos. criar: só com acesso a todos. */
   var PERFIS = {
-    'Coordenação de Projetos': { ver: 't', editar: 't', excluir: 't', aprovar: 't', criar: true, team: 'editar' },
-    'Equipe de Projetos': { ver: 'm', editar: 'm', excluir: 'n', criar: false },
-    'Financeiro': { ver: 't', editar: 'n', excluir: 'n', criar: false, reprog: true, nota: 'Perfil Financeiro: o cadastro é só para consulta. Para mudar valores ou itens, peça uma reprogramação ao setor de Projetos.' },
-    'Administrador do Sistema': { ver: 't', editar: 'n', excluir: 'n', criar: false, team: 'ver', nota: 'Administrador do Sistema: vê todos os projetos, só para consulta.' },
-    'Visualização Geral': { ver: 't', editar: 'n', excluir: 'n', criar: false, nota: 'Perfil de visualização: o cadastro é só para consulta.' },
-    'Gestor de Acessos': { ver: 'n', editar: 'n', excluir: 'n', criar: false }
+    'Coordenação de Projetos': { ver: 't', editar: 't', excluir: 't', aprovar: 't', criar: true, team: 'editar', rel: 't', exportar: true },
+    'Equipe de Projetos': { ver: 'm', editar: 'm', excluir: 'n', criar: false, rel: 'm', exportar: false },
+    'Financeiro': { ver: 't', editar: 'n', excluir: 'n', criar: false, reprog: true, rel: 't', exportar: true, nota: 'Perfil Financeiro: o cadastro é só para consulta. Para mudar valores ou itens, peça uma reprogramação ao setor de Projetos.' },
+    'Administrador do Sistema': { ver: 't', editar: 'n', excluir: 'n', criar: false, team: 'ver', rel: 't', exportar: true, nota: 'Administrador do Sistema: vê todos os projetos, só para consulta.' },
+    'Visualização Geral': { ver: 't', editar: 'n', excluir: 'n', criar: false, rel: 't', exportar: false, nota: 'Perfil de visualização: o cadastro é só para consulta.' },
+    'Gestor de Acessos': { ver: 'n', editar: 'n', excluir: 'n', criar: false, rel: 'n', exportar: false }
   };
   var CONTEXTOS = { novo: 'Novo projeto', meu: 'Projeto existente, atribuído a mim', alheio: 'Projeto existente, não atribuído a mim' };
   var ALC = { n: 'sem acesso', m: 'meus projetos', t: 'todos os projetos' };

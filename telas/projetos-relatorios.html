@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relatórios de projetos - INTEGRA</title>
+<link rel="stylesheet" href="../tokens.css?v=20261112c">
+<link rel="stylesheet" href="../components.css?v=20261112c">
+<link rel="stylesheet" href="../admin.css?v=20261112c">
+<style>
+[hidden]{display:none!important}
+.demo{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 16px;padding:10px 14px;border:1px dashed var(--color-border-field);border-radius:var(--radius-control);background:var(--color-surface);font-size:13px;color:var(--color-text-muted)}
+.demo label{font-weight:600;color:var(--color-text)}
+.demo select{font:14px var(--font);color:var(--color-text);background:var(--color-surface);border:1px solid var(--color-border-field);border-radius:8px;padding:0 10px;height:44px;width:auto}
+.demo select:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+#resumo{flex:1 1 100%;color:var(--color-text-body)}
+.blocked{margin:0 0 16px;padding:16px 20px;border:1px solid var(--color-error);border-radius:var(--radius-card);background:var(--color-error-soft);color:var(--color-error)}
+.blocked p{margin:4px 0 0;color:var(--color-text-body)}
+.cardp{padding:20px}.cardp+.cardp,.charts,.cardp+.charts{margin-top:16px}
+.cardp h2{margin:0 0 2px;font-size:17px;line-height:24px;color:var(--color-text)}
+.sd{margin:0 0 16px;color:var(--color-text-muted);font-size:14px}
+.cardp+.cardp{margin-top:16px}.charts+.cardp{margin-top:16px}.cardp+.charts{margin-top:16px}
+.filtros{display:grid;gap:12px;grid-template-columns:1fr}
+@media (min-width:640px){.filtros{grid-template-columns:repeat(3,1fr)}}
+.rdesc{margin:8px 0 0;color:var(--color-text-body);font-size:14px}
+.rhead{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.rhead h2{margin:0}
+.expo{display:flex;flex-wrap:wrap;gap:8px}
+.expo .btn{width:auto}
+@media (max-width:639px){.expo{width:100%}.expo .btn{flex:1 1 140px}}
+.nota-exp{margin:12px 0 0;padding:10px 14px;border-radius:var(--radius-control);background:var(--color-bg);border:1px solid var(--color-border);font-size:13px;color:var(--color-text-body)}
+.tbl td.num,.tbl th.num{text-align:right;font-variant-numeric:tabular-nums}
+.tbl tfoot td{font-weight:700;border-top:2px solid var(--color-border-field)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<symbol id="i-logo" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="2.5"/><circle cx="5.5" cy="16.5" r="2.5"/><circle cx="18.5" cy="16.5" r="2.5"/><path d="M10.4 9.5 7 14.3M13.6 9.5 17 14.3M8 16.5h8"/></g></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></g></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></g></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></g></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-checkc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.5"/></g></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17" fill="none" stroke="#BA1A1A" stroke-width="3" stroke-linecap="round"/></symbol>
+<symbol id="i-xcircle" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></g></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></g></symbol>
+<symbol id="i-eyeoff" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4M6.6 6.6A17 17 0 0 0 2 12s3.500 7 10 7a9.700 9.700 0 0 0 4.200-.9"/><path d="M9.900 9.900a3 3 0 0 0 4.200 4.200"/></g></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></g></symbol>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-help" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.500a2.500 2.500 0 1 1 3.500 2.300c-.7.400-1 .9-1 1.700M12 17h.01"/></g></symbol>
+<symbol id="i-pause" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6"/></g></symbol>
+<symbol id="i-hourglass" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 21h12M7 3v3.500a5 5 0 0 0 2 4L12 12l-3 1.500a5 5 0 0 0-2 4V21M17 3v3.500a5 5 0 0 1-2 4L12 12l3 1.500a5 5 0 0 1 2 4V21"/></g></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.400-5.700M20 4v5h-5"/></g></symbol>
+<symbol id="i-logout" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></g></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
+
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 19a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14a5 5 0 0 1 4 5"/></g></symbol>
+<symbol id="i-pending" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9zM9 14l2 2 4-4"/></g></symbol>
+<symbol id="i-key" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/></g></symbol>
+<symbol id="i-sliders" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></g></symbol>
+<symbol id="i-scroll" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h8l4 4v14H7z"/><path d="M15 3v4h4M10 12h6M10 16h6"/></g></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></g></symbol>
+<symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 14.5h2"/></g></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4-4"/></g></symbol>
+<symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 5h16l-6 8v6l-4-2v-4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+<symbol id="i-dots" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></g></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+<symbol id="i-unlock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 7.5-2"/></g></symbol>
+<symbol id="i-ban" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></g></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></g></symbol>
+<symbol id="i-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-left" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-save" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v5h7V3M8 21v-7h8v7"/></g></symbol>
+</svg>
+<a class="skip" href="#main">Pular para o conteúdo</a>
+<div class="app">
+  <aside class="side" id="side" aria-label="Menu principal">
+    <div class="side-brand"><div class="logo"><svg width="24" height="24" aria-hidden="true" focusable="false" ><use href="#i-logo"/></svg></div>
+      <div class="nm">INTEGRA<small>Projetos, Pessoas e Recursos</small></div>
+      <button type="button" class="icon-btn side-close" data-close-menu aria-label="Fechar menu"><svg width="22" height="22" aria-hidden="true" focusable="false" ><use href="#i-close"/></svg></button></div>
+    <nav class="nav" aria-label="Administração"><a href="admin-cadastros-pendentes.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-pending"/></svg><span>Cadastros pendentes</span><span class="count" aria-label="3 pendentes">3</span></a><a href="admin-usuarios.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-users"/></svg><span>Usuários</span></a><a href="admin-perfis-permissoes.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-key"/></svg><span>Perfis e permissões</span></a><a href="admin-configuracoes-acesso.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-sliders"/></svg><span>Configurações de acesso</span></a><a href="admin-auditoria.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-scroll"/></svg><span>Registro de auditoria</span></a><a href="minha-conta.html"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-user"/></svg><span>Minha conta</span></a><h2>Módulos</h2><details class="nav-group" open><summary><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></g></svg><span>Projetos</span></summary><div class="sub"><a href="projetos-painel.html"><span>Dashboard de projetos</span></a><a href="projetos-lista.html"><span>Lista de projetos</span></a><a href="projeto-cadastro.html"><span>Cadastrar projeto</span></a><a href="projetos-relatorios.html" aria-current="page"><span>Relatórios</span></a></div></details><span class="soon" aria-disabled="true"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-wallet"/></svg><span>Financeiro</span><em>Em breve</em></span></nav>
+    <div class="side-foot">Ambiente seguro e auditado · LGPD</div>
+  </aside>
+  <div class="scrim" hidden></div>
+  <div class="main-col">
+    <header class="top">
+      <button type="button" class="icon-btn menu-btn" aria-controls="side" aria-expanded="false" aria-label="Abrir menu"><svg width="24" height="24" aria-hidden="true" focusable="false" ><use href="#i-menu"/></svg></button>
+      <span class="brand-sm">INTEGRA</span>
+      <div class="who"><div class="meta"><b>Maria Souza</b><span>Administrador do Sistema</span></div><span class="avatar" aria-hidden="true">MS</span>
+        <a class="icon-btn" href="login.html" aria-label="Sair"><svg width="22" height="22" aria-hidden="true" focusable="false" ><use href="#i-logout"/></svg></a></div>
+    </header>
+    <main id="main"><div class="page-head"><div><h1>Relatórios de projetos</h1><p id="sub">Escolha o relatório, filtre e exporte em PDF ou XLSX.</p></div>
+  <a class="btn auto" id="verPainel" href="projetos-painel.html">Ver o dashboard</a></div>
+<div class="demo"><label for="perfil">Ver como (demonstração)</label><select id="perfil"></select><span id="resumo"></span><span>No sistema real o servidor monta o relatório só com os projetos que a pessoa pode ver e confere a permissão Exportar.</span></div>
+<div class="blocked" id="semAcesso" role="alert" hidden><b>Acesso não permitido</b><p>Seu perfil não tem acesso aos relatórios de projetos.</p></div>
+<div id="area">
+<section class="panel cardp" aria-labelledby="h-esc"><h2 id="h-esc">Escolha o relatório</h2>
+  <div class="field"><label for="rel">Relatório</label><select id="rel" class="select"></select></div>
+  <p class="rdesc" id="rdesc"></p>
+  <div class="filtros" style="margin-top:16px">
+    <div class="field"><label for="f-etapa">Etapa</label><select id="f-etapa" class="select"></select></div>
+    <div class="field"><label for="f-sit">Situação</label><select id="f-sit" class="select"></select></div>
+    <div class="field"><label for="f-conc">Concedente</label><select id="f-conc" class="select"></select></div>
+  </div></section>
+<section class="panel cardp" aria-labelledby="h-res" style="margin-top:16px">
+  <div class="rhead"><div><h2 id="h-res">Relatório</h2><p class="sd" id="rinfo" style="margin:0"></p></div>
+    <div class="expo" role="group" aria-label="Exportar relatório">
+      <button type="button" class="btn primary" id="b-pdf"><svg width="18" height="18" aria-hidden="true" focusable="false"><use href="#i-save"/></svg>Exportar PDF</button>
+      <button type="button" class="btn ghost" id="b-xlsx"><svg width="18" height="18" aria-hidden="true" focusable="false"><use href="#i-save"/></svg>Exportar XLSX</button></div></div>
+  <p class="nota-exp" id="notaExp" hidden></p>
+  <div class="tbl-wrap"><table class="tbl" id="tabela"><caption class="sr-only" id="cap"></caption><thead id="th"></thead><tbody id="tb"></tbody><tfoot id="tf"></tfoot></table></div>
+  <p class="hint" id="vazio" hidden>Nenhum projeto para os filtros escolhidos.</p>
+  <p class="nota-exp">O arquivo traz exatamente os dados desta tabela, com os filtros aplicados. Cada exportação fica registrada na auditoria (quem, quando, relatório e filtros). Os arquivos têm dados da ONG: guarde com cuidado.</p></section>
+<p class="footnote">Projetos de exemplo, só para ilustrar o layout. Beneficiários aparecem só como números; nomes de beneficiários (inclusive menores de idade) não entram nos relatórios.</p>
+</div></main>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<script src="../projeto-acesso.js?v=20261112c"></script>
+<script src="../projeto-equipe-dados.js?v=20261112c"></script>
+<script src="../projeto-dados.js?v=20261112c"></script>
+<script src="../exportar.js?v=20261112c"></script>
+<script src="../relatorios-dados.js?v=20261112c"></script>
+<script>
+(function(){
+const $=s=>document.querySelector(s),D=window.PRJ_DADOS,R=window.PRJ_REL,X=window.INTEGRA_EXPORT,E=window.PRJ_EQUIPE;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ESC={n:'sem acesso',m:'meus projetos',t:'todos os projetos'};
+$('#perfil').innerHTML=window.PRJ_PERFIS.map(p=>'<option>'+esc(p)+'</option>').join('');
+const qs=new URLSearchParams(location.search);
+if(qs.get('perfil')&&window.PRJ_PERFIS.includes(qs.get('perfil')))$('#perfil').value=qs.get('perfil');
+$('#rel').innerHTML=R.lista.map(r=>'<option value="'+r.id+'">'+esc(r.titulo)+'</option>').join('');
+if(qs.get('rel')&&R.porId(qs.get('rel')))$('#rel').value=qs.get('rel');
+$('#f-etapa').innerHTML='<option value="">Todas</option>'+D.ETAPAS.map((n,i)=>'<option value="'+i+'">'+n+'</option>').join('');
+$('#f-sit').innerHTML='<option value="">Todas</option>'+D.SITS.map(n=>'<option>'+n+'</option>').join('');
+$('#f-conc').innerHTML='<option value="">Todos</option>'+Array.from(new Set(D.projetos.map(p=>p.conc))).sort().map(n=>'<option>'+esc(n)+'</option>').join('');
+const quem=()=>{const u=E.usuario(D.USER[$('#perfil').value]);return u?u.name:$('#perfil').value};
+let cur=null;
+const fmt=(t,v)=>(v===null||v===undefined||v==='')?'—':X.textoCelula(t,v);
+function render(){
+  const pn=$('#perfil').value,per=window.PRJ_PERFIL(pn),eu=D.USER[pn],ver=per.rel!=='n';
+  $('#semAcesso').hidden=ver;$('#area').hidden=!ver;
+  $('#resumo').textContent='Ver: '+ESC[per.rel]+' · Exportar: '+(per.exportar?'sim':'não');
+  $('#verPainel').href='projetos-painel.html?perfil='+encodeURIComponent(pn);
+  $('#sub').textContent=per.rel==='m'?'Relatórios dos projetos atribuídos a você.':'Relatórios de todos os projetos. Escolha, filtre e exporte em PDF ou XLSX.';
+  if(!ver)return;
+  const r=R.porId($('#rel').value),base=D.projetos.filter(p=>per.rel==='t'||(per.rel==='m'&&p.eq.includes(eu)));
+  const f={etapa:$('#f-etapa').value,sit:$('#f-sit').value,conc:$('#f-conc').value};
+  const lista=R.filtrar(base,f),d=r.build(lista);
+  $('#rdesc').textContent=r.desc;$('#h-res').textContent=r.titulo;
+  const filtros=[['Alcance',per.rel==='m'?'Meus projetos':'Todos os projetos'],['Etapa',f.etapa===''?'Todas':D.ETAPAS[f.etapa]],['Situação',f.sit||'Todas'],['Concedente',f.conc||'Todos']];
+  $('#rinfo').textContent=R.plural(d.linhas.length,'linha','linhas')+' · '+filtros.map(x=>x[0]+': '+x[1]).join(' · ');
+  $('#cap').textContent=r.titulo;
+  const cl=c=>c.tipo==='texto'?'':' class="num"';
+  $('#th').innerHTML='<tr>'+d.colunas.map(c=>'<th scope="col"'+cl(c)+'>'+esc(c.t)+'</th>').join('')+'</tr>';
+  $('#tb').innerHTML=d.linhas.map(l=>'<tr>'+d.colunas.map((c,i)=>'<td data-label="'+esc(c.t)+'"'+cl(c)+'>'+esc(fmt(c.tipo,l[i]))+'</td>').join('')+'</tr>').join('');
+  $('#tf').innerHTML=d.totais?'<tr>'+d.colunas.map((c,i)=>'<td data-label="'+esc(c.t)+'"'+cl(c)+'>'+esc(i===0?d.totais[0]:(d.totais[i]===''||d.totais[i]===null?'':fmt(c.tipo,d.totais[i])))+'</td>').join('')+'</tr>':'';
+  const vazio=d.linhas.length===0;$('#vazio').hidden=!vazio;$('#tabela').hidden=vazio;
+  const pode=per.exportar&&!vazio;
+  ['#b-pdf','#b-xlsx'].forEach(b=>$(b).setAttribute('aria-disabled',pode?'false':'true'));
+  const n=$('#notaExp');n.hidden=pode;
+  n.textContent=!per.exportar?'Seu perfil pode ver este relatório, mas não pode exportar. Peça a permissão Exportar à administração.':'Não há linhas para exportar com estes filtros.';
+  cur={r:r,lista:lista,filtros:filtros,pode:pode};
+}
+function exportar(id){
+  if(!cur||!cur.pode)return;
+  const nome=R.exportar(id,cur.r.id,cur.lista,cur.filtros,quem());
+  if(window.integraSay)window.integraSay('Arquivo '+nome+' gerado. A exportação foi registrada na auditoria.');
+}
+$('#b-pdf').addEventListener('click',()=>exportar('pdf'));
+$('#b-xlsx').addEventListener('click',()=>exportar('xlsx'));
+['#perfil','#rel','#f-etapa','#f-sit','#f-conc'].forEach(s=>$(s).addEventListener('change',render));
+render();
+})();
+</script>
+<script src="../admin.js?v=20261112c" defer></script>
+<script src="../components.js?v=20261112c" defer></script>
+</body>
+</html>

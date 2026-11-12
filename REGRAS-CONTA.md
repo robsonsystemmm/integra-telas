@@ -39,3 +39,10 @@ Limite de 20 MB por arquivo (decisão de 11/11/2026). Tipos: PDF, PNG e JPG. O s
 - Nova ação na matriz, ao lado de Visualizar, Criar, Editar e Excluir. Existe em: Projetos > Cadastro (aditivos e documentos), Projetos > Prestação de contas, Financeiro > Orçamento (remanejamentos) e Financeiro > Lançamentos (pagamentos).
 - Perfis: Coordenação de Projetos aprova em Projetos (todos os projetos); Financeiro aprova em Orçamento e Lançamentos; Equipe de Projetos, Administrador do Sistema, Gestor de Acessos e Visualização Geral não aprovam por padrão. Qualquer perfil pode receber a ação por ajuste individual.
 - Regra proposta para o servidor: ninguém aprova o que ele mesmo criou ou lançou.
+
+## Relatórios e exportação
+
+- Todo relatório tem os botões **Exportar PDF** e **Exportar XLSX**, com os mesmos dados e filtros da tela.
+- Exportar é uma ação da matriz de permissões, separada de Visualizar. Quem só visualiza vê o aviso "peça a permissão Exportar à administração".
+- Relatórios do módulo Projetos: Resumo de projetos, Beneficiários, Metas, Valor global por concedente, Prazos e vencimentos, Documentos e certidões pendentes, Equipe por projeto. Também exportam o Resumo por projeto (Dashboard) e o Registro de auditoria. Relatórios do Financeiro entram junto com o módulo.
+- Cada exportação é registrada na auditoria (evento "Relatório exportado").

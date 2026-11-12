@@ -64,3 +64,15 @@ Exceções conhecidas e aceitas:
 ## Como repetir a revisão das telas
 
 O script usado nesta revisão confere idioma, títulos, landmarks, nomes acessíveis, ids duplicados, alvos de 44 px, contraste, fonte mínima, rolagem horizontal e recursos externos em cada tela, em 390 e 1280 px. Qualquer tela nova deve passar por ele antes de entrar no repositório.
+
+## Relatórios e exportação (PDF e XLSX)
+
+Regra do produto: todo relatório oferece **Exportar PDF** e **Exportar XLSX**. Na referência (telas estáticas) os arquivos são gerados no navegador por `exportar.js`; no sistema real o servidor gera (sugestão: maatwebsite/excel e dompdf).
+
+- [ ] Ação nova **Exportar** na matriz (linhas Relatórios de projetos, Relatórios do Financeiro e Auditoria), separada de Visualizar. Padrão: Administrador, Coordenação e Financeiro; Equipe de Projetos e Visualização Geral veem, mas não exportam.
+- [ ] O servidor confere a permissão Exportar e o alcance (Meus projetos / Todos) **a cada exportação**; esconder o botão não basta. O arquivo traz só as linhas que a pessoa pode ver.
+- [ ] Cada exportação vai para a auditoria: quem, quando, relatório, formato, filtros e número de linhas.
+- [ ] LGPD: relatórios de projetos trazem só números de beneficiários, nunca nomes (menores de idade); equipe sai só com nomes, sem telefone ou e-mail.
+- [ ] Células que começam com `=`, `+`, `-` ou `@` recebem apóstrofo no XLSX real (injeção de fórmula). No gerador de referência todo texto sai como texto, não como fórmula.
+- [ ] Limite de linhas por exportação; acima dele, gerar em fila e avisar por e-mail. Arquivo não fica guardado no servidor depois do download.
+- [ ] Rodapé de todo arquivo: quem emitiu, quando e "uso restrito".
