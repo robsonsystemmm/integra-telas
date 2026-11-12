@@ -154,3 +154,20 @@ input[aria-invalid=true]{border:2px solid var(--color-error);padding:0 11px}
 
 .legal-links{display:flex;flex-wrap:wrap;justify-content:center;gap:0 16px;margin:4px 0 0;font-size:13px}
 .legal-links a{display:inline-flex;align-items:center;min-height:44px;padding:0 4px;color:var(--color-primary);font-weight:600}
+
+/* ---- Modo fluxo: um estado por vez, com navegação entre as telas (ver fluxo.js) ---- */
+body.fluxo .sheet{max-width:none;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-block:24px 40px}
+body.fluxo .states{display:block;margin-top:0}
+.fluxo-aviso{margin:0;padding:10px 12px;border:1px solid var(--color-error);border-radius:var(--radius-control);background:var(--color-error-soft);color:var(--color-error);font-size:14px;font-weight:500}
+.fluxo-aviso[role="status"]{border-color:var(--color-border);background:var(--color-bg);color:var(--color-text-body);margin-top:12px}
+.demo-fluxo{width:100%;max-width:var(--auth-card-max);margin:16px auto 0;border:1px dashed var(--color-border-field);border-radius:var(--radius-control);background:var(--color-surface);font-size:13px;color:var(--color-text-muted)}
+.demo-fluxo summary{display:flex;align-items:center;min-height:44px;padding:0 14px;cursor:pointer;font-weight:600;color:var(--color-text)}
+.demo-fluxo summary:focus-visible{outline:none;box-shadow:var(--focus-ring);border-radius:var(--radius-control)}
+.demo-corpo{padding:0 14px 12px}
+.demo-corpo p{margin:0 0 8px}.demo-corpo ul{margin:0 0 8px;padding-left:18px}
+.demo-corpo a{display:inline-flex;align-items:center;min-height:44px;color:var(--color-primary);font-weight:600}
+.demo-corpo code{font-size:12px;background:var(--color-bg);padding:1px 4px;border-radius:4px;color:var(--color-text)}
+.demo-tab{overflow-x:auto;margin:0 0 8px}.demo-tab table{width:100%;border-collapse:collapse}
+.demo-tab th,.demo-tab td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--color-border);vertical-align:top}
+.demo-btn{min-height:44px;padding:0 14px;border:1px solid var(--color-border-field);border-radius:var(--radius-control);background:var(--color-surface);color:var(--color-text);font:600 14px var(--font);cursor:pointer}
+.demo-btn:focus-visible{outline:none;box-shadow:var(--focus-ring)}

@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Registro de auditoria - INTEGRA</title>
-<link rel="stylesheet" href="../tokens.css?v=20261112e">
-<link rel="stylesheet" href="../components.css?v=20261112e">
-<link rel="stylesheet" href="../admin.css?v=20261112e">
+<link rel="stylesheet" href="../tokens.css?v=20261112f">
+<link rel="stylesheet" href="../components.css?v=20261112f">
+<link rel="stylesheet" href="../admin.css?v=20261112f">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -66,7 +66,7 @@
       <button type="button" class="icon-btn menu-btn" aria-controls="side" aria-expanded="false" aria-label="Abrir menu"><svg width="24" height="24" aria-hidden="true" focusable="false" ><use href="#i-menu"/></svg></button>
       <span class="brand-sm">INTEGRA</span>
       <div class="who"><div class="meta"><b>Maria Souza</b><span>Administrador do Sistema</span></div><span class="avatar" aria-hidden="true">MS</span>
-        <a class="icon-btn" href="login.html" aria-label="Sair"><svg width="22" height="22" aria-hidden="true" focusable="false" ><use href="#i-logout"/></svg></a></div>
+        <a class="icon-btn" href="../index.html" aria-label="Sair"><svg width="22" height="22" aria-hidden="true" focusable="false" ><use href="#i-logout"/></svg></a></div>
     </header>
     <main id="main"><div class="page-head"><div><h1>Registro de auditoria</h1><p>Quem fez o quê e quando. Os registros são guardados por 5 anos e não podem ser alterados.</p></div></div>
 <section class="panel">
@@ -89,7 +89,7 @@
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-<script src="../exportar.js?v=20261112e"></script>
+<script src="../exportar.js?v=20261112f"></script>
 <script>
 (function(){
 const X=window.INTEGRA_EXPORT,$=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -108,7 +108,7 @@ function sai(f){const o=dados(),nome=X.baixar(f,o);X.registrar({quem:QUEM,relato
 $('#b-pdf').addEventListener('click',()=>sai('pdf'));$('#b-xlsx').addEventListener('click',()=>sai('xlsx'));
 })();
 </script>
-<script src="../admin.js?v=20261112e" defer></script>
-<script src="../components.js?v=20261112e" defer></script>
+<script src="../admin.js?v=20261112f" defer></script>
+<script src="../components.js?v=20261112f" defer></script>
 </body>
 </html>

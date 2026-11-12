@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Relatórios de projetos - INTEGRA</title>
-<link rel="stylesheet" href="../tokens.css?v=20261112e">
-<link rel="stylesheet" href="../components.css?v=20261112e">
-<link rel="stylesheet" href="../admin.css?v=20261112e">
+<link rel="stylesheet" href="../tokens.css?v=20261112f">
+<link rel="stylesheet" href="../components.css?v=20261112f">
+<link rel="stylesheet" href="../admin.css?v=20261112f">
 <style>
 [hidden]{display:none!important}
 .demo{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 16px;padding:10px 14px;border:1px dashed var(--color-border-field);border-radius:var(--radius-control);background:var(--color-surface);font-size:13px;color:var(--color-text-muted)}
@@ -91,7 +91,7 @@
       <button type="button" class="icon-btn menu-btn" aria-controls="side" aria-expanded="false" aria-label="Abrir menu"><svg width="24" height="24" aria-hidden="true" focusable="false" ><use href="#i-menu"/></svg></button>
       <span class="brand-sm">INTEGRA</span>
       <div class="who"><div class="meta"><b>Maria Souza</b><span>Administrador do Sistema</span></div><span class="avatar" aria-hidden="true">MS</span>
-        <a class="icon-btn" href="login.html" aria-label="Sair"><svg width="22" height="22" aria-hidden="true" focusable="false" ><use href="#i-logout"/></svg></a></div>
+        <a class="icon-btn" href="../index.html" aria-label="Sair"><svg width="22" height="22" aria-hidden="true" focusable="false" ><use href="#i-logout"/></svg></a></div>
     </header>
     <main id="main"><div class="page-head"><div><h1>Relatórios de projetos</h1><p id="sub">Escolha o relatório, filtre e exporte em PDF ou XLSX.</p></div>
   <a class="btn auto" id="verPainel" href="projetos-painel.html">Ver o dashboard</a></div>
@@ -121,11 +121,11 @@
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-<script src="../projeto-acesso.js?v=20261112e"></script>
-<script src="../projeto-equipe-dados.js?v=20261112e"></script>
-<script src="../projeto-dados.js?v=20261112e"></script>
-<script src="../exportar.js?v=20261112e"></script>
-<script src="../relatorios-dados.js?v=20261112e"></script>
+<script src="../projeto-acesso.js?v=20261112f"></script>
+<script src="../projeto-equipe-dados.js?v=20261112f"></script>
+<script src="../projeto-dados.js?v=20261112f"></script>
+<script src="../exportar.js?v=20261112f"></script>
+<script src="../relatorios-dados.js?v=20261112f"></script>
 <script>
 (function(){
 const $=s=>document.querySelector(s),D=window.PRJ_DADOS,R=window.PRJ_REL,X=window.INTEGRA_EXPORT,E=window.PRJ_EQUIPE;
@@ -178,7 +178,7 @@ $('#b-xlsx').addEventListener('click',()=>exportar('xlsx'));
 render();
 })();
 </script>
-<script src="../admin.js?v=20261112e" defer></script>
-<script src="../components.js?v=20261112e" defer></script>
+<script src="../admin.js?v=20261112f" defer></script>
+<script src="../components.js?v=20261112f" defer></script>
 </body>
 </html>
