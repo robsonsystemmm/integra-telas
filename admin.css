@@ -400,3 +400,15 @@ dialog .dacts{display:flex;flex-direction:column-reverse;gap:8px;margin-top:4px}
 td .pill{white-space:normal}
 .prof:has(input:checked) span span{color:#475569}
 .tbl td small{font-size:12px}
+
+/* Menu "Projetos" com submenu (painel, lista e cadastro) */
+.nav-group summary{display:flex;align-items:center;gap:12px;min-height:var(--touch-target);padding:0 12px;border-radius:var(--radius-control);color:#E2E8F0;font-weight:500;font-size:14px;cursor:pointer;list-style:none}
+.nav-group summary::-webkit-details-marker{display:none}
+.nav-group summary::after{content:"";margin-left:auto;width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform .15s}
+.nav-group[open] summary::after{transform:rotate(-135deg)}
+.nav-group summary:hover{background:rgba(255,255,255,.1)}
+.nav-group summary:focus-visible{outline:none;box-shadow:0 0 0 2px var(--color-primary),0 0 0 4px #fff}
+.nav-group:has(a[aria-current=page]) summary{color:#fff;font-weight:600}
+.nav-group .sub{display:grid;gap:2px;margin:2px 0 4px 20px;padding-left:12px;border-left:1px solid rgba(255,255,255,.25)}
+.nav-group .sub a{min-height:var(--touch-target)}
+@media (prefers-reduced-motion:reduce){.nav-group summary::after{transition:none}}

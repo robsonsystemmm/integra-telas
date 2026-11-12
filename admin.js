@@ -26,7 +26,7 @@
     if (!app || !app.classList.contains('menu-open') || wide.matches) return;
     if (e.key === 'Escape') { setMenu(false); return; }
     if (e.key === 'Tab') {
-      var f = side.querySelectorAll('a[href],button:not([disabled])');
+      var f = side.querySelectorAll('a[href],button:not([disabled]),summary');
       if (!f.length) return;
       var a = f[0], z = f[f.length - 1];
       if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); }
