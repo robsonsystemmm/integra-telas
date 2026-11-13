@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Financeiro - INTEGRA</title>
-<link rel="stylesheet" href="../tokens.css?v=20261113g">
-<link rel="stylesheet" href="../components.css?v=20261113g">
-<link rel="stylesheet" href="../admin.css?v=20261113g">
+<link rel="stylesheet" href="../tokens.css?v=20261113h">
+<link rel="stylesheet" href="../components.css?v=20261113h">
+<link rel="stylesheet" href="../admin.css?v=20261113h">
 <style>
 [hidden]{display:none!important}
 .demo{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 16px;padding:10px 14px;border:1px dashed var(--color-border-field);border-radius:var(--radius-control);background:var(--color-surface);font-size:13px;color:var(--color-text-muted)}
@@ -82,7 +82,7 @@
     <div class="side-brand"><div class="logo"><svg width="24" height="24" aria-hidden="true" focusable="false" ><use href="#i-logo"/></svg></div>
       <div class="nm">INTEGRA<small>Projetos, Pessoas e Recursos</small></div>
       <button type="button" class="icon-btn side-close" data-close-menu aria-label="Fechar menu"><svg width="22" height="22" aria-hidden="true" focusable="false" ><use href="#i-close"/></svg></button></div>
-    <nav class="nav" aria-label="Módulos"><details class="nav-group"><summary><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></g></svg><span>Administrar sistema</span><span class="count" aria-label="3 cadastros pendentes">3</span></summary><div class="sub"><a href="admin-cadastros-pendentes.html"><span>Cadastros pendentes</span><span class="count" aria-label="3 pendentes">3</span></a><a href="admin-usuarios.html"><span>Usuários</span></a><a href="admin-perfis-permissoes.html"><span>Perfis e permissões</span></a><a href="admin-configuracoes-acesso.html"><span>Configurações de acesso</span></a><a href="admin-auditoria.html"><span>Registro de auditoria</span></a><a href="minha-conta.html"><span>Minha conta</span></a></div></details><details class="nav-group"><summary><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></g></svg><span>Projetos</span></summary><div class="sub"><a href="projetos-painel.html"><span>Dashboard de projetos</span></a><a href="projetos-lista.html"><span>Lista de projetos</span></a><a href="projeto-cadastro.html"><span>Cadastrar projeto</span></a><a href="projetos-relatorios.html"><span>Relatórios</span></a></div></details><a href="financeiro.html" aria-current="page"><svg width="20" height="20" aria-hidden="true" focusable="false" ><use href="#i-wallet"/></svg><span>Financeiro</span></a></nav>
+    <nav class="nav" aria-label="Módulos"><details class="nav-group"><summary><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></g></svg><span>Administrar sistema</span><span class="count" aria-label="3 cadastros pendentes">3</span></summary><div class="sub"><a href="admin-cadastros-pendentes.html"><span>Cadastros pendentes</span><span class="count" aria-label="3 pendentes">3</span></a><a href="admin-usuarios.html"><span>Usuários</span></a><a href="admin-perfis-permissoes.html"><span>Perfis e permissões</span></a><a href="admin-configuracoes-acesso.html"><span>Configurações de acesso</span></a><a href="admin-auditoria.html"><span>Registro de auditoria</span></a><a href="minha-conta.html"><span>Minha conta</span></a></div></details><details class="nav-group"><summary><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></g></svg><span>Projetos</span></summary><div class="sub"><a href="projetos-painel.html"><span>Dashboard de projetos</span></a><a href="projetos-lista.html"><span>Lista de projetos</span></a><a href="projeto-cadastro.html"><span>Cadastrar projeto</span></a><a href="projetos-relatorios.html"><span>Relatórios</span></a></div></details><details class="nav-group" open><summary><svg width="20" height="20" aria-hidden="true" focusable="false"><use href="#i-wallet"/></svg><span>Financeiro</span></summary><div class="sub"><a href="financeiro.html?v=geral" data-fin="geral" aria-current="page"><span>Dashboard</span></a><a href="financeiro.html?v=lista" data-fin="lista"><span>Projetos</span></a></div></details></nav>
     <div class="side-foot">Ambiente seguro e auditado · LGPD</div>
   </aside>
   <div class="scrim" hidden></div>
@@ -104,7 +104,7 @@
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-<script src="../projeto-acesso.js?v=20261113g"></script>
+<script src="../projeto-acesso.js?v=20261113h"></script>
 <script>
 (function(){
 const $=s=>document.querySelector(s);
@@ -121,11 +121,20 @@ function render(){
   n.textContent='Seu perfil só consulta o financeiro. Nesta demonstração o módulo ainda mostra os botões de edição; no sistema real o servidor bloqueia qualquer alteração.';
 }
 $('#perfil').addEventListener('change',render);render();
-$('#qgd').addEventListener('load',()=>{try{const d=$('#qgd').contentDocument,st=d.createElement('style');
-  st.textContent='.sbt{display:none}header{padding:10px 14px 0}h1{font-size:16px;margin:0 0 6px}main{padding:12px 14px}';d.head.appendChild(st)}catch(e){/* outra origem: segue sem ajuste visual */}});
+const fr=$('#qgd'),subs=[...document.querySelectorAll('[data-fin]')];
+let vista=qs.get('v')==='lista'?'lista':'geral';
+function marca(v){subs.forEach(a=>{if(a.getAttribute('data-fin')===v)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')})}
+function app(){try{return fr.contentWindow&&fr.contentWindow.go?fr.contentWindow:null}catch(e){return null}}
+function sincroniza(){const w=app();if(!w)return;let v;try{v=w.eval('view')}catch(e){return}marca(v==='geral'?'geral':'lista')}
+fr.addEventListener('load',()=>{try{const d=fr.contentDocument,st=d.createElement('style');
+  st.textContent='aside,.sbt{display:none}.app{display:block}header{padding:10px 14px 0}h1{font-size:16px;margin:0 0 6px}main{padding:12px 14px}';d.head.appendChild(st);
+  const w=app();if(w){const o=w.render;w.render=function(){const r=o.apply(this,arguments);sincroniza();return r};if(w.eval('view')!==vista)w.go(vista);else sincroniza()}}catch(e){/* outra origem: segue sem ajuste */}});
+subs.forEach(a=>a.addEventListener('click',e=>{const w=app();if(!w)return;e.preventDefault();vista=a.getAttribute('data-fin');w.go(vista);history.replaceState(null,'','?v='+vista+(qs.get('perfil')?'&perfil='+encodeURIComponent(qs.get('perfil')):''));
+  const m=document.querySelector('.menu-btn');if(m&&getComputedStyle(m).display!=='none'){const c=document.querySelector('[data-close-menu]');if(c)c.click()}}));
+marca(vista);
 })();
 </script>
-<script src="../admin.js?v=20261113g" defer></script>
-<script src="../components.js?v=20261113g" defer></script>
+<script src="../admin.js?v=20261113h" defer></script>
+<script src="../components.js?v=20261113h" defer></script>
 </body>
 </html>
