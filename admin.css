@@ -412,3 +412,13 @@ td .pill{white-space:normal}
 .nav-group .sub{display:grid;gap:2px;margin:2px 0 4px 20px;padding-left:12px;border-left:1px solid rgba(255,255,255,.25)}
 .nav-group .sub a{min-height:var(--touch-target)}
 @media (prefers-reduced-motion:reduce){.nav-group summary::after{transition:none}}
+.nav-group summary .count{margin-left:auto}
+.nav-group summary:has(.count)::after{margin-left:8px}
+.nav-group[open] summary .count{display:none}
+.nav-group[open] summary:has(.count)::after{margin-left:auto}
+.nav-group .sub .count{margin-left:auto}
+.nav-group summary{gap:10px}
+.nav-group summary>span:not(.count){white-space:nowrap}
+.nav-group summary .count{margin-left:auto;flex:none}
+.nav-group summary>svg{flex:none}
+.nav-group summary::after{flex:none}
