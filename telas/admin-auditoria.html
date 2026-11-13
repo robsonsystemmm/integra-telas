@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Registro de auditoria - INTEGRA</title>
-<link rel="stylesheet" href="../tokens.css?v=20261113b">
-<link rel="stylesheet" href="../components.css?v=20261113b">
-<link rel="stylesheet" href="../admin.css?v=20261113b">
+<link rel="stylesheet" href="../tokens.css?v=20261113f">
+<link rel="stylesheet" href="../components.css?v=20261113f">
+<link rel="stylesheet" href="../admin.css?v=20261113f">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -89,7 +89,7 @@
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-<script src="../exportar.js?v=20261113b"></script>
+<script src="../exportar.js?v=20261113f"></script>
 <script>
 (function(){
 const X=window.INTEGRA_EXPORT,$=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -108,7 +108,7 @@ function sai(f){const o=dados(),nome=X.baixar(f,o);X.registrar({quem:QUEM,relato
 $('#b-pdf').addEventListener('click',()=>sai('pdf'));$('#b-xlsx').addEventListener('click',()=>sai('xlsx'));
 })();
 </script>
-<script src="../admin.js?v=20261113b" defer></script>
-<script src="../components.js?v=20261113b" defer></script>
+<script src="../admin.js?v=20261113f" defer></script>
+<script src="../components.js?v=20261113f" defer></script>
 </body>
 </html>

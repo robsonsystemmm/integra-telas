@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Financeiro - INTEGRA</title>
-<link rel="stylesheet" href="../tokens.css?v=20261113b">
-<link rel="stylesheet" href="../components.css?v=20261113b">
-<link rel="stylesheet" href="../admin.css?v=20261113b">
+<link rel="stylesheet" href="../tokens.css?v=20261113f">
+<link rel="stylesheet" href="../components.css?v=20261113f">
+<link rel="stylesheet" href="../admin.css?v=20261113f">
 <style>
 [hidden]{display:none!important}
 .demo{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 16px;padding:10px 14px;border:1px dashed var(--color-border-field);border-radius:var(--radius-control);background:var(--color-surface);font-size:13px;color:var(--color-text-muted)}
@@ -33,7 +33,7 @@
 .tbl tfoot td{font-weight:700;border-top:2px solid var(--color-border-field)}
 </style>
 </head>
-<body>
+<body class="pg-fin">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
 <symbol id="i-logo" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="2.5"/><circle cx="5.5" cy="16.5" r="2.5"/><circle cx="18.5" cy="16.5" r="2.5"/><path d="M10.4 9.5 7 14.3M13.6 9.5 17 14.3M8 16.5h8"/></g></symbol>
 <symbol id="i-alert" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></g></symbol>
@@ -93,20 +93,18 @@
       <div class="who"><div class="meta"><b>Maria Souza</b><span>Administrador do Sistema</span></div><span class="avatar" aria-hidden="true">MS</span>
         <a class="icon-btn" href="../index.html" aria-label="Sair"><svg width="22" height="22" aria-hidden="true" focusable="false" ><use href="#i-logout"/></svg></a></div>
     </header>
-    <main id="main"><div class="page-head"><div><h1>Financeiro</h1><p id="sub">Orçamento por rubrica, gastos, repasses e aditivos de cada projeto.</p></div>
-  <a class="btn auto" id="abrir" href="../financeiro/index.html" target="_blank" rel="noopener">Abrir em tela cheia<span class="sr-only"> (abre em nova aba)</span></a></div>
-<div class="demo"><label for="perfil">Ver como (demonstração)</label><select id="perfil"></select><span id="resumo"></span></div>
+    <main id="main"><div class="page-head"><div><h1>Financeiro</h1><p id="sub">Orçamento por rubrica, gastos, repasses e aditivos de cada projeto.</p></div></div>
+<div class="demo"><label for="perfil">Ver como (demonstração)</label><select id="perfil"></select><span id="resumo"></span><details class="sobre"><summary>Sobre esta versão</summary><p>Versão de demonstração do módulo, recebida como arquivo único. Os dados ficam só neste navegador (use "Projetos &gt; Exportar backup" para guardar). Ainda não está ligada aos projetos do INTEGRA, aos perfis de acesso nem à auditoria.</p></details></div>
 <div class="blocked" id="semAcesso" role="alert" hidden><b>Acesso não permitido</b><p>Seu perfil não tem acesso ao módulo Financeiro. Ver o projeto não dá acesso ao financeiro dele.</p></div>
 <div id="area">
 <p class="nota-exp" id="nota" hidden></p>
 <div class="fin-frame"><iframe id="qgd" title="Módulo Financeiro: orçamento, gastos, repasses e aditivos" src="../financeiro/index.html" loading="lazy"></iframe></div>
-<p class="footnote">Versão de demonstração do módulo, recebida como arquivo único. Os dados ficam só neste navegador (use "Projetos &gt; Exportar backup" para guardar). Ainda não está ligada aos projetos do INTEGRA, aos perfis de acesso nem à auditoria.</p>
 </div></main>
   </div>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-<script src="../projeto-acesso.js?v=20261113b"></script>
+<script src="../projeto-acesso.js?v=20261113f"></script>
 <script>
 (function(){
 const $=s=>document.querySelector(s);
@@ -117,15 +115,17 @@ const qs=new URLSearchParams(location.search);
 if(qs.get('perfil')&&window.PRJ_PERFIS.includes(qs.get('perfil')))$('#perfil').value=qs.get('perfil');
 function render(){
   const per=window.PRJ_PERFIL($('#perfil').value),ver=per.fin!=='n';
-  $('#semAcesso').hidden=ver;$('#area').hidden=!ver;$('#abrir').hidden=!ver;
+  $('#semAcesso').hidden=ver;$('#area').hidden=!ver;
   $('#resumo').textContent='Financeiro: '+TXT[per.fin];
   const n=$('#nota');n.hidden=per.fin!=='consulta';
   n.textContent='Seu perfil só consulta o financeiro. Nesta demonstração o módulo ainda mostra os botões de edição; no sistema real o servidor bloqueia qualquer alteração.';
 }
 $('#perfil').addEventListener('change',render);render();
+$('#qgd').addEventListener('load',()=>{try{const d=$('#qgd').contentDocument,st=d.createElement('style');
+  st.textContent='.sbt{display:none}header{padding:10px 14px 0}h1{font-size:16px;margin:0 0 6px}main{padding:12px 14px}';d.head.appendChild(st)}catch(e){/* outra origem: segue sem ajuste visual */}});
 })();
 </script>
-<script src="../admin.js?v=20261113b" defer></script>
-<script src="../components.js?v=20261113b" defer></script>
+<script src="../admin.js?v=20261113f" defer></script>
+<script src="../components.js?v=20261113f" defer></script>
 </body>
 </html>

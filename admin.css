@@ -422,5 +422,20 @@ td .pill{white-space:normal}
 .nav-group summary .count{margin-left:auto;flex:none}
 .nav-group summary>svg{flex:none}
 .nav-group summary::after{flex:none}
-.fin-frame{border:1px solid var(--color-border);border-radius:var(--radius-card);overflow:hidden;background:var(--color-surface)}
-.fin-frame iframe{display:block;width:100%;height:calc(100vh - 220px);min-height:640px;border:0}
+/* Financeiro: o aplicativo preenche a altura que sobra na tela, sem segunda rolagem nem vazio embaixo */
+.pg-fin .main-col{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+.pg-fin main{flex:1;display:flex;flex-direction:column;min-height:0}
+.pg-fin #area{flex:1;display:flex;flex-direction:column;min-height:0}
+.pg-fin .page-head{margin-bottom:12px}.pg-fin .demo{margin-bottom:12px}
+.fin-frame{flex:1;display:flex;min-height:520px;border:1px solid var(--color-border);border-radius:var(--radius-card);overflow:hidden;background:var(--color-surface)}
+.fin-frame iframe{flex:1;display:block;width:100%;border:0;min-height:0}
+.sobre{margin:0 0 12px;font-size:13px;color:var(--color-text-muted)}
+.sobre summary{display:flex;align-items:center;min-height:44px;cursor:pointer;font-weight:600;color:var(--color-text)}
+.sobre summary:focus-visible{outline:none;box-shadow:var(--focus-ring);border-radius:var(--radius-control)}
+.sobre p{margin:0 0 8px;max-width:72ch}
+.pg-fin main{width:100%}
+.pg-fin .demo #resumo{flex:0 1 auto}
+.pg-fin .demo .sobre{margin:0;flex:1 1 auto}
+.pg-fin .demo .sobre summary{display:inline-flex;color:var(--color-primary)}
+.pg-fin .demo .sobre p{flex-basis:100%;margin-top:4px}
+.pg-fin main{padding-bottom:16px}
