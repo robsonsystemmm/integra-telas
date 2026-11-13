@@ -39,6 +39,6 @@ Telas testadas em 320, 375, 768, 1024 e 1440px.
 
 ## Como isso será implementado
 
-- **Telas de autenticação:** Blade + Tailwind com as variáveis de `tokens.css`, mobile primeiro.
-- **Painel do administrador:** Filament, que já traz menu recolhível, tabelas que viram cartões no celular e filtros em painel. Esses recursos serão configurados com o tema da paleta aprovada.
+- **Telas de autenticação:** Next.js (React) + Tailwind com as variáveis de `tokens.css`, mobile primeiro.
+- **Painel do administrador:** construído em Next.js + Tailwind com componentes acessíveis (shadcn/ui), reproduzindo as telas aprovadas: menu recolhível, tabelas que viram cartões no celular e filtros em painel.
 - **Testes:** um teste automatizado (Playwright) abre cada tela nas 5 larguras e falha se houver rolagem horizontal.

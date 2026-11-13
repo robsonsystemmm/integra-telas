@@ -1,6 +1,6 @@
 /* INTEGRA - exportação de relatórios em PDF e XLSX, direto no navegador, sem bibliotecas e sem CDN.
    Gera arquivos reais (PDF 1.4 com Helvetica e planilha OOXML). No sistema real o servidor gera os dois
-   formatos (por exemplo, maatwebsite/excel e dompdf), valida a permissão "Exportar" e registra a exportação na auditoria.
+   formatos (por exemplo, exceljs e pdf-lib), valida a permissão "Exportar" e registra a exportação na auditoria.
 
    Uso:
      INTEGRA_EXPORT.baixar('pdf' | 'xlsx', {

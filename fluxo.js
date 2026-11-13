@@ -2,7 +2,7 @@
    Cada tela de autenticação tem vários estados (erro, CAPTCHA, link expirado...). Aqui a tela mostra um estado por vez
    e os botões levam à próxima tela, como no sistema real. Para ver todos os estados lado a lado: acrescente ?todos=1.
    Estado específico: ?estado=B (A, B, C...).
-   Tudo aqui é simulação: no Laravel, login, cadastro, confirmação e recuperação de senha são feitos no servidor. */
+   Tudo aqui é simulação: no sistema real, login, cadastro, confirmação e recuperação de senha são feitos no servidor. */
 (function () {
   'use strict';
   var script = document.currentScript;

@@ -1,6 +1,6 @@
 # INTEGRA: checklist de segurança e acessibilidade
 
-Revisão feita em 11/11/2026 sobre as 21 telas de referência (celular 390 px e computador 1280 px). A parte 1 foi verificada por script nas telas. As partes 2 e 3 são o que o Laravel precisa cumprir: cada item vira teste automático ou revisão de código antes de entrar dado real.
+Revisão feita em 11/11/2026 sobre as 21 telas de referência (celular 390 px e computador 1280 px). A parte 1 foi verificada por script nas telas. As partes 2 e 3 são o que o sistema real (Next.js na Vercel + Supabase, ver `STACK.md`) precisa cumprir: cada item vira teste automático ou revisão de código antes de entrar dado real.
 
 ## 1. Telas de referência (verificado)
 
@@ -22,37 +22,40 @@ Revisão feita em 11/11/2026 sobre as 21 telas de referência (celular 390 px e 
 Exceções conhecidas e aceitas:
 - As telas de autenticação mostram vários estados lado a lado, por isso têm mais de um `h1`. No sistema real cada estado é uma página, com um só `h1`.
 - Caixas de marcação têm 24 px, mas ficam dentro de um rótulo de 44 px clicável.
-- Ainda há `<script>` e atributos `style` inline em poucas telas. No Laravel eles vão para arquivos do Vite, e a CSP fica sem `unsafe-inline`.
+- Ainda há `<script>` e atributos `style` inline em poucas telas. No Next.js eles viram módulos do projeto, e a CSP usa nonce, sem `unsafe-inline`.
 - Dados de demonstração ficam no `localStorage` do navegador. No sistema real nada disso é guardado no navegador.
 
-## 2. Login e contas (Laravel)
+## 2. Login e contas (Supabase Auth + Next.js)
 
-- [ ] CSRF em todo formulário e requisição que altera dado.
+- [ ] CSRF: Server Actions conferem a origem; rotas de API que alteram dado conferem `Origin` e usam cookie `SameSite=Lax`.
 - [ ] Cloudflare Turnstile validado **no servidor** (não só no navegador). Na 3ª tentativa errada o CAPTCHA passa a ser obrigatório.
 - [ ] Mensagens de erro genéricas no login e na recuperação de senha (não revelam se o e-mail existe nem quantas tentativas restam).
-- [ ] Limite de tentativas por e-mail e por IP (`throttle`). Bloqueio por tentativas só é desfeito por um administrador.
-- [ ] Senhas com hash (Argon2id ou bcrypt); mínimo de 10 caracteres; checagem contra senhas vazadas comuns.
-- [ ] Sessão: cookie `Secure`, `HttpOnly`, `SameSite=Lax`; `session()->regenerate()` no login; sessões encerradas ao inativar, bloquear ou trocar a senha.
-- [ ] "Lembrar-me": token de longa duração guardado com hash, revogado ao trocar a senha.
-- [ ] Confirmação de e-mail e redefinição de senha por link assinado, com validade curta (60 min) e uso único.
-- [ ] Cadastro restrito ao domínio institucional configurável (+ exceções por e-mail), validado no servidor. `gmail.com` só em teste.
-- [ ] Estados da conta (pendente, aguardando perfil, ativo, bloqueado, inativo, rejeitado) aplicados por middleware em toda rota, inclusive APIs e o painel Filament.
+- [ ] Limite de tentativas por e-mail e por IP. O login passa por uma Server Action própria que conta as tentativas em tabela e só libera a conta por ação de um administrador.
+- [ ] **Decisão a tomar:** a chave pública do Supabase permite chamar o endpoint de login direto, sem passar pela nossa Server Action. Para o bloqueio valer mesmo assim, usar o *hook de verificação de senha* do Supabase (conferir se o plano contratado oferece) ou exigir CAPTCHA em todo login no próprio Supabase. Testar a tentativa direta antes de entrar dado real.
+- [ ] Senha: mínimo de 10 caracteres; ativar a proteção contra senhas vazadas se o plano oferecer.
+- [ ] Sessão: cookies `Secure` e `SameSite=Lax` (pelo `@supabase/ssr`); no servidor, validar sempre com `getUser()`, nunca confiar só em `getSession()`; encerrar as sessões ao inativar, bloquear ou trocar a senha.
+- [ ] "Lembrar-me" define a duração da sessão; sem marcar, a sessão acaba ao fechar o navegador.
+- [ ] Confirmação de e-mail e redefinição de senha por link de uso único, com validade curta (60 min; ajustar a expiração do OTP no Supabase).
+- [ ] Cadastro restrito ao domínio institucional configurável (+ exceções por e-mail), validado no servidor e por hook "antes de criar usuário" ou gatilho no banco. `gmail.com` só em teste.
+- [ ] Estados da conta (pendente, aguardando perfil, ativo, bloqueado, inativo, rejeitado) ficam em tabela própria e são conferidos por middleware e por uma função `exigirAcesso()` em toda rota e Server Action.
 - [ ] Mínimo de 2 administradores ativos; ninguém altera o próprio perfil; só o Administrador do Sistema inativa ou reativa contas, com motivo e justificativa.
-- [ ] 2FA para administradores e Financeiro **antes de qualquer dado financeiro real** (2ª etapa).
+- [ ] 2FA (TOTP do Supabase) para administradores e Financeiro **antes de qualquer dado financeiro real** (2ª etapa).
 
-## 3. Permissões, dados e infraestrutura (Laravel)
+## 3. Permissões, dados e infraestrutura (Supabase + Vercel)
 
-- [ ] Acesso negado por padrão; toda ação checada no servidor (Policies + spatie/laravel-permission). Esconder botão na tela não conta como proteção.
-- [ ] Alcance por linha (Meus projetos / Todos) aplicado na consulta (escopo global), não só na tela. Estar no projeto não dá acesso ao financeiro dele.
+- [ ] Acesso negado por padrão; toda ação checada no servidor por uma função central (`pode(usuario, ação, projeto)`) a partir das tabelas de perfil e ajuste individual. Esconder botão na tela não conta como proteção.
+- [ ] **RLS ligado em todas as tabelas, sem política = nega tudo.** Os dados só são lidos e gravados pelo servidor, com a chave `service_role`. Essa chave e qualquer segredo nunca vão para o navegador (nada de `NEXT_PUBLIC_` em segredo).
+- [ ] Alcance por linha (Meus projetos / Todos) aplicado na consulta, por uma função única que monta o filtro, não só na tela. Estar no projeto não dá acesso ao financeiro dele.
 - [ ] Ação Aprovar: ninguém aprova o que ele mesmo criou ou lançou.
-- [ ] `$fillable` explícito em todo modelo (sem mass assignment); validação por FormRequest.
-- [ ] Banco só com Eloquent e parâmetros ligados (nada de SQL montado com texto do usuário). Saída sempre escapada (`{{ }}` no Blade, nunca `{!! !!}` com dado de usuário).
-- [ ] Anexos: até 20 MB; tipo conferido pelo conteúdo (PDF, PNG, JPG), não só pela extensão; nome gerado pelo servidor; guardados fora da pasta pública, entregues por link assinado e com checagem de permissão.
-- [ ] Auditoria com spatie/laravel-activitylog: quem, quando, valor antigo e novo; somente inclusão, sem editar nem apagar; retenção de 5 anos. Consulta a dado sensível também é registrada.
-- [ ] Cabeçalhos: CSP sem `unsafe-inline`, HSTS, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`, `frame-ancestors 'none'`. Só HTTPS.
-- [ ] Produção: `APP_DEBUG=false`, segredos só no `.env` (fora do Git), sem Telescope/Debugbar, logs sem senha, token nem dado de menor.
-- [ ] Dependências: `composer audit` e `npm audit` no CI; atualizações de segurança em dia.
-- [ ] Backups criptografados e restauração testada. Plano para falha de e-mail (o Gmail é provisório).
+- [ ] Toda Server Action e rota valida a entrada com um esquema (Zod) que lista os campos aceitos; campo fora da lista é descartado.
+- [ ] Consultas sempre parametrizadas (supabase-js ou ORM); nada de SQL montado com texto do usuário. Nunca `dangerouslySetInnerHTML` com dado de usuário.
+- [ ] Anexos: até 20 MB; bucket **privado** do Supabase Storage com limite de tamanho; envio direto do navegador por URL assinada (a Vercel limita o corpo das requisições a cerca de 4,5 MB); tipo conferido pelo conteúdo (PDF, PNG, JPG), não só pela extensão; nome gerado pelo servidor; entrega por link assinado de vida curta e com checagem de permissão.
+- [ ] Auditoria em tabela própria: quem, quando, valor antigo e novo; somente inclusão (sem permissão de editar ou apagar, com gatilho que bloqueia); gravada pelo servidor e por gatilhos nas tabelas críticas; retenção de 5 anos. Consulta a dado sensível também é registrada.
+- [ ] Cabeçalhos pelo Next.js: CSP com nonce, HSTS, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`, `frame-ancestors 'none'`. Só HTTPS (a Vercel já força).
+- [ ] Ambientes separados: **produção e teste usam projetos Supabase diferentes**; deploys de prévia da Vercel nunca apontam para o banco de produção e ficam protegidos por login da Vercel.
+- [ ] Produção: segredos só nas variáveis de ambiente da Vercel (marcadas como sensíveis), nunca no Git; logs sem senha, token nem dado de menor; região São Paulo (funções e banco).
+- [ ] Dependências: `npm audit` no CI e atualizações automáticas de segurança (Dependabot).
+- [ ] Backups do Supabase (plano pago) com restauração testada, e cópia exportada periodicamente. Plano para falha de e-mail (o Gmail é provisório; usar SMTP próprio configurado no Supabase).
 
 ## 4. LGPD
 
@@ -67,7 +70,7 @@ O script usado nesta revisão confere idioma, títulos, landmarks, nomes acessí
 
 ## Relatórios e exportação (PDF e XLSX)
 
-Regra do produto: todo relatório oferece **Exportar PDF** e **Exportar XLSX**. Na referência (telas estáticas) os arquivos são gerados no navegador por `exportar.js`; no sistema real o servidor gera (sugestão: maatwebsite/excel e dompdf).
+Regra do produto: todo relatório oferece **Exportar PDF** e **Exportar XLSX**. Na referência (telas estáticas) os arquivos são gerados no navegador por `exportar.js`; no sistema real o servidor gera (sugestão: exceljs para XLSX e pdf-lib ou @react-pdf/renderer para PDF, respeitando os limites de tempo das funções da Vercel; ou manter o gerador do navegador).
 
 - [ ] Ação nova **Exportar** na matriz (linhas Relatórios de projetos, Relatórios do Financeiro e Auditoria), separada de Visualizar. Padrão: Administrador, Coordenação e Financeiro; Equipe de Projetos e Visualização Geral veem, mas não exportam.
 - [ ] O servidor confere a permissão Exportar e o alcance (Meus projetos / Todos) **a cada exportação**; esconder o botão não basta. O arquivo traz só as linhas que a pessoa pode ver.
