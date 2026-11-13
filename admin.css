@@ -422,3 +422,5 @@ td .pill{white-space:normal}
 .nav-group summary .count{margin-left:auto;flex:none}
 .nav-group summary>svg{flex:none}
 .nav-group summary::after{flex:none}
+.fin-frame{border:1px solid var(--color-border);border-radius:var(--radius-card);overflow:hidden;background:var(--color-surface)}
+.fin-frame iframe{display:block;width:100%;height:calc(100vh - 220px);min-height:640px;border:0}

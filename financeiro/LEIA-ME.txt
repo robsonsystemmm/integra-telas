@@ -1,0 +1,44 @@
+FINANCEIRO – MÓDULO QGD
+=======================
+
+Conteúdo
+  index.html   Aplicação completa em um único arquivo (HTML + CSS + JavaScript).
+               Não precisa instalar nada nem ter internet.
+
+Como usar
+  1. Extraia o .zip.
+  2. Dê dois cliques em index.html (abre no navegador).
+  3. No menu Projetos, clique em "Carregar dados fictícios" para ver o sistema populado,
+     ou crie seu primeiro projeto.
+
+Importante – onde ficam os dados
+  * Aberto a partir deste arquivo, os dados ficam salvos SOMENTE no navegador do
+    computador em que você abriu (localStorage). Limpar os dados do navegador apaga tudo.
+  * Use sempre "Projetos > Exportar backup" para guardar um arquivo .json com todos os
+    projetos e históricos, e "Restaurar de um arquivo de backup" para recuperar.
+  * Cada computador/navegador tem seus próprios dados. Para vários usuários acessarem
+    os mesmos dados, a aplicação precisa ficar hospedada com banco de dados
+    (como a versão publicada no Claude, ou no seu servidor).
+
+Funcionalidades
+  Menu lateral Financeiro
+    - Dashboard geral: todos os projetos ou um selecionado; fluxo de caixa, maiores gastos,
+      projeção, risco por projeto, repasses, aditivos/remanejamentos.
+    - Projetos: cadastro, backup/restauração, lixeira (restaurar projeto excluído).
+  Dentro de cada projeto
+    - Dashboard, Rubricas (grupos A-D e novos grupos, edição, semáforo), Gastos mensais
+      (gráficos, filtros, exportar CSV, imprimir PDF), Aditivos/Remanejamentos,
+      Fornecedores (histórico de trocas), Repasses, Histórico de alterações (quem,
+      quando, valor anterior e novo; restaurar rubrica excluída), Projeto (datas, aviso de
+      4 meses para o fim).
+
+Semáforo das rubricas
+  Vermelho: gasto acima do valor global da rubrica.
+  Amarelo : gasto >= 70% do valor e acima do ritmo do tempo decorrido do projeto.
+  Azul    : gasto bem abaixo do ritmo do tempo (sobra de saldo prevista).
+  Verde   : dentro do esperado.
+
+Limitações desta cópia
+  * Sem integração com o Conta Azul (exige API e credenciais).
+  * O nome do usuário no histórico aparece como "Usuário" (sem login).
+  * Perfis de acesso não implementados.

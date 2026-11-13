@@ -33,6 +33,17 @@ O sistema vive em um repositório GitHub novo (por exemplo `integra`), ligado à
 6. **Testes e revisão de segurança:** checklist do `SEGURANCA.md`, incluindo a tentativa direta ao endpoint de login.
 7. **2ª etapa:** 2FA e módulo Financeiro (antes de qualquer dado financeiro real).
 
+## Módulo Financeiro (protótipo recebido em 13/11/2026)
+
+O arquivo `financeiro/index.html` (aplicativo único, sem dependências) cobre dashboard geral, rubricas com semáforo, gastos mensais, aditivos e remanejamentos, fornecedores, repasses e histórico de alterações. Está embutido na tela `telas/financeiro.html`, dentro da moldura do INTEGRA, com acesso por perfil. É a base funcional para o módulo na 2ª etapa. Limitações conhecidas:
+
+- Dados só no navegador (`localStorage`); no sistema real passam para o Postgres do Supabase.
+- Tem o próprio cadastro de projetos, separado do cadastro do INTEGRA: no sistema real o orçamento deve se ligar ao projeto já cadastrado (uma única tabela de projetos).
+- Sem login, perfis, auditoria do INTEGRA nem 2FA; o histórico mostra "Usuário". Perfis só de consulta ainda veem os botões de edição.
+- Visual próprio (cores e fonte do protótipo), ainda fora da paleta aprovada e sem a revisão de acessibilidade (WCAG 2.2 AA) das demais telas.
+- Sem integração com o Conta Azul.
+- Revisar escape de texto e regras de cálculo antes de entrar dado real.
+
 ## Pendências de decisão
 
 - Plano pago do Supabase e da Vercel (confirmar preços e se há condição para ONG).
