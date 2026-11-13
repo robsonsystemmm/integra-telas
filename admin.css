@@ -439,3 +439,4 @@ td .pill{white-space:normal}
 .pg-fin .demo .sobre summary{display:inline-flex;color:var(--color-primary)}
 .pg-fin .demo .sobre p{flex-basis:100%;margin-top:4px}
 .pg-fin main{padding-bottom:16px}
+.pg-fin #main{padding-bottom:12px}
