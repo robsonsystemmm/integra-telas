@@ -28,6 +28,7 @@
     { name: 'Financeiro', note: 'Ver o projeto não dá acesso ao financeiro dele', rows: [
       { k: 'fin_orc', type: 'sc', label: 'Orçamento (rubricas)', hint: 'Rubricas, valores, remanejamentos e saldos. Aprovar: remanejamentos.', acts: SIXA },
       { k: 'fin_lan', type: 'sc', label: 'Lançamentos', hint: 'Gastos e pagamentos por rubrica. Aprovar: pagamentos.', acts: SIXA },
+      { k: 'fin_bkp', type: 'sc', label: 'Backup e restauração', hint: 'Exportar: baixar o backup com todos os dados financeiros. Editar: restaurar de um arquivo (mescla ou substitui dados). Cada uso vai para a auditoria.', acts: ['exportar', 'editar'] },
       { k: 'fin_rel', type: 'sc', label: 'Relatórios', hint: 'Painéis e relatórios financeiros. Exportar: baixar em PDF e XLSX; cada exportação vai para a auditoria.', acts: ['ver', 'exportar'] } ] }
   ];
   const ROWS = AREAS.reduce((a, ar) => a.concat(ar.rows), []);
@@ -48,7 +49,7 @@
     equipe: { name: 'Equipe de Projetos', desc: 'Vê e edita só os projetos atribuídos a ela. Não cria, exclui nem aprova.',
       base: mk(Object.assign(S(PRJ, ['ver', 'editar'], 'm'), S(['prj_rel'], ['ver'], 'm'))) },
     fin: { name: 'Financeiro', desc: 'Tudo no Financeiro, de todos os projetos, inclusive aprovar. Em Projetos, só consulta.',
-      base: mk(Object.assign(S(['fin_orc', 'fin_lan'], ['ver', 'editar', 'excluir'], 't'), S(['fin_orc', 'fin_lan'], ['criar'], 'y'), S(['fin_orc', 'fin_lan'], ['aprovar'], 't'), S(['fin_rel'], ['ver', 'exportar'], 't'), S(PRJ.concat(['prj_rel']), ['ver'], 't'), S(['prj_rel'], ['exportar'], 't'))) },
+      base: mk(Object.assign(S(['fin_orc', 'fin_lan'], ['ver', 'editar', 'excluir'], 't'), S(['fin_orc', 'fin_lan'], ['criar'], 'y'), S(['fin_orc', 'fin_lan'], ['aprovar'], 't'), S(['fin_rel'], ['ver', 'exportar'], 't'), S(['fin_bkp'], ['exportar', 'editar'], 't'), S(PRJ.concat(['prj_rel']), ['ver'], 't'), S(['prj_rel'], ['exportar'], 't'))) },
     visual: { name: 'Visualização Geral', desc: 'Perfil de consulta. Ao atribuir, marque o que a pessoa pode visualizar.',
       base: mk({}) }
   };

@@ -7,7 +7,7 @@
   var PERFIS = {
     'Coordenação de Projetos': { fin: 'consulta', ver: 't', editar: 't', excluir: 't', aprovar: 't', criar: true, team: 'editar', rel: 't', exportar: true },
     'Equipe de Projetos': { fin: 'n', ver: 'm', editar: 'm', excluir: 'n', criar: false, rel: 'm', exportar: false },
-    'Financeiro': { fin: 'total', ver: 't', editar: 'n', excluir: 'n', criar: false, reprog: true, rel: 't', exportar: true, nota: 'Perfil Financeiro: o cadastro é só para consulta. Para mudar valores ou itens, peça uma reprogramação ao setor de Projetos.' },
+    'Financeiro': { fin: 'total', bkp: true, ver: 't', editar: 'n', excluir: 'n', criar: false, reprog: true, rel: 't', exportar: true, nota: 'Perfil Financeiro: o cadastro é só para consulta. Para mudar valores ou itens, peça uma reprogramação ao setor de Projetos.' },
     'Administrador do Sistema': { fin: 'consulta', ver: 't', editar: 'n', excluir: 'n', criar: false, team: 'ver', rel: 't', exportar: true, nota: 'Administrador do Sistema: vê todos os projetos, só para consulta.' },
     'Visualização Geral': { fin: 'n', ver: 't', editar: 'n', excluir: 'n', criar: false, rel: 't', exportar: false, nota: 'Perfil de visualização: o cadastro é só para consulta.' },
     'Gestor de Acessos': { fin: 'n', ver: 'n', editar: 'n', excluir: 'n', criar: false, rel: 'n', exportar: false }

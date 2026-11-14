@@ -87,3 +87,11 @@ Regra do produto: todo relatório oferece **Exportar PDF** e **Exportar XLSX**. 
 - [ ] Mudança relevante nos textos: nova versão e novo aceite no próximo login.
 - [ ] Menores de idade: confirmar com o jurídico como o consentimento do responsável é coletado e guardado.
 - [ ] Links dos documentos no rodapé do login e do cadastro; abrem em nova aba para não perder o formulário preenchido.
+
+## Backup e restauração do Financeiro
+
+- [ ] Menu próprio em Financeiro > Backup e restauração, com permissões separadas na matriz: **Exportar** (baixar o backup) e **Editar** (restaurar). Padrão: só o perfil Financeiro; os demais só por ajuste individual.
+- [ ] O servidor confere a permissão a cada exportação e a cada restauração. Esconder o menu não basta.
+- [ ] Exportar e restaurar vão para a auditoria (quem, quando, quantos projetos, modo mesclar ou substituir). Restaurar com "Substituir tudo" pede confirmação reforçada e guarda uma cópia do estado anterior.
+- [ ] O arquivo de backup tem todos os dados financeiros: exigir 2FA recente, avisar para guardar em local seguro e, de preferência, gerar criptografado. Nunca anexar a e-mail comum.
+- [ ] Na versão real, o backup do banco é automático (Supabase, diário) e só administradores de infraestrutura restauram. O backup manual por arquivo serve para exportar dados da ONG.
