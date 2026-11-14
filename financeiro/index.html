@@ -299,7 +299,7 @@ async function csv(){const ms=fm(),q=v=>'"'+String(v).replace(/"/g,'""')+'"';
   try{const d=await dlr();await d.save({filename:'qgd-financeiro.csv',data})}catch(e){toast('Não foi possível baixar aqui.')}}
 /* INTEGRA: modo embutido (?embed=1&v=geral|lista|backup). O menu e o título ficam no sistema; a troca de tela chega por mensagem do sistema (funciona também abrindo os arquivos direto do computador). */
 if(/[?&]embed=1/.test(location.search)){
-  const st=document.createElement('style');st.textContent='aside,.sbt{display:none}.app{display:block}header{padding:10px 14px 0}h1{font-size:16px;margin:0 0 6px}main{padding:12px 14px}';document.head.appendChild(st);
+  const st=document.createElement('style');st.textContent='aside,.sbt{display:none}.app{display:block}header{padding:10px 14px 0}h1{font-size:16px;margin:0 0 6px}main{padding:12px 14px;max-width:none;margin:0}';document.head.appendChild(st);
   const mv=location.search.match(/[?&]v=(geral|lista|backup)/);if(mv)view=mv[1];
   const _render=render;render=function(){const r=_render.apply(this,arguments);try{parent.postMessage({integra:'view',view:view},'*')}catch(e){}return r};
   window.addEventListener('message',e=>{if(e.source===parent&&e.data&&e.data.integra==='go'&&(e.data.view==='geral'||e.data.view==='lista'||e.data.view==='backup'))go(e.data.view)});

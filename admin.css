@@ -440,3 +440,16 @@ td .pill{white-space:normal}
 .pg-fin .demo .sobre p{flex-basis:100%;margin-top:4px}
 .pg-fin main{padding-bottom:16px}
 .pg-fin #main{padding-bottom:12px}
+
+/* Financeiro como área de trabalho: ocupa toda a largura e a altura da janela (a rolagem fica dentro do aplicativo) */
+.pg-fin main#main{max-width:none;margin-inline:0}
+.pg-fin .demo .sobre[open]{flex-basis:100%}
+@media (min-width:1024px){
+  .pg-fin .app{height:100vh;height:100dvh;min-height:0;overflow:hidden}
+  .pg-fin .main-col{height:100vh;height:100dvh;min-height:0;overflow:hidden}
+  .pg-fin main#main{overflow:hidden;padding:20px 24px 16px}
+  .pg-fin .fin-frame{min-height:0}
+}
+@media (max-width:1023px){
+  .pg-fin .fin-frame{min-height:560px}
+}
