@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Financeiro - INTEGRA</title>
-<link rel="stylesheet" href="../tokens.css?v=20261113h">
-<link rel="stylesheet" href="../components.css?v=20261113h">
-<link rel="stylesheet" href="../admin.css?v=20261113h">
+<link rel="stylesheet" href="../tokens.css?v=20261114a">
+<link rel="stylesheet" href="../components.css?v=20261114a">
+<link rel="stylesheet" href="../admin.css?v=20261114a">
 <style>
 [hidden]{display:none!important}
 .demo{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 16px;padding:10px 14px;border:1px dashed var(--color-border-field);border-radius:var(--radius-control);background:var(--color-surface);font-size:13px;color:var(--color-text-muted)}
@@ -98,13 +98,13 @@
 <div class="blocked" id="semAcesso" role="alert" hidden><b>Acesso não permitido</b><p>Seu perfil não tem acesso ao módulo Financeiro. Ver o projeto não dá acesso ao financeiro dele.</p></div>
 <div id="area">
 <p class="nota-exp" id="nota" hidden></p>
-<div class="fin-frame"><iframe id="qgd" title="Módulo Financeiro: orçamento, gastos, repasses e aditivos" src="../financeiro/index.html" loading="lazy"></iframe></div>
+<div class="fin-frame"><iframe id="qgd" title="Módulo Financeiro: orçamento, gastos, repasses e aditivos"></iframe></div>
 </div></main>
   </div>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-<script src="../projeto-acesso.js?v=20261113h"></script>
+<script src="../projeto-acesso.js?v=20261114a"></script>
 <script>
 (function(){
 const $=s=>document.querySelector(s);
@@ -123,18 +123,18 @@ function render(){
 $('#perfil').addEventListener('change',render);render();
 const fr=$('#qgd'),subs=[...document.querySelectorAll('[data-fin]')];
 let vista=qs.get('v')==='lista'?'lista':'geral';
+fr.src='../financeiro/index.html?embed=1&v='+vista;
 function marca(v){subs.forEach(a=>{if(a.getAttribute('data-fin')===v)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')})}
-function app(){try{return fr.contentWindow&&fr.contentWindow.go?fr.contentWindow:null}catch(e){return null}}
-function sincroniza(){const w=app();if(!w)return;let v;try{v=w.eval('view')}catch(e){return}marca(v==='geral'?'geral':'lista')}
-fr.addEventListener('load',()=>{try{const d=fr.contentDocument,st=d.createElement('style');
-  st.textContent='aside,.sbt{display:none}.app{display:block}header{padding:10px 14px 0}h1{font-size:16px;margin:0 0 6px}main{padding:12px 14px}';d.head.appendChild(st);
-  const w=app();if(w){const o=w.render;w.render=function(){const r=o.apply(this,arguments);sincroniza();return r};if(w.eval('view')!==vista)w.go(vista);else sincroniza()}}catch(e){/* outra origem: segue sem ajuste */}});
-subs.forEach(a=>a.addEventListener('click',e=>{const w=app();if(!w)return;e.preventDefault();vista=a.getAttribute('data-fin');w.go(vista);history.replaceState(null,'','?v='+vista+(qs.get('perfil')?'&perfil='+encodeURIComponent(qs.get('perfil')):''));
+/* o aplicativo avisa em que tela está (inclusive dentro de um projeto) */
+window.addEventListener('message',e=>{if(e.source!==fr.contentWindow||!e.data||e.data.integra!=='view')return;vista=e.data.view==='geral'?'geral':'lista';marca(vista)});
+subs.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();vista=a.getAttribute('data-fin');marca(vista);
+  fr.contentWindow.postMessage({integra:'go',view:vista},'*');
+  history.replaceState(null,'','?v='+vista+(qs.get('perfil')?'&perfil='+encodeURIComponent(qs.get('perfil')):''));
   const m=document.querySelector('.menu-btn');if(m&&getComputedStyle(m).display!=='none'){const c=document.querySelector('[data-close-menu]');if(c)c.click()}}));
 marca(vista);
 })();
 </script>
-<script src="../admin.js?v=20261113h" defer></script>
-<script src="../components.js?v=20261113h" defer></script>
+<script src="../admin.js?v=20261114a" defer></script>
+<script src="../components.js?v=20261114a" defer></script>
 </body>
 </html>
